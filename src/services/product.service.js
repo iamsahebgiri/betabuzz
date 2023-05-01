@@ -73,11 +73,32 @@ const deleteProductById = async (productId) => {
   return product;
 };
 
+/**
+ * Upvote product by id
+ * @param {ObjectId} productId
+ * @param {ObjectId} userId
+ * @returns {Promise<Product>}
+ */
+const upvoteProductById = async (productId, userId) => {
+  const product = await getProductById(productId);
+  if (!product) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
+  }
+  if (product.upvotes.includes(userId)) {
+    product.upvotes.pull(userId);
+  } else {
+    product.upvotes.push(userId);
+  }
+  await product.save();
+  return product;
+};
+
 module.exports = {
   createProduct,
   queryProducts,
   queryRecentProducts,
   getProductById,
   updateProductById,
+  upvoteProductById,
   deleteProductById,
 };

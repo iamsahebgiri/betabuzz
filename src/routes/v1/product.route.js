@@ -14,8 +14,9 @@ router.get('/recent', productController.getRecentProducts);
 router
   .route('/:productId')
   .get(validate(productValidation.getProduct), productController.getProduct)
-  .patch(auth(), validate(productValidation.updateProduct), productController.updateProduct)
-  .delete(auth(), validate(productValidation.deleteProduct), productController.deleteProduct);
+  .patch(auth(), validate(productValidation.updateProduct), productController.updateProduct);
+
+router.route('/:productId/upvote').patch(auth(), validate(productValidation.upvoteProduct), productController.upvoteProduct);
 
 module.exports = router;
 

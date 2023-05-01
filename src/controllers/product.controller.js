@@ -43,6 +43,12 @@ const updateProduct = catchAsync(async (req, res) => {
   res.send(product);
 });
 
+const upvoteProduct = catchAsync(async (req, res) => {
+  const userId = req.user.id;
+  const product = await productService.upvoteProductById(req.params.productId, userId);
+  res.send(product);
+});
+
 const deleteProduct = catchAsync(async (req, res) => {
   await productService.deleteProductById(req.params.productId);
   res.status(httpStatus.NO_CONTENT).send();
@@ -55,5 +61,6 @@ module.exports = {
   getRecentProducts,
   getProduct,
   updateProduct,
+  upvoteProduct,
   deleteProduct,
 };

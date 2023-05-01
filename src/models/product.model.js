@@ -18,6 +18,18 @@ const productSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    comments: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Comment',
+      },
+    ],
+    upvotes: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+      },
+    ],
     maker: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'User',

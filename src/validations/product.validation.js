@@ -39,6 +39,12 @@ const updateProduct = {
     .min(1),
 };
 
+const upvoteProduct = {
+  params: Joi.object().keys({
+    productId: Joi.required().custom(objectId),
+  }),
+};
+
 const deleteProduct = {
   params: Joi.object().keys({
     productId: Joi.string().custom(objectId),
@@ -49,6 +55,7 @@ module.exports = {
   createProduct,
   getProducts,
   getProduct,
+  upvoteProduct,
   updateProduct,
   deleteProduct,
 };
