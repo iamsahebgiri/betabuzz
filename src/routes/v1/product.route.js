@@ -17,6 +17,9 @@ router
   .patch(auth(), validate(productValidation.updateProduct), productController.updateProduct);
 
 router.route('/:productId/upvote').patch(auth(), validate(productValidation.upvoteProduct), productController.upvoteProduct);
+router
+  .route('/:productId/comment')
+  .post(auth(), validate(productValidation.commentOnProduct), productController.commentOnProduct);
 
 module.exports = router;
 

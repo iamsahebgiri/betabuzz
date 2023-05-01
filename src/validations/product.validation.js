@@ -45,6 +45,16 @@ const upvoteProduct = {
   }),
 };
 
+const commentOnProduct = {
+  params: Joi.object().keys({
+    productId: Joi.required().custom(objectId),
+  }),
+  body: Joi.object().keys({
+    content: Joi.string().required(),
+    parent: Joi.string().custom(objectId),
+  }),
+};
+
 const deleteProduct = {
   params: Joi.object().keys({
     productId: Joi.string().custom(objectId),
@@ -52,6 +62,7 @@ const deleteProduct = {
 };
 
 module.exports = {
+  commentOnProduct,
   createProduct,
   getProducts,
   getProduct,

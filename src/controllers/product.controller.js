@@ -2,7 +2,7 @@ const httpStatus = require('http-status');
 const pick = require('../utils/pick');
 const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
-const { productService } = require('../services');
+const { productService, commentService } = require('../services');
 
 const createProduct = catchAsync(async (req, res) => {
   const payload = {
@@ -54,7 +54,19 @@ const deleteProduct = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send();
 });
 
+const commentOnProduct = catchAsync(async (req, res) => {
+  const { productId } = req.params;
+  const commentBody = {
+    content: req.body.content,
+    author: req.user.id,
+    product: productId,
+  };
+  const comment = await commentService.commentOnProduct(productId, commentBody);
+  res.status(httpStatus.CREATED).send(comment);
+});
+
 module.exports = {
+  commentOnProduct,
   createProduct,
   getProducts,
   getTrendingProducts,
