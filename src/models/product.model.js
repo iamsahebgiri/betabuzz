@@ -76,6 +76,7 @@ productSchema.methods.removeComment = function (commentId) {
 
 productSchema.methods.toProductResponse = async function () {
   return {
+    id: this.id,
     name: this.name,
     image: this.image,
     description: this.description,
@@ -83,7 +84,7 @@ productSchema.methods.toProductResponse = async function () {
     commentsCount: this.comments.length,
     upvotesCount: this.upvotes.length,
     upvoted: this.upvotes.indexOf(this.maker) !== -1,
-    maker: await User.findById(this.maker, 'name email'),
+    maker: await User.findById(this.maker),
     createdAt: this.createdAt,
     updatedAt: this.updatedAt,
   };

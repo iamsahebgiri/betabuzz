@@ -36,8 +36,13 @@ const queryProducts = async (filter, options) => {
  * @returns {Promise<QueryResult>}
  */
 const queryRecentProducts = async () => {
-  const products = await Product.find({}).sort({ createdAt: 'desc' }).limit(10).populate('maker', 'name email');
-  return { results: products, totalResults: products.length };
+  const products = await Product.find({}).sort({ createdAt: 'desc' }).limit(10);
+  const results = await Promise.all(
+    products.map(async (product) => {
+      return product.toProductResponse();
+    })
+  );
+  return { results, totalResults: products.length };
 };
 
 /**
