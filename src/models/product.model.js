@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { toJSONLoose, paginate } = require('./plugins');
+const User = require('./user.model');
 
 const productSchema = mongoose.Schema(
   {
@@ -82,7 +83,7 @@ productSchema.methods.toProductResponse = async function () {
     commentsCount: this.comments.length,
     upvotesCount: this.upvotes.length,
     upvoted: this.upvotes.indexOf(this.maker) !== -1,
-    maker: this.maker,
+    maker: await User.findById(this.maker, 'name email'),
     createdAt: this.createdAt,
     updatedAt: this.updatedAt,
   };

@@ -21,7 +21,7 @@ const createProduct = async (productBody) => {
  * @returns {Promise<QueryResult>}
  */
 const queryProducts = async (filter, options) => {
-  Object.assign(options, { populate: 'maker:name email' });
+  Object.assign(options);
   const { results: products, ...rest } = await Product.paginate(filter, options);
   const results = await Promise.all(
     products.map(async (product) => {
