@@ -67,7 +67,7 @@ const updateProductById = async (productId, updateBody) => {
   }
   Object.assign(product, updateBody);
   await product.save();
-  return product;
+  return product.toProductResponse();
 };
 
 /**
@@ -81,7 +81,7 @@ const deleteProductById = async (productId) => {
     throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
   }
   await product.remove();
-  return product;
+  return product.toProductResponse();
 };
 
 /**
@@ -96,7 +96,7 @@ const voteProductById = async (productId, userId) => {
     throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
   }
   await product.addUpvote(userId);
-  return product;
+  return product.toProductResponse();
 };
 
 /**
@@ -111,7 +111,7 @@ const unvoteProductById = async (productId, userId) => {
     throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
   }
   await product.removeUpvote(userId);
-  return product;
+  return product.toProductResponse();
 };
 
 module.exports = {

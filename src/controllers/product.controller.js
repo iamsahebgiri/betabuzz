@@ -31,10 +31,11 @@ const getProducts = catchAsync(async (req, res) => {
 });
 
 const getProduct = catchAsync(async (req, res) => {
-  const product = await productService.getProductById(req.params.productId);
+  let product = await productService.getProductById(req.params.productId);
   if (!product) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
   }
+  product = await product.toProductResponse();
   res.send(product);
 });
 
