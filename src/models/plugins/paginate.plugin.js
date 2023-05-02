@@ -41,12 +41,12 @@ const paginate = (schema) => {
 
     if (options.populate) {
       options.populate.split(',').forEach((populateOption) => {
-        docsPromise = docsPromise.populate(
-          populateOption
-            .split('.')
-            .reverse()
-            .reduce((a, b) => ({ path: b, populate: a }))
-        );
+        const [fields, select] = populateOption.split(':');
+        if (typeof select === 'undefined') {
+          docsPromise = docsPromise.populate(fields);
+        } else {
+          docsPromise = docsPromise.populate(fields, select);
+        }
       });
     }
 
