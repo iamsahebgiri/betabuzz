@@ -85,22 +85,32 @@ const deleteProductById = async (productId) => {
 };
 
 /**
- * Upvote product by id
+ * Add Upvote product by id
  * @param {ObjectId} productId
  * @param {ObjectId} userId
  * @returns {Promise<Product>}
  */
-const upvoteProductById = async (productId, userId) => {
+const voteProductById = async (productId, userId) => {
   const product = await getProductById(productId);
   if (!product) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
   }
-  if (product.upvotes.includes(userId)) {
-    product.upvotes.pull(userId);
-  } else {
-    product.upvotes.push(userId);
+  await product.addUpvote(userId);
+  return product;
+};
+
+/**
+ * Remove upvote product by id
+ * @param {ObjectId} productId
+ * @param {ObjectId} userId
+ * @returns {Promise<Product>}
+ */
+const unvoteProductById = async (productId, userId) => {
+  const product = await getProductById(productId);
+  if (!product) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
   }
-  await product.save();
+  await product.removeUpvote(userId);
   return product;
 };
 
@@ -110,6 +120,7 @@ module.exports = {
   queryRecentProducts,
   getProductById,
   updateProductById,
-  upvoteProductById,
+  voteProductById,
+  unvoteProductById,
   deleteProductById,
 };

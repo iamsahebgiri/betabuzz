@@ -46,7 +46,7 @@ const productSchema = mongoose.Schema(
 productSchema.plugin(toJSONLoose);
 productSchema.plugin(paginate);
 
-productSchema.methods.upvote = function (userId) {
+productSchema.methods.addUpvote = function (userId) {
   if (this.upvotes.indexOf(userId) === -1) {
     this.upvotes.push(userId);
   }
@@ -54,8 +54,8 @@ productSchema.methods.upvote = function (userId) {
 };
 
 productSchema.methods.removeUpvote = function (userId) {
-  if (this.upvotes.indexOf(userId) === -1) {
-    this.upvotes.remove(userId);
+  if (this.upvotes.indexOf(userId) !== -1) {
+    this.upvotes.pull(userId);
   }
   return this.save();
 };
@@ -68,7 +68,7 @@ productSchema.methods.addComment = function (commentId) {
 };
 
 productSchema.methods.removeComment = function (commentId) {
-  if (this.comments.indexOf(commentId) === -1) {
+  if (this.comments.indexOf(commentId) !== -1) {
     this.comments.remove(commentId);
   }
   return this.save();

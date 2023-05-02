@@ -43,9 +43,15 @@ const updateProduct = catchAsync(async (req, res) => {
   res.send(product);
 });
 
-const upvoteProduct = catchAsync(async (req, res) => {
+const unvoteProduct = catchAsync(async (req, res) => {
   const userId = req.user.id;
-  const product = await productService.upvoteProductById(req.params.productId, userId);
+  const product = await productService.unvoteProductById(req.params.productId, userId);
+  res.send(product);
+});
+
+const voteProduct = catchAsync(async (req, res) => {
+  const userId = req.user.id;
+  const product = await productService.voteProductById(req.params.productId, userId);
   res.send(product);
 });
 
@@ -73,6 +79,7 @@ module.exports = {
   getRecentProducts,
   getProduct,
   updateProduct,
-  upvoteProduct,
+  unvoteProduct,
+  voteProduct,
   deleteProduct,
 };

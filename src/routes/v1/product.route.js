@@ -16,7 +16,11 @@ router
   .get(validate(productValidation.getProduct), productController.getProduct)
   .patch(auth(), validate(productValidation.updateProduct), productController.updateProduct);
 
-router.route('/:productId/upvote').patch(auth(), validate(productValidation.upvoteProduct), productController.upvoteProduct);
+router.route('/:productId/vote').post(auth(), validate(productValidation.voteProduct), productController.voteProduct);
+router
+  .route('/:productId/unvote')
+  .delete(auth(), validate(productValidation.unvoteProduct), productController.unvoteProduct);
+
 router
   .route('/:productId/comment')
   .post(auth(), validate(productValidation.commentOnProduct), productController.commentOnProduct);
