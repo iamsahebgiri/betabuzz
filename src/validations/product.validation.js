@@ -32,8 +32,8 @@ const updateProduct = {
   }),
   body: Joi.object()
     .keys({
-      name: Joi.string().required(),
-      link: Joi.string().required(),
+      name: Joi.string(),
+      link: Joi.string(),
       description: Joi.string(),
     })
     .min(1),
