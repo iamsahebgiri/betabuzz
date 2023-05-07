@@ -44,11 +44,62 @@ const getComments = async (productId, userId, filter, options) => {
     })
   );
   return { results, ...rest };
-  // const totalResults = await Comment.paginate(filter, options);
-  // return totalResults;
+};
+
+/**
+ * Get comment by id
+ * @param {ObjectId} id
+ * @returns {Promise<Comment>}
+ */
+const getCommentById = async (id) => {
+  return Comment.findById(id);
+};
+
+/**
+ * Get comment
+ * @param {ObjectId} id
+ * @returns {Promise<Comment>}
+ */
+const getComment = async (id) => {
+  const comment = await getCommentById(id);
+  return comment.toCommentResponse();
+};
+
+/**
+ * Update comment by id
+ * @param {ObjectId} commentId
+ * @param {Object} updateBody
+ * @returns {Promise<Comment>}
+ */
+const updateCommentById = async (commentId, updateBody) => {
+  const comment = await getCommentById(commentId);
+  if (!comment) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Comment not found');
+  }
+  Object.assign(comment, updateBody);
+  await comment.save();
+  return comment.toCommentResponse();
+};
+
+/**
+ * Delete comment by id
+ * @param {ObjectId} commentId
+ * @returns {Promise<Comment>}
+ */
+const deleteCommentById = async (commentId) => {
+  const comment = await getCommentById(commentId);
+  if (!comment) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Comment not found');
+  }
+  await comment.remove();
+  return comment.toCommentResponse();
 };
 
 module.exports = {
   createComment,
   getComments,
+  getCommentById,
+  getComment,
+  updateCommentById,
+  deleteCommentById,
 };

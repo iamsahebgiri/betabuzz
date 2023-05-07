@@ -25,6 +25,11 @@ router
 
 router.route('/:productId/comments').get(auth(), validate(commentValidation.getComments), productController.getComments);
 router.route('/:productId/comment').post(auth(), validate(commentValidation.createComment), productController.createComment);
+router
+  .route('/:productId/comment/:commentId')
+  .get(auth(), validate(commentValidation.getComment), productController.getComment)
+  .patch(auth(), validate(commentValidation.updateComment), productController.updateComment)
+  .delete(auth(), validate(commentValidation.deleteComment), productController.deleteComment);
 
 module.exports = router;
 

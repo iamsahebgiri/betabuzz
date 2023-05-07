@@ -25,12 +25,14 @@ const getComments = {
 
 const getComment = {
   params: Joi.object().keys({
+    productId: Joi.string().custom(objectId),
     commentId: Joi.string().custom(objectId),
   }),
 };
 
 const updateComment = {
   params: Joi.object().keys({
+    productId: Joi.string().custom(objectId),
     commentId: Joi.required().custom(objectId),
   }),
   body: Joi.object()
@@ -54,6 +56,7 @@ const unvoteComment = {
 
 const deleteComment = {
   params: Joi.object().keys({
+    productId: Joi.string().custom(objectId),
     commentId: Joi.string().custom(objectId),
   }),
 };
