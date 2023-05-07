@@ -1,6 +1,10 @@
+const sharp = require('sharp');
 const httpStatus = require('http-status');
+const config = require('../config/config');
 const { User } = require('../models');
 const ApiError = require('../utils/ApiError');
+const strings = require('../utils/strings');
+const uploadService = require('./upload.service');
 
 /**
  * Create a user
@@ -79,6 +83,49 @@ const deleteUserById = async (userId) => {
   return user;
 };
 
+/**
+ * Upload avatar
+ * @param {ObjectId} userId
+ * @param {Object} file
+ * @returns {Promise<User>}
+ */
+const uploadAvatar = async (userId, file) => {
+  const user = await getUserById(userId);
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+  }
+  const name = strings.generateFileName();
+  const fileBuffer = await sharp(file.buffer).resize({ height: 128, width: 128 }).toBuffer();
+  await uploadService.uploadFile({
+    ...file,
+    buffer: fileBuffer,
+    key: name,
+  });
+  const avatarUrl = `https://${config.aws.s3.bucketName}.s3.${config.aws.s3.bucketRegion}.amazonaws.com/${name}`;
+  user.avatar = avatarUrl;
+  await user.save();
+  return user;
+};
+
+/**
+ * Remove avatar
+ * @param {ObjectId} userId
+ * @returns {Promise<User>}
+ */
+const deleteAvatar = async (userId) => {
+  const user = await getUserById(userId);
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+  }
+  if (user.avatar !== null) {
+    const key = user.avatar.split('/').pop();
+    await uploadService.deleteFile(key);
+  }
+  user.avatar = null;
+  await user.save();
+  return user;
+};
+
 module.exports = {
   createUser,
   queryUsers,
@@ -86,4 +133,6 @@ module.exports = {
   getUserByEmail,
   updateUserById,
   deleteUserById,
+  uploadAvatar,
+  deleteAvatar,
 };

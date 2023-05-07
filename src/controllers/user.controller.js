@@ -34,10 +34,32 @@ const deleteUser = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send();
 });
 
+const getMe = catchAsync(async (req, res) => {
+  const user = await userService.getUserById(req.user.id);
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+  }
+  res.send(user);
+});
+
+const uploadAvatar = catchAsync(async (req, res) => {
+  const file = pick(req.file, ['buffer', 'mimetype']);
+  const user = await userService.uploadAvatar(req.user.id, file);
+  res.status(httpStatus.CREATED).send(user);
+});
+
+const removeAvatar = catchAsync(async (req, res) => {
+  const user = await userService.deleteAvatar(req.user.id);
+  res.send(user);
+});
+
 module.exports = {
   createUser,
   getUsers,
   getUser,
   updateUser,
   deleteUser,
+  uploadAvatar,
+  removeAvatar,
+  getMe,
 };

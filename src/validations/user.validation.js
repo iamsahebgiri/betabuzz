@@ -45,10 +45,18 @@ const deleteUser = {
   }),
 };
 
+const uploadAvatar = {
+  params: Joi.object().keys({
+    userId: Joi.required().custom(objectId),
+  }),
+  file: Joi.object().required(),
+};
+
 module.exports = {
   createUser,
   getUsers,
   getUser,
   updateUser,
   deleteUser,
+  uploadAvatar,
 };
