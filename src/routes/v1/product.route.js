@@ -3,6 +3,7 @@ const auth = require('../../middlewares/auth');
 const validate = require('../../middlewares/validate');
 const productController = require('../../controllers/product.controller');
 const productValidation = require('../../validations/product.validation');
+const commentValidation = require('../../validations/comment.validation');
 
 const router = express.Router();
 
@@ -22,9 +23,8 @@ router
   .route('/:productId/unvote')
   .delete(auth(), validate(productValidation.unvoteProduct), productController.unvoteProduct);
 
-router
-  .route('/:productId/comment')
-  .post(auth(), validate(productValidation.commentOnProduct), productController.commentOnProduct);
+router.route('/:productId/comments').get(auth(), validate(commentValidation.getComments), productController.getComments);
+router.route('/:productId/comment').post(auth(), validate(commentValidation.createComment), productController.createComment);
 
 module.exports = router;
 

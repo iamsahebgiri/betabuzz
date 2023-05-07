@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
-const { toJSON, paginate } = require('./plugins');
+const { paginate, toJSONLoose } = require('./plugins');
+const User = require('./user.model');
 
 const commentSchema = mongoose.Schema(
   {
@@ -21,13 +22,6 @@ const commentSchema = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Comment',
     },
-    replies: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Comment',
-        default: [],
-      },
-    ],
     upvotes: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -41,8 +35,21 @@ const commentSchema = mongoose.Schema(
 );
 
 // add plugin that converts mongoose to json
-commentSchema.plugin(toJSON);
+commentSchema.plugin(toJSONLoose);
 commentSchema.plugin(paginate);
+
+commentSchema.methods.toCommentResponse = async function (userId) {
+  return {
+    id: this.id,
+    content: this.content,
+    upvotesCount: this.upvotes.length,
+    upvoted: this.upvotes.indexOf(userId) !== -1,
+    product: this.product,
+    author: await User.findById(this.author),
+    createdAt: this.createdAt,
+    updatedAt: this.updatedAt,
+  };
+};
 
 /**
  * @typedef Comment

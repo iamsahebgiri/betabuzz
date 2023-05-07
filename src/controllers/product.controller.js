@@ -61,19 +61,27 @@ const deleteProduct = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send();
 });
 
-const commentOnProduct = catchAsync(async (req, res) => {
+const createComment = catchAsync(async (req, res) => {
   const { productId } = req.params;
   const commentBody = {
     content: req.body.content,
     author: req.user.id,
     product: productId,
   };
-  const comment = await commentService.commentOnProduct(productId, commentBody);
+  const comment = await commentService.createComment(productId, commentBody);
   res.status(httpStatus.CREATED).send(comment);
 });
 
+const getComments = catchAsync(async (req, res) => {
+  const { productId } = req.params;
+  const userId = req.user.id;
+  const filter = pick(req.query, ['content']);
+  const options = pick(req.query, ['sortBy', 'limit', 'page']);
+  const comments = await commentService.getComments(productId, userId, filter, options);
+  res.send(comments);
+});
+
 module.exports = {
-  commentOnProduct,
   createProduct,
   getProducts,
   getTrendingProducts,
@@ -83,4 +91,6 @@ module.exports = {
   unvoteProduct,
   voteProduct,
   deleteProduct,
+  createComment,
+  getComments,
 };
