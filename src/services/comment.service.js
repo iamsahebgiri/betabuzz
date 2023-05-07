@@ -14,12 +14,11 @@ const createComment = async (productId, commentBody) => {
   if (!product) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
   }
-  let comment = await Comment.create(commentBody);
+  const comment = await Comment.create(commentBody);
   product.comments.push(comment.id);
   await product.save();
 
-  comment = await comment.populate('author', 'name email').populate('product', 'name description link').execPopulate();
-  return comment;
+  return comment.toCommentResponse();
 };
 
 /**
@@ -62,6 +61,9 @@ const getCommentById = async (id) => {
  */
 const getComment = async (id) => {
   const comment = await getCommentById(id);
+  if (!comment) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Comment not found');
+  }
   return comment.toCommentResponse();
 };
 
@@ -95,6 +97,36 @@ const deleteCommentById = async (commentId) => {
   return comment.toCommentResponse();
 };
 
+/**
+ * Vote comment by id
+ * @param {ObjectId} commentId
+ * @param {ObjectId} userId
+ * @returns {Promise<Comment>}
+ */
+const voteCommentById = async (commentId, userId) => {
+  const comment = await getCommentById(commentId);
+  if (!comment) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Comment not found');
+  }
+  await comment.addUpvote(userId);
+  return comment.toCommentResponse();
+};
+
+/**
+ * Remove vote from comment by id
+ * @param {ObjectId} commentId
+ * @param {ObjectId} userId
+ * @returns {Promise<Comment>}
+ */
+const unvoteCommentById = async (commentId, userId) => {
+  const comment = await getCommentById(commentId);
+  if (!comment) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Comment not found');
+  }
+  await comment.removeUpvote(userId);
+  return comment.toCommentResponse();
+};
+
 module.exports = {
   createComment,
   getComments,
@@ -102,4 +134,6 @@ module.exports = {
   getComment,
   updateCommentById,
   deleteCommentById,
+  voteCommentById,
+  unvoteCommentById,
 };

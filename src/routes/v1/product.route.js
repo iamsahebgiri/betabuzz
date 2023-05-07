@@ -31,6 +31,13 @@ router
   .patch(auth(), validate(commentValidation.updateComment), productController.updateComment)
   .delete(auth(), validate(commentValidation.deleteComment), productController.deleteComment);
 
+router
+  .route('/:productId/comment/:commentId/vote')
+  .post(auth(), validate(commentValidation.voteComment), productController.voteComment);
+router
+  .route('/:productId/comment/:commentId/unvote')
+  .delete(auth(), validate(commentValidation.unvoteComment), productController.unvoteComment);
+
 module.exports = router;
 
 /**

@@ -99,6 +99,18 @@ const deleteComment = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send();
 });
 
+const unvoteComment = catchAsync(async (req, res) => {
+  const userId = req.user.id;
+  const comment = await commentService.unvoteCommentById(req.params.commentId, userId);
+  res.send(comment);
+});
+
+const voteComment = catchAsync(async (req, res) => {
+  const userId = req.user.id;
+  const comment = await commentService.voteCommentById(req.params.commentId, userId);
+  res.send(comment);
+});
+
 module.exports = {
   createProduct,
   getProducts,
@@ -114,4 +126,6 @@ module.exports = {
   getComment,
   updateComment,
   deleteComment,
+  unvoteComment,
+  voteComment,
 };

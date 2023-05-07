@@ -44,12 +44,14 @@ const updateComment = {
 
 const voteComment = {
   params: Joi.object().keys({
+    productId: Joi.required().custom(objectId),
     commentId: Joi.required().custom(objectId),
   }),
 };
 
 const unvoteComment = {
   params: Joi.object().keys({
+    productId: Joi.required().custom(objectId),
     commentId: Joi.required().custom(objectId),
   }),
 };

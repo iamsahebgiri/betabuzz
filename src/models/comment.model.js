@@ -38,6 +38,20 @@ const commentSchema = mongoose.Schema(
 commentSchema.plugin(toJSONLoose);
 commentSchema.plugin(paginate);
 
+commentSchema.methods.addUpvote = function (userId) {
+  if (this.upvotes.indexOf(userId) === -1) {
+    this.upvotes.push(userId);
+  }
+  return this.save();
+};
+
+commentSchema.methods.removeUpvote = function (userId) {
+  if (this.upvotes.indexOf(userId) !== -1) {
+    this.upvotes.pull(userId);
+  }
+  return this.save();
+};
+
 commentSchema.methods.toCommentResponse = async function (userId) {
   return {
     id: this.id,
