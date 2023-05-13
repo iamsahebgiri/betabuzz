@@ -1,38 +1,41 @@
 import Link from "next/link"
 
-import { siteConfig } from "@/config/site"
-import { buttonVariants } from "@/components/ui/button"
+import { Icons } from "@/components/icons"
+
+const Item = () => (
+  <div className="flex justify-between">
+    <div className="mr-2 flex flex-1 items-start gap-3">
+      <img
+        src="https://ph-files.imgix.net/5f79504d-e241-4218-9249-1d7f8c084a6a.png?auto=compress&codec=mozjpeg&cs=strip&auto=format&w=80&h=80&fit=crop&bg=0fff&dpr=1"
+        alt=""
+        className="h-12 w-12 rounded-lg"
+      />
+      <div>
+        <Link href="/" className="text-base font-bold">
+          Video Depth Effect prototype in SwiftUI{" "}
+          <span className="font-medium">(twitter.com)</span>
+        </Link>
+        <div className="text-muted-foreground font-medium">
+          2 points by raul_dronca · 25d ago · 0 comments
+        </div>
+      </div>
+    </div>
+    <button className="border-border flex h-12 w-12 flex-col items-center justify-center rounded-lg border">
+      <Icons.arrowUp className="text-primary h-6 w-6" />
+      <span className="-mt-1 text-sm font-bold">
+        {Math.floor(Math.random() * 100)}
+      </span>
+    </button>
+  </div>
+)
 
 export default function IndexPage() {
   return (
     <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
-      <div className="flex max-w-[980px] flex-col items-start gap-2">
-        <h1 className="text-3xl font-extrabold leading-tight tracking-tighter sm:text-3xl md:text-5xl lg:text-6xl">
-          Beautifully designed components <br className="hidden sm:inline" />
-          built with Radix UI and Tailwind CSS.
-        </h1>
-        <p className="max-w-[700px] text-lg text-muted-foreground sm:text-xl">
-          Accessible and customizable components that you can copy and paste
-          into your apps. Free. Open Source. And Next.js 13 Ready.
-        </p>
-      </div>
-      <div className="flex gap-4">
-        <Link
-          href={siteConfig.links.docs}
-          target="_blank"
-          rel="noreferrer"
-          className={buttonVariants({ size: "lg" })}
-        >
-          Documentation
-        </Link>
-        <Link
-          target="_blank"
-          rel="noreferrer"
-          href={siteConfig.links.github}
-          className={buttonVariants({ variant: "outline", size: "lg" })}
-        >
-          GitHub
-        </Link>
+      <div className="mx-auto w-full max-w-2xl space-y-8 lg:space-y-10">
+        {new Array(10).fill(0).map((_, index) => (
+          <Item key={index} />
+        ))}
       </div>
     </section>
   )

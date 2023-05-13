@@ -2,12 +2,19 @@ export type SiteConfig = typeof siteConfig
 
 export const siteConfig = {
   name: "BetaBuzz",
-  description:
-    "Creating a buzz around the latest beta products",
+  description: "Creating a buzz around the latest beta products",
   mainNav: [
     {
-      title: "Home",
+      title: "Popular",
       href: "/",
+    },
+    {
+      title: "Recent",
+      href: "/recent",
+    },
+    {
+      title: "Trending",
+      href: "/trending",
     },
   ],
   links: {

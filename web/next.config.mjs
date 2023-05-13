@@ -4,6 +4,13 @@ const nextConfig = {
   experimental: {
     appDir: true,
   },
+  images: {
+    remotePatterns: [
+      {
+        hostname: "betabuzz-avatars.s3.ap-south-1.amazonaws.com",
+      },
+    ],
+  },
 }
 
 export default nextConfig
