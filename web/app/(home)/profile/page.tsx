@@ -1,12 +1,20 @@
+"use client"
+
 import React from "react"
 import Image from "next/image"
 import Link from "next/link"
+import authService from "@/services/auth.service"
 
 import { Button, buttonVariants } from "@/components/ui/button"
 import { Icons } from "@/components/icons"
 import { ThemeToggle } from "@/components/theme-toggle"
 
 export default function ProfilePage() {
+
+  const handleLogout = async () => {
+    await authService.signOut()
+  }
+
   const plans = {
     red: {
       color: "text-red-500",
@@ -36,11 +44,6 @@ export default function ProfilePage() {
             width={128}
             height={128}
           />
-          {/* <img
-            className="h-full w-full rounded-full object-cover"
-            src="https://lh3.googleusercontent.com/a/AGNmyxYCxUZeSxrFiRFUwEvxoYZIJIgdJSR-L38AqkspBA=s96-c"
-            alt="Saheb Giri"
-          /> */}
         </div>
         <div className="inline-flex items-center space-x-2">
           <h1 className="text-lg font-bold">Saheb Giri</h1>
@@ -104,7 +107,7 @@ export default function ProfilePage() {
             </Link>
           </div>
         </div>
-        <Button>Log out</Button>
+        <Button onClick={handleLogout}>Log out</Button>
       </div>
     </div>
   )
