@@ -1,15 +1,19 @@
-"use client"
-
 import React from "react"
 import Image from "next/image"
 import Link from "next/link"
+import { notFound } from "next/navigation"
 import authService from "@/services/auth.service"
 
+import { getCurrentUser } from "@/lib/session"
 import { Button, buttonVariants } from "@/components/ui/button"
 import { Icons } from "@/components/icons"
 import { ThemeToggle } from "@/components/theme-toggle"
 
-export default function ProfilePage() {
+export default async function ProfilePage() {
+  const user = await getCurrentUser()
+  if (!user) {
+    return notFound()
+  }
 
   const handleLogout = async () => {
     await authService.signOut()
@@ -32,25 +36,36 @@ export default function ProfilePage() {
       gradient: "from-amber-500 to-yellow-500",
     },
   }
+
   const currentPlan = plans.red
+
+  // if (isLoading) {
+  //   return <div>Loading...</div>
+  // }
+
+  // if (!user) {
+  //   return <div>User not found</div>
+  // }
+
   return (
     <div className="container mx-auto max-w-md py-16">
       <div className="space-y mb-8 text-center">
         <div className="avatar avatar-md mx-auto mb-6 h-32 w-32 rounded-full">
           <Image
-            src="https://betabuzz-avatars.s3.ap-south-1.amazonaws.com/5f65b0a1679cf255ad4568a0bc5a053f069638f3479c67c111f88172fdcf61d3"
-            alt="Saheb Giri"
+            src={user.avatar}
+            alt={user.name}
             className="h-full w-full rounded-full object-cover"
             width={128}
             height={128}
+            priority
           />
         </div>
         <div className="inline-flex items-center space-x-2">
-          <h1 className="text-lg font-bold">Saheb Giri</h1>
+          <h1 className="text-lg font-bold">{user.name}</h1>
           <Icons.verified className={`h-4 w-4 ${currentPlan.color}`} />
         </div>
         <h2 className="text-md text-muted-foreground font-semibold">
-          sahebgiri578@gmail.com
+          {user.email}
         </h2>
         <div className="mt-2">
           <Button variant="outline" size="sm" className="space-x-3">
@@ -107,7 +122,7 @@ export default function ProfilePage() {
             </Link>
           </div>
         </div>
-        <Button onClick={handleLogout}>Log out</Button>
+        {/* <Button onClick={handleLogout}>Log out</Button> */}
       </div>
     </div>
   )

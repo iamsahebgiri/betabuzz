@@ -9,6 +9,9 @@ const nextConfig = {
       {
         hostname: "betabuzz-avatars.s3.ap-south-1.amazonaws.com",
       },
+      {
+        hostname: "i.pravatar.cc",
+      },
     ],
   },
 }

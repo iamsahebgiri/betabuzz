@@ -52,11 +52,13 @@ class AuthService extends APIService {
       .then((response) => {
         this.purgeAccessToken()
         this.purgeRefreshToken()
+        this.purgeUser()
         return response?.data
       })
       .catch((error) => {
         this.purgeAccessToken()
         this.purgeRefreshToken()
+        this.purgeUser()
         throw error?.response?.data
       })
   }
