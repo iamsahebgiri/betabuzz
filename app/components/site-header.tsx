@@ -39,7 +39,8 @@ const UserMenu = () => {
             <Image
               src={`https://ui-avatars.com/api/?name=${user.name}&background=random`}
               alt={user.name}
-              fill
+              width={40}
+              height={40}
             />
           </AvatarFallback>
         </Avatar>

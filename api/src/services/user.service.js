@@ -64,6 +64,9 @@ const updateUserById = async (userId, updateBody) => {
   if (updateBody.email && (await User.isEmailTaken(updateBody.email, userId))) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
   }
+  if (updateBody.name) {
+    updateBody.avatar = `https://ui-avatars.com/api/?name=${updateBody.name}&background=random`;
+  }
   Object.assign(user, updateBody);
   await user.save();
   return user;

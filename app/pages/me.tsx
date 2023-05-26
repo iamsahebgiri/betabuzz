@@ -213,7 +213,7 @@ const UserAvatar = () => {
         </div>
       ) : (
         <div className="group h-32 w-32 rounded-full overflow-hidden relative">
-          <Image
+          <img
             src={user.avatar}
             alt={user.name}
             className="h-full w-full rounded-full object-cover"
@@ -234,12 +234,14 @@ const UserAvatar = () => {
                 onChange={handleImageChange}
               />
             </label>
-            <button
-              className="w-8 h-8 bg-black bg-opacity-40 justify-center items-center rounded-full hidden group-hover:flex border-2 border-black/40 hover:border-white"
-              onClick={deleteAvatar}
-            >
-              <Icons.trash className="h-5 w-5 text-white" />
-            </button>
+            {user.avatar.includes("amazonaws.com") && (
+              <button
+                className="w-8 h-8 bg-black bg-opacity-40 justify-center items-center rounded-full hidden group-hover:flex border-2 border-black/40 hover:border-white"
+                onClick={deleteAvatar}
+              >
+                <Icons.trash className="h-5 w-5 text-white" />
+              </button>
+            )}
           </div>
         </div>
       )}
