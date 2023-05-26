@@ -6,6 +6,7 @@ const createProduct = {
     name: Joi.string().required(),
     link: Joi.string().required(),
     description: Joi.string(),
+    image: Joi.string(),
   }),
 };
 
@@ -35,6 +36,7 @@ const updateProduct = {
       name: Joi.string(),
       link: Joi.string(),
       description: Joi.string(),
+      image: Joi.string(),
     })
     .min(1),
 };
@@ -57,6 +59,14 @@ const deleteProduct = {
   }),
 };
 
+const uploadImage = {
+  file: Joi.object().required(),
+};
+
+const removeImage = {
+  image: Joi.string().required(),
+};
+
 module.exports = {
   createProduct,
   getProducts,
@@ -65,4 +75,6 @@ module.exports = {
   unvoteProduct,
   updateProduct,
   deleteProduct,
+  uploadImage,
+  removeImage
 };

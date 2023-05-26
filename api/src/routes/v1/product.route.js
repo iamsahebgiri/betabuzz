@@ -1,16 +1,25 @@
 const express = require('express');
 const auth = require('../../middlewares/auth');
 const validate = require('../../middlewares/validate');
+const { upload } = require('../../middlewares/multer');
 const productController = require('../../controllers/product.controller');
 const productValidation = require('../../validations/product.validation');
 const commentValidation = require('../../validations/comment.validation');
 
 const router = express.Router();
 
-router.route('/').post(auth(), validate(productValidation.createProduct), productController.createProduct).get(productController.getProducts);
+router
+  .route('/')
+  .post(auth(), validate(productValidation.createProduct), productController.createProduct)
+  .get(productController.getProducts);
 
 router.get('/trending', productController.getTrendingProducts);
 router.get('/recent', productController.getRecentProducts);
+
+router
+  .route('/image')
+  .post(auth(), upload.single('image'), validate(productValidation.uploadImage), productController.uploadImage)
+  .delete(auth(), validate(productValidation.removeImage), productController.removeImage);
 
 router
   .route('/:productId')
