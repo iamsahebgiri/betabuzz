@@ -8,11 +8,21 @@ import { Icons } from "@/components/icons";
 import { ThemeToggle } from "@/components/theme-toggle";
 import useUser from "@/hooks/use-user";
 import MainLayout from "@/layouts/main.layout";
-import userService from "@/services/user.service";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { toast } from "@/components/ui/use-toast";
+import userService from "@/services/user.service";
+import EditProfileForm from "@/components/forms/edit-profile";
 
 export default function ProfilePage() {
   const { user, loading, mutate } = useUser();
+  const [editing, setEditing] = useState(false);
 
   const handleLogout = async () => {
     await authService.signOut();
@@ -56,9 +66,23 @@ export default function ProfilePage() {
             {user.email}
           </h2>
           <div className="mt-2">
-            <Button variant="outline" size="sm">
-              <span className=" text-sm font-bold">Edit profile</span>
-            </Button>
+            <Dialog open={editing} onOpenChange={setEditing}>
+              <DialogTrigger asChild>
+                <Button variant="outline" size="sm">
+                  <span className=" text-sm font-bold">Edit profile</span>
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>Edit profile</DialogTitle>
+                  <DialogDescription>
+                    Make changes to your profile here. Click save when you're
+                    done.
+                  </DialogDescription>
+                </DialogHeader>
+                <EditProfileForm onSuccess={() => setEditing(false)} />
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
         <div className="flex flex-col space-y-4">
@@ -129,8 +153,8 @@ const UserAvatar = () => {
       console.log("Uploading...");
       userService
         .uploadAvatar(file, user.id)
-        .then(async () => {
-          await mutate();
+        .then(async (res) => {
+          await mutate("user.me", res);
           // toast({
           //   title: "Changed avatar successfully.",
           //   variant: "default",
@@ -154,8 +178,8 @@ const UserAvatar = () => {
     setIsProcessing(true);
     userService
       .deleteAvatar(user.id)
-      .then(async () => {
-        await mutate();
+      .then(async (res) => {
+        await mutate("user.me", res);
         // toast({
         //   title: "Deleted avatar successfully.",
         //   variant: "default",
@@ -195,7 +219,6 @@ const UserAvatar = () => {
             className="h-full w-full rounded-full object-cover"
             width={128}
             height={128}
-            priority
           />
           <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-gray-800 hidden group-hover:flex justify-center items-center space-x-2">
             <label htmlFor="user-avatar" className="cursor-pointer">

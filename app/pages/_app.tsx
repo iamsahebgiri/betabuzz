@@ -7,12 +7,12 @@ import type { AppProps } from "next/app";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-      <div className={fontSans.variable}>
+    <div className={fontSans.variable}>
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
         <Component {...pageProps} />
         <Toaster />
-      </div>
-      <TailwindIndicator />
-    </ThemeProvider>
+        <TailwindIndicator />
+      </ThemeProvider>
+    </div>
   );
 }
