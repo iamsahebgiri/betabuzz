@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label";
 import { toast } from "@/components/ui/use-toast";
 import { Icons } from "@/components/icons";
 import useUser from "@/hooks/use-user";
+import { FormErrorMessage } from "@/components/ui/form-error-message";
 
 interface SignInFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 interface RegisterFormProps extends React.HTMLAttributes<HTMLDivElement> {}
@@ -54,7 +55,6 @@ export function SignInForm({ className, ...props }: SignInFormProps) {
           title: "Bad request.",
           description: err?.message,
           variant: "destructive",
-          
         });
       })
       .finally(() => {
@@ -79,9 +79,7 @@ export function SignInForm({ className, ...props }: SignInFormProps) {
               {...register("email")}
             />
             {errors?.email && (
-              <p className="px-1 text-xs font-medium text-red-600">
-                {errors.email.message}
-              </p>
+              <FormErrorMessage>{errors.email.message}</FormErrorMessage>
             )}
           </div>
           <div className="grid gap-1">
@@ -97,9 +95,7 @@ export function SignInForm({ className, ...props }: SignInFormProps) {
               {...register("password")}
             />
             {errors?.password && (
-              <p className="px-1 text-xs text-red-600">
-                {errors.password.message}
-              </p>
+              <FormErrorMessage>{errors.password.message}</FormErrorMessage>
             )}
           </div>
           <button className={cn(buttonVariants())} disabled={isLoading}>
@@ -195,9 +191,7 @@ export function RegisterForm({ className, ...props }: RegisterFormProps) {
               {...register("name")}
             />
             {errors?.name && (
-              <p className="px-1 text-xs font-medium text-red-600">
-                {errors.name.message}
-              </p>
+              <FormErrorMessage>{errors.name.message}</FormErrorMessage>
             )}
           </div>
           <div className="grid gap-1">
@@ -213,9 +207,7 @@ export function RegisterForm({ className, ...props }: RegisterFormProps) {
               {...register("email")}
             />
             {errors?.email && (
-              <p className="px-1 text-xs font-medium text-red-600">
-                {errors.email.message}
-              </p>
+              <FormErrorMessage>{errors.email.message}</FormErrorMessage>
             )}
           </div>
           <div className="grid gap-1">
@@ -230,9 +222,7 @@ export function RegisterForm({ className, ...props }: RegisterFormProps) {
               {...register("password")}
             />
             {errors?.password && (
-              <p className="px-1 text-xs font-medium text-red-600">
-                {errors.password.message}
-              </p>
+              <FormErrorMessage>{errors.password.message}</FormErrorMessage>
             )}
           </div>
           <button className={cn(buttonVariants())} disabled={isLoading}>
