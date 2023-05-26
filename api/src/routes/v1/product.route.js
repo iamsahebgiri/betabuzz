@@ -7,7 +7,7 @@ const commentValidation = require('../../validations/comment.validation');
 
 const router = express.Router();
 
-router.route('/').post(auth(), productController.createProduct).get(productController.getProducts);
+router.route('/').post(auth(), validate(productValidation.createProduct), productController.createProduct).get(productController.getProducts);
 
 router.get('/trending', productController.getTrendingProducts);
 router.get('/recent', productController.getRecentProducts);

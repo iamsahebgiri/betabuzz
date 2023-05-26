@@ -95,7 +95,7 @@ const uploadAvatar = async (userId, file) => {
     throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
   }
   const name = strings.generateFileName();
-  const fileBuffer = await sharp(file.buffer).resize({ height: 128, width: 128 }).toBuffer();
+  const fileBuffer = await sharp(file.buffer).resize({ height: 256, width: 256 }).toBuffer();
   await uploadService.uploadFile({
     ...file,
     buffer: fileBuffer,
@@ -117,11 +117,11 @@ const deleteAvatar = async (userId) => {
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
   }
-  if (user.avatar !== null) {
+  if (user.avatar !== null && user.avatar.includes('amazonaws.com')) {
     const key = user.avatar.split('/').pop();
     await uploadService.deleteFile(key);
   }
-  user.avatar = null;
+  user.avatar = `https://ui-avatars.com/api/?name=${user.name}&background=random`;
   await user.save();
   return user;
 };
