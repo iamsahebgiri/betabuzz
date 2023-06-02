@@ -6,10 +6,15 @@ const imageSchema = mongoose.Schema(
     url: {
       type: String,
       required: true,
+      unique: true,
     },
     expires: {
       type: Boolean,
       required: true,
+    },
+    creator: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: 'User',
     },
   },
   {

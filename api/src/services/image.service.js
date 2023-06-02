@@ -9,10 +9,11 @@ const uploadService = require('./upload.service');
 
 /**
  * Upload image
- * @param {Object} file
+ * @param {Multer.File} file
+ * @param {ObjectId} userId
  * @returns {Promise<Image>}
  */
-const uploadImage = async (file) => {
+const uploadImage = async (file, userId) => {
   const name = strings.generateFileName();
   const fileBuffer = await sharp(file.buffer).resize({ height: 256, width: 256 }).toBuffer();
   await uploadService.uploadFile({
@@ -24,6 +25,7 @@ const uploadImage = async (file) => {
   return Image.create({
     url,
     expires: true,
+    creator: userId,
   });
 };
 

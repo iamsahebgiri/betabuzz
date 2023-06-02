@@ -113,7 +113,8 @@ const voteComment = catchAsync(async (req, res) => {
 
 const uploadImage = catchAsync(async (req, res) => {
   const file = pick(req.file, ['buffer', 'mimetype']);
-  const image = await imageService.uploadImage(file);
+  const userId = req.user.id;
+  const image = await imageService.uploadImage(file, userId);
   res.status(httpStatus.CREATED).send(image);
 });
 
