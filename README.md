@@ -7,6 +7,7 @@ Creating a buzz around the latest beta products
 
 - JWT Based Authentication
 - Storing user generated content in S3
+- Stripe integration for subscription
 
 ## Todo
-- Stripe integration for payment
+- 
