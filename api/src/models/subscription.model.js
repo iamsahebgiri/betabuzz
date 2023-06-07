@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 
 const subscriptionSchema = mongoose.Schema(
   {
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
     customerId: {
       type: String,
       required: true,
@@ -12,14 +16,8 @@ const subscriptionSchema = mongoose.Schema(
     },
     plan: {
       type: String,
-      required: true,
-      enum: ['free', 'basic', 'pro', 'premium'],
+      enum: ['free', 'starter', 'pro', 'premium'],
       default: 'free',
-    },
-    status: {
-      type: String,
-      required: true,
-      enum: ['active', 'canceled', 'pastDue', 'unpaid'],
     },
     currentPeriodStart: {
       type: Date,
@@ -28,13 +26,6 @@ const subscriptionSchema = mongoose.Schema(
     currentPeriodEnd: {
       type: Date,
       required: true,
-    },
-    cancelAtPeriodEnd: {
-      type: Boolean,
-      required: true,
-    },
-    canceledAt: {
-      type: Date,
     },
   },
   {

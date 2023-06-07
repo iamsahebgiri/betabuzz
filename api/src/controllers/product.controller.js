@@ -2,7 +2,7 @@ const httpStatus = require('http-status');
 const pick = require('../utils/pick');
 const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
-const { productService, commentService } = require('../services');
+const { productService, commentService, imageService } = require('../services');
 
 const createProduct = catchAsync(async (req, res) => {
   const payload = {
@@ -111,6 +111,18 @@ const voteComment = catchAsync(async (req, res) => {
   res.send(comment);
 });
 
+const uploadImage = catchAsync(async (req, res) => {
+  const file = pick(req.file, ['buffer', 'mimetype']);
+  const userId = req.user.id;
+  const image = await imageService.uploadImage(file, userId);
+  res.status(httpStatus.CREATED).send(image);
+});
+
+const removeImage = catchAsync(async (req, res) => {
+  await imageService.deleteImage(req.body);
+  res.status(httpStatus.NO_CONTENT).send();
+});
+
 module.exports = {
   createProduct,
   getProducts,
@@ -128,4 +140,6 @@ module.exports = {
   deleteComment,
   unvoteComment,
   voteComment,
+  uploadImage,
+  removeImage,
 };

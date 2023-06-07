@@ -2,13 +2,13 @@ import APIService from "@/services/api.service";
 
 const { NEXT_PUBLIC_API_BASE_URL } = process.env;
 
-class UserService extends APIService {
+class ProductService extends APIService {
   constructor() {
     super(NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000/v1");
   }
 
-  async me() {
-    return this.get("/users/me")
+  async createProduct(data: any) {
+    return this.post("/products", data)
       .then((response) => {
         const { data } = response;
         console.log(data);
@@ -19,22 +19,11 @@ class UserService extends APIService {
       });
   }
 
-  async updateUser(userId: String, data: any) {
-    return this.patch(`/users/${userId}`, data)
-      .then((response) => {
-        const { data } = response;
-        return data;
-      })
-      .catch((error) => {
-        throw error?.response?.data;
-      });
-  }
-
-  async uploadAvatar(avatar: File, userId: String) {
+  async uploadImage(image: File) {
     const formData = new FormData();
-    formData.append("avatar", avatar);
+    formData.append("image", image);
 
-    return this.mediaUpload(`/users/${userId}/avatar`, formData)
+    return this.mediaUpload(`/products/image`, formData)
       .then((response) => {
         const { data } = response;
         return data;
@@ -44,8 +33,10 @@ class UserService extends APIService {
       });
   }
 
-  async deleteAvatar(userId: String) {
-    return this.delete(`/users/${userId}/avatar`)
+  async deleteImage(imageUrl: String) {
+    return this.delete(`/products/image`, {
+      image: imageUrl,
+    })
       .then((response) => {
         const { data } = response;
         return data;
@@ -56,6 +47,6 @@ class UserService extends APIService {
   }
 }
 
-const userService = new UserService();
+const productService = new ProductService();
 
-export default userService;
+export default productService;

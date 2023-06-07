@@ -5,7 +5,7 @@ const ApiError = require('../utils/ApiError');
 
 /**
  * Comment on a product
- * @param {Object} productId
+ * @param {ObjectId} productId
  * @param {Object} commentBody
  * @returns {Promise<Comment>}
  */
@@ -23,7 +23,8 @@ const createComment = async (productId, commentBody) => {
 
 /**
  * Query for comments
- * @param {String} productId - Mongo filter
+ * @param {ObjectId} productId - Product Id
+ * @param {ObjectId} userId - User Id
  * @param {Object} filter - Mongo filter
  * @param {Object} options - Query options
  * @param {string} [options.sortBy] - Sort option in the format: sortField:(desc|asc)

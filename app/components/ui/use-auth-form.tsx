@@ -66,7 +66,7 @@ export function SignInForm({ className, ...props }: SignInFormProps) {
     <div className={cn("grid gap-6", className)} {...props}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid gap-4">
-          <div className="grid gap-1">
+          <div className="grid gap-2">
             <Label htmlFor="email">Email</Label>
             <Input
               id="email"
@@ -82,7 +82,7 @@ export function SignInForm({ className, ...props }: SignInFormProps) {
               <FormErrorMessage>{errors.email.message}</FormErrorMessage>
             )}
           </div>
-          <div className="grid gap-1">
+          <div className="grid gap-2">
             <Label htmlFor="password">Password</Label>
             <Input
               id="password"
@@ -179,7 +179,7 @@ export function RegisterForm({ className, ...props }: RegisterFormProps) {
     <div className={cn("grid gap-6", className)} {...props}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid gap-4">
-          <div className="grid gap-1">
+          <div className="grid gap-2">
             <Label htmlFor="name">Name</Label>
             <Input
               id="name"
@@ -194,7 +194,7 @@ export function RegisterForm({ className, ...props }: RegisterFormProps) {
               <FormErrorMessage>{errors.name.message}</FormErrorMessage>
             )}
           </div>
-          <div className="grid gap-1">
+          <div className="grid gap-2">
             <Label htmlFor="email">Email</Label>
             <Input
               id="email"
@@ -210,7 +210,7 @@ export function RegisterForm({ className, ...props }: RegisterFormProps) {
               <FormErrorMessage>{errors.email.message}</FormErrorMessage>
             )}
           </div>
-          <div className="grid gap-1">
+          <div className="grid gap-2">
             <Label htmlFor="password">Password</Label>
             <Input
               id="password"
