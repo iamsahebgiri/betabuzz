@@ -1761,7 +1761,7 @@
     "@types/bson" "*"
     "@types/node" "*"
 
-"@types/node@*":
+"@types/node@*", "@types/node@>=8.1.0":
   version "16.0.0"
   resolved "https://registry.npmjs.org/@types/node/-/node-16.0.0.tgz"
   integrity sha512-TmCW5HoZ2o2/z2EYi109jLqIaPIi9y/lc2LmDCWzuCi35bcaQ+OtUh6nwBiFK7SOu25FAU5+YKdqFZUwtqGSdg==
@@ -6778,6 +6778,13 @@ pupa@^2.0.1:
   dependencies:
     escape-goat "^2.0.0"
 
+qs@^6.11.0:
+  version "6.11.2"
+  resolved "https://registry.npmjs.org/qs/-/qs-6.11.2.tgz"
+  integrity sha512-tDNIz22aBzCDxLtVH++VnTfzxlfeK5CbqohpSqpJgj1Wg/cQbStNAz3NuqCs5vV+pjBsK4x4pN9HlVh7rcYRiA==
+  dependencies:
+    side-channel "^1.0.4"
+
 qs@^6.9.4:
   version "6.10.1"
   resolved "https://registry.npmjs.org/qs/-/qs-6.10.1.tgz"
@@ -7724,6 +7731,14 @@ strip-json-comments@~2.0.1:
   version "2.0.1"
   resolved "https://registry.npmjs.org/strip-json-comments/-/strip-json-comments-2.0.1.tgz"
   integrity sha1-PFMZQukIwml8DsNEhYwobHygpgo=
+
+stripe@^12.8.0:
+  version "12.8.0"
+  resolved "https://registry.npmjs.org/stripe/-/stripe-12.8.0.tgz"
+  integrity sha512-LVn981F20uR/0osbGq5n6j49LBh2W3gLoO96d8GPcUX0UYWzIOYXCG3aImIxNuiUPlgtziTHs+e33On2JgCScg==
+  dependencies:
+    "@types/node" ">=8.1.0"
+    qs "^6.11.0"
 
 strnum@^1.0.5:
   version "1.0.5"

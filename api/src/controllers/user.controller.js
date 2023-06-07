@@ -2,7 +2,7 @@ const httpStatus = require('http-status');
 const pick = require('../utils/pick');
 const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
-const { userService } = require('../services');
+const { userService, billingService } = require('../services');
 
 const createUser = catchAsync(async (req, res) => {
   const user = await userService.createUser(req.body);
@@ -53,13 +53,26 @@ const removeAvatar = catchAsync(async (req, res) => {
   res.send(user);
 });
 
+const upgradeBilling = catchAsync(async (req, res) => {
+  const { priceId } = pick(req.query, ['priceId']);
+  const session = await billingService.upgradeBilling(req.user, priceId);
+  res.send(session);
+});
+
+const manageBilling = catchAsync(async (req, res) => {
+  const url = await billingService.manageBilling(req.user.id);
+  res.send({ url });
+});
+
 module.exports = {
   createUser,
-  getUsers,
-  getUser,
-  updateUser,
   deleteUser,
-  uploadAvatar,
-  removeAvatar,
   getMe,
+  getUser,
+  getUsers,
+  manageBilling,
+  removeAvatar,
+  updateUser,
+  upgradeBilling,
+  uploadAvatar,
 };

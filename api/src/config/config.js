@@ -27,6 +27,9 @@ const envVarsSchema = Joi.object()
     AWS_SECRET_ACCESS_KEY: Joi.string().description('AWS secret access key'),
     AWS_S3_BUCKET_NAME: Joi.string().description('AWS S3 bucket name'),
     AWS_S3_BUCKET_REGION: Joi.string().description('AWS S3 bucket region'),
+    STRIPE_PUBLISHABLE_KEY: Joi.string().description('Stripe publishable key'),
+    STRIPE_SECRET_KEY: Joi.string().description('Stripe secret key'),
+    STRIPE_WEBHOOK_SECRET: Joi.string().description('Stripe webhook secret'),
   })
   .unknown();
 
@@ -72,5 +75,11 @@ module.exports = {
       bucketName: envVars.AWS_S3_BUCKET_NAME,
       bucketRegion: envVars.AWS_S3_BUCKET_REGION,
     },
+  },
+
+  stripe: {
+    publishableKey: envVars.STRIPE_PUBLISHABLE_KEY,
+    secretKey: envVars.STRIPE_SECRET_KEY,
+    webhookSecret: envVars.STRIPE_WEBHOOK_SECRET,
   },
 };
