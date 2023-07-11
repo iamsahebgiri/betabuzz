@@ -1,5 +1,5 @@
 import axios from "axios";
-import { parseISO } from "date-fns";
+import dayjs from "@/lib/dayjs";
 import Cookies from "js-cookie";
 
 const unAuthorizedStatus = [401];
@@ -27,7 +27,7 @@ abstract class APIService {
 
   setRefreshToken(token: string, expires: string) {
     Cookies.set("refreshToken", token, {
-      expires: parseISO(expires),
+      expires: dayjs(expires).toDate(),
     });
   }
 
@@ -41,7 +41,7 @@ abstract class APIService {
 
   setAccessToken(token: string, expires: string) {
     Cookies.set("accessToken", token, {
-      expires: parseISO(expires),
+      expires: dayjs(expires).toDate(),
     });
   }
 

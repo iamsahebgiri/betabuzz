@@ -11,10 +11,10 @@ const router = express.Router();
 router
   .route('/')
   .post(auth(), validate(productValidation.createProduct), productController.createProduct)
-  .get(productController.getProducts);
+  .get(auth(),productController.getProducts);
 
-router.get('/trending', productController.getTrendingProducts);
-router.get('/recent', productController.getRecentProducts);
+router.get('/trending', auth(), productController.getTrendingProducts);
+router.get('/recent', auth(), productController.getRecentProducts);
 
 router
   .route('/image')
@@ -23,7 +23,7 @@ router
 
 router
   .route('/:productId')
-  .get(validate(productValidation.getProduct), productController.getProduct)
+  .get(auth(),validate(productValidation.getProduct), productController.getProduct)
   .patch(auth(), validate(productValidation.updateProduct), productController.updateProduct)
   .delete(auth(), validate(productValidation.deleteProduct), productController.deleteProduct);
 

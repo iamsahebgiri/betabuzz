@@ -22,7 +22,7 @@
     "axios": "^1.4.0",
     "class-variance-authority": "^0.6.0",
     "clsx": "^1.2.1",
-    "date-fns": "^2.30.0",
+    "dayjs": "^1.11.9",
     "eslint": "8.40.0",
     "eslint-config-next": "13.4.2",
     "js-cookie": "^3.0.5",
