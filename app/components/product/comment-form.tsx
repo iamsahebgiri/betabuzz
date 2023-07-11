@@ -13,7 +13,13 @@ import { toast } from "../ui/use-toast";
 
 type UpdateUserFormData = z.infer<typeof createCommentProductSchema>;
 
-function CommentForm({ parentId, mutate }: any) {
+function CommentForm({
+  parentId,
+  mutate,
+  commentId,
+  content,
+  handleClose,
+}: any) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -24,34 +30,57 @@ function CommentForm({ parentId, mutate }: any) {
     formState: { errors },
   } = useForm<UpdateUserFormData>({
     resolver: zodResolver(createCommentProductSchema),
+    defaultValues: {
+      content,
+    },
   });
 
   function onSubmit(data: UpdateUserFormData) {
     setIsLoading(true);
     const productId = router.query.id as string;
-
-    productService
-      .postComment(productId, data)
-      .then(async (res) => {
-        mutate((prevData: any) => {
-          return [
-            { ...prevData[0], results: [res, ...prevData[0].results] },
-            ...prevData,
-          ];
+    if (commentId) {
+      productService
+        .editComment(productId, commentId, data)
+        .then(async (res) => {
+          mutate();
+          reset();
+          handleClose();
+        })
+        .catch((err) => {
+          toast({
+            title: "Bad request.",
+            description: err?.message,
+            variant: "destructive",
+          });
+          console.log(err);
+        })
+        .finally(() => {
+          setIsLoading(false);
         });
-        reset();
-      })
-      .catch((err) => {
-        toast({
-          title: "Bad request.",
-          description: err?.message,
-          variant: "destructive",
+    } else {
+      productService
+        .postComment(productId, data)
+        .then(async (res) => {
+          mutate((prevData: any) => {
+            return [
+              { ...prevData[0], results: [res, ...prevData[0].results] },
+              ...prevData,
+            ];
+          });
+          reset();
+        })
+        .catch((err) => {
+          toast({
+            title: "Bad request.",
+            description: err?.message,
+            variant: "destructive",
+          });
+          console.log(err);
+        })
+        .finally(() => {
+          setIsLoading(false);
         });
-        console.log(err);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    }
   }
 
   return (
@@ -73,7 +102,7 @@ function CommentForm({ parentId, mutate }: any) {
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}
-            {parentId ? "Reply" : "Comment"}
+            {content ? "Edit" : parentId ? "Reply" : "Comment"}
           </Button>
         </div>
       </form>

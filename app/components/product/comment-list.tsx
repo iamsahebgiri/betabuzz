@@ -17,6 +17,7 @@ function CommentActions({
   upvotesCount,
   upvoted,
   mutate,
+  content,
 }: {
   commentId: string;
   productId: string;
@@ -25,9 +26,11 @@ function CommentActions({
   upvotesCount: number;
   upvoted: boolean;
   mutate: KeyedMutator<any>;
+  content?: string;
 }) {
   const { user } = useUser();
   const [replying, setReplying] = useState(false);
+  const [editing, setEditing] = useState(false);
 
   const handleDeleteComment = async () => {
     await productService
@@ -69,14 +72,24 @@ function CommentActions({
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => setReplying(!replying)}
+          onClick={() => {
+            setEditing(false);
+            setReplying(!replying);
+          }}
         >
           Reply
         </Button>
 
         {user.id === authorId ? (
           <>
-            <Button variant="ghost" size="sm">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => {
+                setReplying(false);
+                setEditing(!editing);
+              }}
+            >
               Edit
             </Button>
             <Button variant="ghost" size="sm" onClick={handleDeleteComment}>
@@ -87,6 +100,14 @@ function CommentActions({
       </div>
 
       {replying && <CommentForm parentId={commentId} mutate={mutate} />}
+      {editing && (
+        <CommentForm
+          commentId={commentId}
+          content={content}
+          mutate={mutate}
+          handleClose={() => setEditing(false)}
+        />
+      )}
     </>
   );
 }
@@ -113,6 +134,7 @@ function Comment({ comment, mutate, productId, hidden }: any) {
         </div>
 
         <p className="whitespace-pre-wrap font-medium">{comment.content}</p>
+
         <div className="mt-3">
           <CommentActions
             commentId={comment.id}
@@ -122,6 +144,7 @@ function Comment({ comment, mutate, productId, hidden }: any) {
             upvotesCount={comment.upvotesCount}
             upvoted={comment.upvoted}
             mutate={mutate}
+            content={comment.content}
           />
           {comment.children && comment.children.length > 0 && (
             <ListComments comments={comment.children} />
