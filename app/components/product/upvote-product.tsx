@@ -2,11 +2,12 @@ import productService from "@/services/product.service";
 import React from "react";
 import { toast } from "../ui/use-toast";
 import { Icons } from "../icons";
-import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
+import { KeyedMutator } from "swr";
+import { Product } from "@/types";
 
 interface UpvoteProductButtonProps {
-  mutate: (args: any) => void;
+  mutate: KeyedMutator<any>;
   upvoted: boolean;
   productId: string;
   upvotesCount: number;
@@ -24,7 +25,17 @@ export default function UpvoteProductButton({
     await productService
       .voteProduct(id)
       .then((res) => {
-        mutate(res);
+        console.log(res);
+        mutate((prevData: any) => {
+          return prevData.map((page: any) => {
+            return {
+              ...page,
+              results: page.results.map((product: Product) =>
+                product.id === productId ? res : product
+              ),
+            };
+          });
+        });
       })
       .catch((error) => {
         toast({
@@ -39,7 +50,16 @@ export default function UpvoteProductButton({
     await productService
       .unvoteProduct(id)
       .then((res) => {
-        mutate(res);
+        mutate((prevData: any) => {
+          return prevData.map((page: any) => {
+            return {
+              ...page,
+              results: page.results.map((product: Product) =>
+                product.id === productId ? res : product
+              ),
+            };
+          });
+        });
       })
       .catch((error) => {
         toast({

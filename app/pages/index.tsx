@@ -1,44 +1,88 @@
 import Link from "next/link";
 import MainLayout from "@/layouts/main.layout";
-import useSWR from "swr";
+import useSWRInfinite from "swr/infinite";
 import productService from "@/services/product.service";
 import Image from "next/image";
 import UpvoteProductButton from "@/components/product/upvote-product";
 import dayjs from "@/lib/dayjs";
+import { Button } from "@/components/ui/button";
+import { Product } from "@/types";
+import { KeyedMutator } from "swr";
 
-const Item = ({ item, handleMutation }: any) => {
+const Product = ({
+  product,
+  mutate,
+}: {
+  product: Product;
+  mutate: KeyedMutator<any>;
+}) => {
   return (
     <div className="flex justify-between">
       <div className="mr-2 flex flex-1 items-start gap-3">
         <Image
-          src={item.image}
-          alt={item.name}
+          src={product.image}
+          alt={product.name}
           height={72}
           width={72}
           className="h-12 w-12 rounded-lg"
         />
         <div>
-          <Link href={`/products/${item.id}`} className="text-base font-bold">
-            {item.name} <span className="font-medium">({new URL(item.link).hostname})</span>
+          <Link
+            href={`/products/${product.id}`}
+            className="text-base font-bold"
+          >
+            {product.name}{" "}
+            <span className="font-medium">
+              ({new URL(product.link).hostname})
+            </span>
           </Link>
           <div className="text-muted-foreground font-medium">
-            built by {item.maker.name} · {dayjs(item.createdAt).fromNow()} · {item.commentsCount} comments
+            built by {product.maker.name} · {dayjs(product.createdAt).fromNow()}{" "}
+            · {product.commentsCount} comments
           </div>
         </div>
       </div>
       <UpvoteProductButton
-        productId={item.id}
-        upvoted={item.upvoted}
-        upvotesCount={item.upvotesCount}
-        mutate={handleMutation}
+        productId={product.id}
+        upvoted={product.upvoted}
+        upvotesCount={product.upvotesCount}
+        mutate={mutate}
       />
     </div>
   );
 };
 
+function ProductsList({
+  products,
+  mutate,
+}: {
+  products: Product[];
+  mutate: KeyedMutator<any>;
+}) {
+  return (
+    <>
+      {products.map((product) => (
+        <Product key={product.id} product={product} mutate={mutate} />
+      ))}
+    </>
+  );
+}
+
+const PAGE_SIZE = 1;
+
+const getKey = (pageIndex: number, prevPageData: any) => {
+  if (prevPageData && prevPageData.totalPages === prevPageData.page) {
+    return null;
+  }
+
+  return `/products?limit=${PAGE_SIZE}&page=${
+    pageIndex + 1
+  }&sortBy=createdAt:desc`; // SWR key
+};
 export default function IndexPage() {
-  const { data, isLoading, error, mutate } = useSWR("products.all", () =>
-    productService.getAll()
+  const { data, size, setSize, isLoading, error, mutate } = useSWRInfinite(
+    getKey,
+    (url) => productService.getAllInfinite(url)
   );
 
   if (isLoading) {
@@ -49,23 +93,40 @@ export default function IndexPage() {
     return <div>Error...</div>;
   }
 
-  const handleMutation = (res: any) => {
-    const updatedData = {
-      ...data,
-      results: data.results.map((item: any) =>
-        item.id === res.id ? res : item
-      ),
-    };
-    mutate(updatedData);
-  };
+  const pages = data ? [].concat(...data) : [];
+  const isEmpty = data?.[0]?.totalResults === 0;
+  const reachedEnd =
+    data && data[data.length - 1].totalPages === data[data.length - 1].page;
 
   return (
     <MainLayout>
       <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
         <div className="mx-auto w-full max-w-2xl space-y-8 lg:space-y-10">
-          {data.results.map((item: any) => (
-            <Item key={item.id} item={item} handleMutation={handleMutation} />
-          ))}
+          {isEmpty ? (
+            "No Products"
+          ) : (
+            <>
+              {pages.map((page: any, pageIndex) => (
+                <ProductsList
+                  key={pageIndex}
+                  products={page.results}
+                  mutate={mutate}
+                />
+              ))}
+
+              {!reachedEnd && (
+                <div className="flex items-center justify-center">
+                  <Button
+                    disabled={isLoading}
+                    variant="outline"
+                    onClick={() => setSize(size + 1)}
+                  >
+                    Load More
+                  </Button>
+                </div>
+              )}
+            </>
+          )}
         </div>
       </section>
     </MainLayout>

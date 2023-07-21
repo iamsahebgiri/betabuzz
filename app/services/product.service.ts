@@ -17,6 +17,16 @@ class ProductService extends APIService {
       });
   }
 
+  async getAllInfinite(url: string) {
+    return this.get(url)
+      .then((response) => {
+        return response?.data;
+      })
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
   async getProduct(id: string) {
     return this.get(`/products/${id}`)
       .then((response) => {
@@ -58,9 +68,7 @@ class ProductService extends APIService {
   }
 
   async getComments(productId: string) {
-    return this.get(
-      `/products/${productId}/comments?sortBy=createdAt:desc`
-    )
+    return this.get(`/products/${productId}/comments?sortBy=createdAt:desc`)
       .then((response) => {
         return response?.data;
       })
