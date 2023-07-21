@@ -8,4 +8,5 @@ export const createProductSchema = z.object({
 
 export const createCommentProductSchema = z.object({
   content: z.string().min(1, "Seriously! Write something"),
+  parent: z.string().optional(),
 });

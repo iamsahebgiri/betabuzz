@@ -57,9 +57,9 @@ class ProductService extends APIService {
       });
   }
 
-  async getComments(id: string, pageIndex: number = 0) {
+  async getComments(productId: string) {
     return this.get(
-      `/products/${id}/comments?limit=10&page=${pageIndex}&sortBy=createdAt:desc`
+      `/products/${productId}/comments?sortBy=createdAt:desc`
     )
       .then((response) => {
         return response?.data;

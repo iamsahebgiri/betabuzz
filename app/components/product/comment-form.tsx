@@ -10,16 +10,24 @@ import { createCommentProductSchema } from "@/lib/validations/product";
 import { useState } from "react";
 import productService from "@/services/product.service";
 import { toast } from "../ui/use-toast";
+import { KeyedMutator } from "swr";
+import { Comment } from "@/types";
 
 type UpdateUserFormData = z.infer<typeof createCommentProductSchema>;
 
 function CommentForm({
-  parentId,
+  type,
   mutate,
-  commentId,
+  comment,
   content,
   handleClose,
-}: any) {
+}: {
+  type: "create" | "edit";
+  mutate: KeyedMutator<any>;
+  comment?: Comment;
+  content?: string;
+  handleClose?: () => void;
+}) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -38,13 +46,15 @@ function CommentForm({
   function onSubmit(data: UpdateUserFormData) {
     setIsLoading(true);
     const productId = router.query.id as string;
-    if (commentId) {
+    if (type === "edit") {
+      if (!comment) return;
+
       productService
-        .editComment(productId, commentId, data)
+        .editComment(productId, comment.id, data)
         .then(async (res) => {
           mutate();
           reset();
-          handleClose();
+          if (handleClose) handleClose();
         })
         .catch((err) => {
           toast({
@@ -57,17 +67,24 @@ function CommentForm({
         .finally(() => {
           setIsLoading(false);
         });
-    } else {
+    } else if (type === "create") {
       productService
-        .postComment(productId, data)
+        .postComment(productId, {
+          ...data,
+          ...(comment?.id ? { parent: comment.id } : {}),
+        })
         .then(async (res) => {
+          // mutate((prevData: any) => {
+          //   return [
+          //     { ...prevData[0], results: [res, ...prevData[0].results] },
+          //     ...prevData,
+          //   ];
+          // });
           mutate((prevData: any) => {
-            return [
-              { ...prevData[0], results: [res, ...prevData[0].results] },
-              ...prevData,
-            ];
+            return [...prevData, res];
           });
           reset();
+          if (handleClose) handleClose();
         })
         .catch((err) => {
           toast({
@@ -102,7 +119,7 @@ function CommentForm({
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}
-            {content ? "Edit" : parentId ? "Reply" : "Comment"}
+            {content ? "Edit" : comment?.parent ? "Reply" : "Comment"}
           </Button>
         </div>
       </form>

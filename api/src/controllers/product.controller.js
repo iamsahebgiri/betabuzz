@@ -66,6 +66,7 @@ const createComment = catchAsync(async (req, res) => {
   const commentBody = {
     content: req.body.content,
     author: req.user.id,
+    parent: req.body.parent,
     product: productId,
   };
   const comment = await commentService.createComment(productId, commentBody);

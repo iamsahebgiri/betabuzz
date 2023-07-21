@@ -38,14 +38,19 @@ const getComments = async (productId, userId, filter, options) => {
   if (!product) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
   }
-  filter = { ...filter, product: productId };
-  const { results: comments, ...rest } = await Comment.paginate(filter, options);
-  const results = await Promise.all(
-    comments.map(async (comment) => {
-      return comment.toCommentResponse(userId);
-    })
-  );
-  return { results, ...rest };
+  // TODO: No pagination for now please
+  // filter = { ...filter, product: productId };
+  // const { results: comments, ...rest } = await Comment.paginate(filter, options);
+  // const results = await Promise.all(
+  //   comments.map(async (comment) => {
+  //     return comment.toCommentResponse(userId);
+  //   })
+  // );
+  // return { results, ...rest };
+
+  const comments = await Comment.find({ product: productId });
+  const results = await Promise.all(comments.map(async (comment) => comment.toCommentResponse(userId)));
+  return results;
 };
 
 /**

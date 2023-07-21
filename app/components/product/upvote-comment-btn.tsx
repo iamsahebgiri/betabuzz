@@ -3,38 +3,55 @@ import { Button } from "../ui/button";
 import productService from "@/services/product.service";
 import { toast } from "../ui/use-toast";
 import { Icons } from "../icons";
+import { Comment } from "@/types";
+import { KeyedMutator } from "swr";
 
 export default function UpvoteCommentButton({
-  upvoted,
+  comment,
   mutate,
-  productId,
-  commentId,
-  upvotesCount,
-}: any) {
+}: {
+  comment: Comment;
+  mutate: KeyedMutator<any>;
+}) {
   const handleMutation = (type: "upvote" | "unvote") => {
-    mutate((prevData: any) => {
-      const newPrevData = prevData.map((page: any) => {
-        return {
-          ...page,
-          results: page.results.map((comment: any) => {
-            if (comment.id === commentId) {
-              return {
-                ...comment,
-                upvoted: type === "upvote",
-                upvotesCount:
-                  comment.upvotesCount + (type === "upvote" ? 1 : -1),
-              };
-            }
-            return comment;
-          }),
-        };
+    // mutate((prevData: any) => {
+    // TODO: Infinite scrolling
+    // const newPrevData = prevData.map((page: any) => {
+    //   return {
+    //     ...page,
+    //     results: page.results.map((comment: any) => {
+    //       if (comment.id === commentId) {
+    //         return {
+    //           ...comment,
+    //           upvoted: type === "upvote",
+    //           upvotesCount:
+    //             comment.upvotesCount + (type === "upvote" ? 1 : -1),
+    //         };
+    //       }
+    //       return comment;
+    //     }),
+    //   };
+    // });
+    // return newPrevData;
+    // });
+    mutate((prevData: Comment[]) => {
+      const newComments = prevData.map((item: Comment) => {
+        if (item.id === comment.id) {
+          return {
+            ...item,
+            upvoted: type === "upvote",
+            upvotesCount: item.upvotesCount + (type === "upvote" ? 1 : -1),
+          };
+        }
+        return item;
       });
-      return newPrevData;
+      return newComments;
     });
   };
   const handleVoteComment = async () => {
+    console.log(comment.product);
     await productService
-      .voteComment(productId, commentId)
+      .voteComment(comment.product, comment.id)
       .then(() => {
         handleMutation("upvote");
       })
@@ -49,7 +66,7 @@ export default function UpvoteCommentButton({
 
   const handleUnvoteComment = async () => {
     await productService
-      .unvoteComment(productId, commentId)
+      .unvoteComment(comment.product, comment.id)
       .then(() => {
         handleMutation("unvote");
       })
@@ -64,10 +81,10 @@ export default function UpvoteCommentButton({
 
   return (
     <Button
-      variant={upvoted ? "default" : "outline"}
+      variant={comment.upvoted ? "default" : "outline"}
       size="sm"
       onClick={() => {
-        if (upvoted) {
+        if (comment.upvoted) {
           handleUnvoteComment();
         } else {
           handleVoteComment();
@@ -77,7 +94,7 @@ export default function UpvoteCommentButton({
     >
       <Icons.arrowUp className="h-6 w-6 mt-0.5" />
       <div className="text-sm font-bold space-x-2">
-        <span>{upvotesCount}</span>
+        <span>{comment.upvotesCount}</span>
       </div>
     </Button>
   );

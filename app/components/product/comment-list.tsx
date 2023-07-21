@@ -8,23 +8,15 @@ import productService from "@/services/product.service";
 import { toast } from "../ui/use-toast";
 import UpvoteCommentButton from "./upvote-comment-btn";
 import type { KeyedMutator } from "swr";
+import { Comment, CommentWithChildren } from "@/types";
+import formatComments from "@/lib/comments";
 
 function CommentActions({
-  commentId,
-  productId,
-  authorId,
-  replyCount,
-  upvotesCount,
-  upvoted,
+  comment,
   mutate,
   content,
 }: {
-  commentId: string;
-  productId: string;
-  authorId: string;
-  replyCount: number;
-  upvotesCount: number;
-  upvoted: boolean;
+  comment: CommentWithChildren;
   mutate: KeyedMutator<any>;
   content?: string;
 }) {
@@ -34,21 +26,27 @@ function CommentActions({
 
   const handleDeleteComment = async () => {
     await productService
-      .removeComment(productId, commentId)
+      .removeComment(comment.product, comment.id)
       .then(() => {
-        mutate(
-          (prevData: any) => {
-            return prevData.map((page: any) => {
-              return {
-                ...page,
-                results: page.results.filter(
-                  (comment: any) => comment.id !== commentId
-                ),
-              };
-            });
-          },
-          { revalidate: false }
-        );
+        // mutate(
+        //   (prevData: any) => {
+        //     return prevData.map((page: any) => {
+        //       return {
+        //         ...page,
+        //         results: page.results.filter(
+        //           (comment: any) => comment.id !== commentId
+        //         ),
+        //       };
+        //     });
+        //   },
+        //   { revalidate: false }
+        // );
+        mutate((prevData: any) => {
+          const newComments = prevData.filter(
+            (item: Comment) => item.id !== comment.id
+          );
+          return newComments;
+        });
       })
       .catch((error) => {
         toast({
@@ -61,14 +59,8 @@ function CommentActions({
 
   return (
     <>
-      <div className="mb-2 flex gap-2 items-center">
-        <UpvoteCommentButton
-          commentId={commentId}
-          productId={productId}
-          upvotesCount={upvotesCount}
-          upvoted={upvoted}
-          mutate={mutate}
-        />
+      <div className="mb-6 flex gap-2 items-center">
+        <UpvoteCommentButton comment={comment} mutate={mutate} />
         <Button
           variant="ghost"
           size="sm"
@@ -80,7 +72,7 @@ function CommentActions({
           Reply
         </Button>
 
-        {user.id === authorId ? (
+        {user.id === comment.author.id ? (
           <>
             <Button
               variant="ghost"
@@ -92,17 +84,28 @@ function CommentActions({
             >
               Edit
             </Button>
-            <Button variant="ghost" size="sm" onClick={handleDeleteComment}>
-              Delete
-            </Button>
+            {comment.children.length === 0 && (
+              <Button variant="ghost" size="sm" onClick={handleDeleteComment}>
+                Delete
+              </Button>
+            )}
           </>
         ) : null}
       </div>
 
-      {replying && <CommentForm parentId={commentId} mutate={mutate} />}
+      {replying && (
+        <CommentForm
+          type="create"
+          comment={comment}
+          mutate={mutate}
+          handleClose={() => setReplying(false)}
+        />
+      )}
+
       {editing && (
         <CommentForm
-          commentId={commentId}
+          type="edit"
+          comment={comment}
           content={content}
           mutate={mutate}
           handleClose={() => setEditing(false)}
@@ -114,7 +117,7 @@ function CommentActions({
 
 function Comment({ comment, mutate, productId, hidden }: any) {
   return (
-    <li className="relative flex gap-6 pb-8 items-start gap-x-2">
+    <li className="relative flex gap-6 items-start gap-x-2">
       {hidden ? null : (
         <span className="absolute left-[15px] inset-y-0 my-auto h-full w-[2px] bg-border/80" />
       )}
@@ -135,19 +138,18 @@ function Comment({ comment, mutate, productId, hidden }: any) {
 
         <p className="whitespace-pre-wrap font-medium">{comment.content}</p>
 
-        <div className="mt-3">
+        <div className="my-3">
           <CommentActions
-            commentId={comment.id}
-            productId={productId}
-            authorId={comment.author.id}
-            replyCount={0}
-            upvotesCount={comment.upvotesCount}
-            upvoted={comment.upvoted}
+            comment={comment}
             mutate={mutate}
             content={comment.content}
           />
           {comment.children && comment.children.length > 0 && (
-            <ListComments comments={comment.children} />
+            <ListComments
+              comments={comment.children}
+              mutate={mutate}
+              productId={productId}
+            />
           )}
         </div>
       </div>
