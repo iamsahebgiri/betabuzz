@@ -87,6 +87,11 @@ const userSchema = mongoose.Schema(
       },
       private: true, // used by the toJSON plugin
     },
+    plan: {
+      type: String,
+      enum: ['free', 'starter', 'pro', 'premium'],
+      default: 'free',
+    },
     role: {
       type: String,
       enum: roles,
@@ -127,7 +132,7 @@ userSchema.statics.isEmailTaken = async function (email, excludeUserId) {
  */
 userSchema.statics.isUsernameTaken = async function (username, excludeUserId) {
   const user = await this.findOne({ username, _id: { $ne: excludeUserId } });
-return !!user;
+  return !!user;
 };
 
 /**

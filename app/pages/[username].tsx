@@ -15,6 +15,7 @@ import useSWR from "swr";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import { siteConfig } from "@/config/site";
+import { plansColor } from "@/config/plan-colors";
 
 function UserProfilePage({ username }: { username: string }) {
   const { user, loading } = useUser();
@@ -24,26 +25,6 @@ function UserProfilePage({ username }: { username: string }) {
     isLoading,
   } = useSWR(`user.${username}`, () => userService.getUserByUsername(username));
 
-  const plans = {
-    red: {
-      color: "text-red-500",
-      colorDark: "text-red-800",
-      gradient: "from-rose-500 to-red-500",
-    },
-    blue: {
-      color: "text-blue-500",
-      colorDark: "text-blue-800",
-      gradient: "from-cyan-500 to-blue-500",
-    },
-    yellow: {
-      color: "text-yellow-500",
-      colorDark: "text-yellow-800",
-      gradient: "from-amber-500 to-yellow-500",
-    },
-  };
-
-  const currentPlan = plans.red;
-
   if (isLoading || loading) return <div>Loading...</div>;
 
   if (!userProfile) {
@@ -52,6 +33,9 @@ function UserProfilePage({ username }: { username: string }) {
   if (error) {
     return <div>{JSON.stringify(error, null, 2)}</div>;
   }
+
+  const type = userProfile.plan as "free" | "starter" | "pro" | "premium";
+  const currentPlan = plansColor[type];
 
   return (
     <MainLayout>

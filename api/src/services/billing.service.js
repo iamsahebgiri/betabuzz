@@ -14,8 +14,8 @@ const upgradeBilling = async (user, priceId) => {
   const stripeSession = await stripe.checkout.sessions.create({
     customer_email: user.email,
     billing_address_collection: 'required',
-    success_url: 'http://localhost:3000/settings/billing?success=true',
-    cancel_url: 'http://localhost:3000/settings/billing?success=false',
+    success_url: `${config.origin}/billing/success`,
+    cancel_url: `${config.origin}/billing/failure`,
     line_items: [{ price: priceId, quantity: 1 }],
     mode: 'subscription',
     client_reference_id: user.id,
@@ -39,7 +39,7 @@ const manageBilling = async (userId) => {
 
   const { url } = await stripe.billingPortal.sessions.create({
     customer: subscription.customerId,
-    return_url: 'http://localhost:3000/settings/billing',
+    return_url: `${config.origin}/me`,
   });
   return url;
 };

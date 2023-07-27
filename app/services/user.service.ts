@@ -65,6 +65,27 @@ class UserService extends APIService {
         throw error?.response?.data;
       });
   }
+
+  async manageBilling() {
+    return this.post("/users/me/billing/manage")
+      .then((response) => {
+        const { data } = response;
+        return data;
+      })
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+  async upgradeBilling(priceId: string) {
+    return this.post(`/users/me/billing/upgrade?priceId=${priceId}`)
+      .then((response) => {
+        const { data } = response;
+        return data;
+      })
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
 }
 
 const userService = new UserService();

@@ -12,15 +12,20 @@ Creating a buzz around the latest beta products
 - Stripe integration for subscription
 
 ## Todo
-- OpenAI Integration
 - Collect
-- Public Profile
+- Liked on profile
+- UI Integration Stripe
+- Add Discussions
+- Google Login
+
 - Cover image and add cron job to handle unused images
-- Settings
-- Revamp create product (tags,) and listings
+- OpenAI Integration
 - Recent and trending
-- Analytics
 - User activities
+- Analytics
 - Follow and friends
 - Notifications
-- Add Discussions
+
+- Public Profile
+- Settings
+- Revamp create product (tags,) and listings
