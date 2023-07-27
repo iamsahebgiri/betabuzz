@@ -11,7 +11,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
         <Component {...pageProps} />
         <Toaster />
-        <TailwindIndicator />
+        {process.env.NODE_ENV === "development" && <TailwindIndicator />}
       </ThemeProvider>
     </div>
   );

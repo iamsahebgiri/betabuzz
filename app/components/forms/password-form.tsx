@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import * as z from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -15,45 +15,48 @@ import {
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 import useUser from "@/hooks/use-user";
+import { extractDomain } from "@/lib/strings";
+import { cn } from "@/lib/utils";
 import userService from "@/services/user.service";
+import delete24Filled from "@iconify/icons-fluent/delete-24-filled";
+import { Icon } from "@iconify/react";
 import { useState } from "react";
 
-const editProfileFormSchema = z.object({
-  username: z
-    .string({
-      required_error: "Username is required",
-    })
-    .nonempty(),
-  email: z
-    .string({
-      required_error: "Email is required",
-    })
-    .email()
-    .nonempty(),
-});
+const passwordFormSchema = z
+  .object({
+    password: z
+      .string()
+      .min(1, "Password is required")
+      .min(8, "Password must be at least 8 characters"),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  });
 
-type EditProfileFormValues = z.infer<typeof editProfileFormSchema>;
+type PasswordFormValues = z.infer<typeof passwordFormSchema>;
 
-interface EditProfileFormProps {
+interface PasswordFormProps {
   onSuccess: () => void;
 }
 
-export function EditProfileForm({ onSuccess }: EditProfileFormProps) {
+export function PasswordForm({ onSuccess }: PasswordFormProps) {
   const { user, mutate } = useUser();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const form = useForm<EditProfileFormValues>({
-    resolver: zodResolver(editProfileFormSchema),
+  const form = useForm<PasswordFormValues>({
+    resolver: zodResolver(passwordFormSchema),
     defaultValues: {
       ...user,
     },
     mode: "onChange",
   });
 
-  function onSubmit(data: EditProfileFormValues) {
+  function onSubmit(data: PasswordFormValues) {
     setIsLoading(true);
     userService
-      .updateUser(user.id, data)
+      .updateUser(user.id, { password: data.password })
       .then((res) => {
         mutate(res);
         onSuccess();
@@ -76,16 +79,15 @@ export function EditProfileForm({ onSuccess }: EditProfileFormProps) {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
-          name="username"
+          name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Username</FormLabel>
+              <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input placeholder="iamsahebgiri" {...field} />
+                <Input type="password" placeholder="s3cr3t" {...field} />
               </FormControl>
               <FormDescription>
-                This is your public username name. It can be your real name or a
-                pseudonym.
+                Password has to be more than 8 characters long.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -93,19 +95,18 @@ export function EditProfileForm({ onSuccess }: EditProfileFormProps) {
         />
         <FormField
           control={form.control}
-          name="email"
+          name="confirmPassword"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>Confirm password</FormLabel>
               <FormControl>
-                <Input placeholder="iamsahebgiri@betabuzz.com" {...field} />
+                <Input type="password" placeholder="s3cr3t" {...field} />
               </FormControl>
-
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit">Update account</Button>
+        <Button type="submit">Update password</Button>
       </form>
     </Form>
   );

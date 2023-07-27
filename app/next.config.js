@@ -13,6 +13,9 @@ const nextConfig = {
       {
         hostname: "ui-avatars.com",
       },
+      {
+        hostname: "icons.bitwarden.net",
+      },
     ],
   },
 };

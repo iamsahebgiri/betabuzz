@@ -23,10 +23,58 @@ const userSchema = mongoose.Schema(
         }
       },
     },
+    username: {
+      type: String,
+      unique: true,
+      trim: true,
+    },
     avatar: {
       type: String,
       trim: true,
     },
+    preferences: {
+      type: Map,
+      of: String,
+    },
+    socials: [
+      {
+        platform: String,
+        href: String,
+      },
+    ],
+    dateOfBirth: {
+      type: Date,
+    },
+    bio: {
+      type: String,
+    },
+    gender: {
+      type: String,
+      enum: ['male', 'female', 'non-binary', 'other'],
+    },
+    nationality: {
+      type: String,
+    },
+    language: {
+      type: String,
+    },
+    interests: [
+      {
+        type: String,
+      },
+    ],
+    collections: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Product',
+      },
+    ],
+    products: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Product',
+      },
+    ],
     password: {
       type: String,
       required: true,
@@ -72,6 +120,17 @@ userSchema.statics.isEmailTaken = async function (email, excludeUserId) {
 };
 
 /**
+ * Check if username is taken
+ * @param {string} username - The user's username
+ * @param {ObjectId} [excludeUserId] - The id of the user to be excluded
+ * @returns {Promise<boolean>}
+ */
+userSchema.statics.isUsernameTaken = async function (username, excludeUserId) {
+  const user = await this.findOne({ username, _id: { $ne: excludeUserId } });
+return !!user;
+};
+
+/**
  * Check if password matches the user's password
  * @param {string} password
  * @returns {Promise<boolean>}
@@ -85,6 +144,9 @@ userSchema.pre('save', async function (next) {
   const user = this;
   if (user.isModified('password')) {
     user.password = await bcrypt.hash(user.password, 8);
+  }
+  if (!user.username) {
+    user.username = user.email.split('@').shift();
   }
   next();
 });

@@ -1,20 +1,20 @@
-import * as React from "react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
+import * as React from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
-import { NavItem } from "@/types/nav"
-import { buttonVariants } from "@/components/ui/button"
+import { NavItem } from "@/types/nav";
+import { buttonVariants } from "@/components/ui/button";
 
 interface MainNavProps {
-  items?: NavItem[]
+  items?: NavItem[];
 }
 
 export function MainNav({ items }: MainNavProps) {
-  const pathname = usePathname()
+  const pathname = usePathname();
   return (
     <div>
       {items?.length ? (
-        <nav className="hidden gap-6 md:flex">
+        <nav className="gap-6 md:flex">
           {items?.map(
             (item, index) =>
               item.href && (
@@ -22,7 +22,7 @@ export function MainNav({ items }: MainNavProps) {
                   key={index}
                   href={item.href}
                   className={buttonVariants({
-                    variant: pathname.startsWith(item.href)
+                    variant: pathname.endsWith(item.href)
                       ? "secondary"
                       : "ghost",
                     size: "sm",
@@ -35,5 +35,5 @@ export function MainNav({ items }: MainNavProps) {
         </nav>
       ) : null}
     </div>
-  )
+  );
 }

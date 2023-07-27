@@ -1,20 +1,16 @@
-export type SiteConfig = typeof siteConfig
+export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
   name: "BetaBuzz",
   description: "Creating a buzz around the latest beta products",
   mainNav: [
     {
-      title: "Popular",
+      title: "Products",
       href: "/",
     },
     {
-      title: "Recent",
-      href: "/recent",
-    },
-    {
-      title: "Trending",
-      href: "/trending",
+      title: "Community",
+      href: "/discussion",
     },
   ],
   links: {
@@ -22,4 +18,4 @@ export const siteConfig = {
     github: "https://github.com/iamsahebgiri",
     docs: "https://betabuzz.vercel.app",
   },
-}
+};

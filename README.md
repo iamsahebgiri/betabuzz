@@ -13,3 +13,14 @@ Creating a buzz around the latest beta products
 
 ## Todo
 - OpenAI Integration
+- Collect
+- Public Profile
+- Cover image and add cron job to handle unused images
+- Settings
+- Revamp create product (tags,) and listings
+- Recent and trending
+- Analytics
+- User activities
+- Follow and friends
+- Notifications
+- Add Discussions

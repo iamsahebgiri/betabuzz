@@ -30,6 +30,17 @@ class UserService extends APIService {
       });
   }
 
+  async getUserByUsername(username: String) {
+    return this.get(`/users/${username}`)
+      .then((response) => {
+        const { data } = response;
+        return data;
+      })
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
   async uploadAvatar(avatar: File, userId: String) {
     const formData = new FormData();
     formData.append("avatar", avatar);

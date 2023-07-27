@@ -61,9 +61,6 @@ const Product = ({ productId }: { productId: string }) => {
       <h2 className="mt-2 text-xl font-semibold leading-7 text-primary">
         {data.name}
       </h2>
-      <p className="mt-1 text-base font-medium leading-6 text-muted-foreground">
-        {data.description}
-      </p>
 
       <div className="mt-2 flex items-center justify-between">
         <div className="space-x-2 flex">
@@ -99,6 +96,9 @@ const Product = ({ productId }: { productId: string }) => {
             </Button>
           </div>
         ) : null}
+      </div>
+      <div className="mt-1 text-base font-medium leading-6 text-muted-foreground whitespace-pre-wrap">
+        {data.description}
       </div>
 
       <hr className="my-8" />

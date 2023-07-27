@@ -66,11 +66,25 @@ export default function CommentSection({ productId }: any) {
         Comments
       </h2>
 
-      <ListCommentsFormatter
-        productId={productId}
-        comments={data}
-        mutate={mutate}
-      />
+      {data.length === 0 ? (
+        <div className="flex flex-col mx-auto max-w-xs text-center space-y-3 relative">
+          <div className="flex gap-3 items-center rounded-md p-2 border">
+            <div className="h-8 w-8 bg-border rounded-full" />
+            <div className="space-y-2">
+              <div className="h-2 w-[80px] rounded-lg bg-border" />
+              <div className="h-2 w-[100px] rounded-lg bg-border" />
+            </div>
+          </div>
+          <p className="font-medium">No comments yet</p>
+        </div>
+      ) : (
+        <ListCommentsFormatter
+          productId={productId}
+          comments={data}
+          mutate={mutate}
+        />
+      )}
+
       {/* TODO: Infinite Scrolling 3 */}
       {/* {isEmpty ? (
         "No comments"

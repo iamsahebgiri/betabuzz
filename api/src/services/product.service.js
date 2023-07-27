@@ -1,5 +1,5 @@
 const httpStatus = require('http-status');
-const { Product, Comment } = require('../models');
+const { Product, Comment, User } = require('../models');
 const ApiError = require('../utils/ApiError');
 const { deleteImage } = require('./image.service');
 
@@ -9,7 +9,11 @@ const { deleteImage } = require('./image.service');
  * @returns {Promise<Product>}
  */
 const createProduct = async (productBody) => {
-  return Product.create(productBody);
+  const product = await Product.create(productBody);
+  const maker = await User.findById(productBody.maker);
+  maker.products.push(product.id);
+  await maker.save();
+  return product;
 };
 
 /**
