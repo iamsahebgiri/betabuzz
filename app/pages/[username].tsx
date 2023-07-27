@@ -13,6 +13,8 @@ import { Pill } from "@/components/ui/pill";
 import Image from "next/image";
 import useSWR from "swr";
 import { useRouter } from "next/router";
+import Head from "next/head";
+import { siteConfig } from "@/config/site";
 
 function UserProfilePage({ username }: { username: string }) {
   const { user, loading } = useUser();
@@ -53,6 +55,11 @@ function UserProfilePage({ username }: { username: string }) {
 
   return (
     <MainLayout>
+      <Head>
+        <title>
+          {userProfile.name} (@{userProfile.username}) - {siteConfig.name}
+        </title>
+      </Head>
       <div className="container mx-auto max-w-3xl py-8">
         <div>
           <div

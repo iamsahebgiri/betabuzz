@@ -11,6 +11,7 @@ import useUser from "@/hooks/use-user";
 import CommentSection from "@/components/product/comment-section";
 import Image from "next/image";
 import { Icons } from "@/components/icons";
+import { siteConfig } from "@/config/site";
 
 const Product = ({ productId }: { productId: string }) => {
   const { user } = useUser();
@@ -47,7 +48,10 @@ const Product = ({ productId }: { productId: string }) => {
   return (
     <div>
       <Head>
-        <title>{data.name} - Product page</title>
+        <title>
+          {data.name} - {siteConfig.name}
+        </title>
+        <meta name="description" content={data.tagline} />
       </Head>
 
       <Image

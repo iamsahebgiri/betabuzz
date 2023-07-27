@@ -1,9 +1,19 @@
 import MainLayout from "@/layouts/main.layout";
 import { CreateProductForm } from "@/components/forms/create-product";
+import Head from "next/head";
+import { siteConfig } from "@/config/site";
 
 export default function NewProduct() {
   return (
     <MainLayout>
+      <Head>
+        <title>Create a new product - {siteConfig.name}</title>
+        <meta
+          name="description"
+          content="Tell us more about this product like name, description."
+        />
+      </Head>
+
       <div className="container max-w-2xl pb-8 pt-6 md:py-10">
         <div className="space-y-8">
           <div>
