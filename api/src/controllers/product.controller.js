@@ -13,20 +13,20 @@ const createProduct = catchAsync(async (req, res) => {
   res.status(httpStatus.CREATED).send(product);
 });
 
-const getTrendingProducts = catchAsync(async (_, res) => {
-  const products = await productService.queryProducts();
+const getTrendingProducts = catchAsync(async (req, res) => {
+  const products = await productService.queryProducts(req.user.id);
   res.send(products);
 });
 
-const getRecentProducts = catchAsync(async (_, res) => {
-  const products = await productService.queryRecentProducts();
+const getRecentProducts = catchAsync(async (req, res) => {
+  const products = await productService.queryRecentProducts(req.user.id);
   res.send(products);
 });
 
 const getProducts = catchAsync(async (req, res) => {
   const filter = pick(req.query, ['name']);
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
-  const result = await productService.queryProducts(filter, options);
+  const result = await productService.queryProducts(req.user.id, filter, options);
   res.send(result);
 });
 
@@ -35,12 +35,12 @@ const getProduct = catchAsync(async (req, res) => {
   if (!product) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
   }
-  product = await product.toProductResponse();
+  product = await product.toProductResponse(req.user.id);
   res.send(product);
 });
 
 const updateProduct = catchAsync(async (req, res) => {
-  const product = await productService.updateProductById(req.params.productId, req.body);
+  const product = await productService.updateProductById(req.params.productId, req.user.id, req.body);
   res.send(product);
 });
 
@@ -57,7 +57,7 @@ const voteProduct = catchAsync(async (req, res) => {
 });
 
 const deleteProduct = catchAsync(async (req, res) => {
-  await productService.deleteProductById(req.params.productId);
+  await productService.deleteProductById(req.params.productId, req.user.id);
   res.status(httpStatus.NO_CONTENT).send();
 });
 
@@ -66,6 +66,7 @@ const createComment = catchAsync(async (req, res) => {
   const commentBody = {
     content: req.body.content,
     author: req.user.id,
+    parent: req.body.parent,
     product: productId,
   };
   const comment = await commentService.createComment(productId, commentBody);
@@ -95,7 +96,7 @@ const updateComment = catchAsync(async (req, res) => {
 });
 
 const deleteComment = catchAsync(async (req, res) => {
-  await commentService.deleteCommentById(req.params.commentId);
+  await commentService.deleteCommentById(req.params.commentId, req.params.productId);
   res.status(httpStatus.NO_CONTENT).send();
 });
 

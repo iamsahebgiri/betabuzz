@@ -5,6 +5,9 @@ const createProduct = {
   body: Joi.object().keys({
     name: Joi.string().required(),
     link: Joi.string().required(),
+    tagline: Joi.string(),
+    tags: Joi.array().items(Joi.string()),
+    category: Joi.string(),
     description: Joi.string(),
     image: Joi.string(),
   }),
@@ -33,8 +36,11 @@ const updateProduct = {
   }),
   body: Joi.object()
     .keys({
-      name: Joi.string(),
-      link: Joi.string(),
+      name: Joi.string().required(),
+      link: Joi.string().required(),
+      tagline: Joi.string(),
+      tags: Joi.array().items(Joi.string()),
+      category: Joi.string(),
       description: Joi.string(),
       image: Joi.string(),
     })
@@ -76,5 +82,5 @@ module.exports = {
   updateProduct,
   deleteProduct,
   uploadImage,
-  removeImage
+  removeImage,
 };

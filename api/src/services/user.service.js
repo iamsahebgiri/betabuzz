@@ -51,6 +51,15 @@ const getUserByEmail = async (email) => {
 };
 
 /**
+ * Get user by username
+ * @param {string} username
+ * @returns {Promise<User>}
+ */
+const getUserByUsername = async (username) => {
+  return User.findOne({ username });
+};
+
+/**
  * Update user by id
  * @param {ObjectId} userId
  * @param {Object} updateBody
@@ -64,8 +73,11 @@ const updateUserById = async (userId, updateBody) => {
   if (updateBody.email && (await User.isEmailTaken(updateBody.email, userId))) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
   }
+  if (updateBody.username && (await User.isEmailTaken(updateBody.username, userId))) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Username already taken');
+  }
   if (updateBody.name) {
-    updateBody.avatar = `https://ui-avatars.com/api/?name=${updateBody.name}&background=random`;
+    updateBody.avatar = `https://ui-avatars.com/api/?name=${encodeURI(updateBody.name)}&background=random`;
   }
   Object.assign(user, updateBody);
   await user.save();
@@ -134,6 +146,7 @@ module.exports = {
   queryUsers,
   getUserById,
   getUserByEmail,
+  getUserByUsername,
   updateUserById,
   deleteUserById,
   uploadAvatar,

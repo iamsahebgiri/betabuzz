@@ -9,6 +9,9 @@ const productSchema = mongoose.Schema(
       required: true,
       trim: true,
     },
+    tagline: {
+      type: String,
+    },
     image: {
       type: String,
     },
@@ -18,6 +21,18 @@ const productSchema = mongoose.Schema(
     link: {
       type: String,
       required: true,
+    },
+    tags: [
+      {
+        type: String,
+      },
+    ],
+    category: {
+      type: String,
+    },
+    views: {
+      type: Number,
+      default: 0,
     },
     comments: [
       {
@@ -74,16 +89,25 @@ productSchema.methods.removeComment = function (commentId) {
   return this.save();
 };
 
-productSchema.methods.toProductResponse = async function () {
+productSchema.pre('save', async function (next) {
+  this.views += 1;
+  next();
+});
+
+productSchema.methods.toProductResponse = async function (userId) {
   return {
     id: this.id,
     name: this.name,
+    tagline: this.tagline,
     image: this.image,
     description: this.description,
     link: this.link,
+    views: this.views,
+    tags: this.tags,
+    category: this.category,
     commentsCount: this.comments.length,
     upvotesCount: this.upvotes.length,
-    upvoted: this.upvotes.indexOf(this.maker) !== -1,
+    upvoted: this.upvotes.indexOf(userId) !== -1,
     maker: await User.findById(this.maker),
     createdAt: this.createdAt,
     updatedAt: this.updatedAt,

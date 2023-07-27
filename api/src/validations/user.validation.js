@@ -7,6 +7,11 @@ const createUser = {
     password: Joi.string().required().custom(password),
     name: Joi.string().required(),
     role: Joi.string().required().valid('user', 'admin'),
+    username: Joi.string(),
+    gender: Joi.string().valid('male', 'female', 'non-binary', 'other'),
+    nationality: Joi.string(),
+    language: Joi.string(),
+    interests: Joi.array().items(Joi.string()),
   }),
 };
 
@@ -26,6 +31,12 @@ const getUser = {
   }),
 };
 
+const getUserByUsername = {
+  params: Joi.object().keys({
+    username: Joi.string(),
+  }),
+};
+
 const updateUser = {
   params: Joi.object().keys({
     userId: Joi.required().custom(objectId),
@@ -35,6 +46,21 @@ const updateUser = {
       email: Joi.string().email(),
       password: Joi.string().custom(password),
       name: Joi.string(),
+      role: Joi.string().valid('user', 'admin'),
+      username: Joi.string(),
+      preferences: Joi.object(),
+      socials: Joi.array().items(
+        Joi.object().keys({
+          platform: Joi.string(),
+          href: Joi.string(),
+        })
+      ),
+      dateOfBirth: Joi.date(),
+      bio: Joi.string(),
+      gender: Joi.string().valid('male', 'female', 'non-binary', 'other'),
+      nationality: Joi.string(),
+      language: Joi.string(),
+      interests: Joi.array().items(Joi.string()),
     })
     .min(1),
 };
@@ -56,6 +82,7 @@ module.exports = {
   createUser,
   getUsers,
   getUser,
+  getUserByUsername,
   updateUser,
   deleteUser,
   uploadAvatar,

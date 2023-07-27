@@ -15,6 +15,7 @@ router
 router.route('/me').get(auth(), userController.getMe);
 router.post('/me/billing/upgrade', auth(), validate(billingValidation.upgradeBilling), userController.upgradeBilling);
 router.post('/me/billing/manage', auth(), userController.manageBilling);
+router.route('/:username').get(validate(userValidation.getUserByUsername), userController.getUserByUsername);
 
 router
   .route('/:userId')
@@ -24,8 +25,8 @@ router
 
 router
   .route('/:userId/avatar')
-  .post(auth(), upload.single('avatar'), validate(userValidation.uploadAvatar), userController.uploadAvatar)
-  .delete(auth(), userController.removeAvatar);
+  .post(auth('manageUsers'), upload.single('avatar'), validate(userValidation.uploadAvatar), userController.uploadAvatar)
+  .delete(auth('manageUsers'), userController.removeAvatar);
 
 module.exports = router;
 

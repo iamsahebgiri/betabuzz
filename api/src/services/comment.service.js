@@ -2,6 +2,7 @@ const httpStatus = require('http-status');
 const productService = require('./product.service');
 const { Comment } = require('../models');
 const ApiError = require('../utils/ApiError');
+const Product = require('../models/product.model');
 
 /**
  * Comment on a product
@@ -37,13 +38,19 @@ const getComments = async (productId, userId, filter, options) => {
   if (!product) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
   }
-  const { results: comments, ...rest } = await Comment.paginate(filter, options);
-  const results = await Promise.all(
-    comments.map(async (comment) => {
-      return comment.toCommentResponse(userId);
-    })
-  );
-  return { results, ...rest };
+  // TODO: No pagination for now please
+  // filter = { ...filter, product: productId };
+  // const { results: comments, ...rest } = await Comment.paginate(filter, options);
+  // const results = await Promise.all(
+  //   comments.map(async (comment) => {
+  //     return comment.toCommentResponse(userId);
+  //   })
+  // );
+  // return { results, ...rest };
+
+  const comments = await Comment.find({ product: productId });
+  const results = await Promise.all(comments.map(async (comment) => comment.toCommentResponse(userId)));
+  return results;
 };
 
 /**
@@ -87,13 +94,20 @@ const updateCommentById = async (commentId, updateBody) => {
 /**
  * Delete comment by id
  * @param {ObjectId} commentId
+ * @param {ObjectId} productId
  * @returns {Promise<Comment>}
  */
-const deleteCommentById = async (commentId) => {
+const deleteCommentById = async (commentId, productId) => {
   const comment = await getCommentById(commentId);
   if (!comment) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Comment not found');
   }
+  const product = await Product.findById(productId);
+  if (!product) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
+  }
+  await product.removeComment(commentId);
+
   await comment.remove();
   return comment.toCommentResponse();
 };

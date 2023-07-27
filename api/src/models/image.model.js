@@ -11,6 +11,7 @@ const imageSchema = mongoose.Schema(
     expires: {
       type: Boolean,
       required: true,
+      default: true,
     },
     creator: {
       type: mongoose.SchemaTypes.ObjectId,

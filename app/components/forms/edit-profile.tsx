@@ -1,45 +1,61 @@
-import React, { useState } from "react";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { updateUserSchema } from "@/lib/validations/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { FormErrorMessage } from "../ui/form-error-message";
-import { DialogFooter } from "../ui/dialog";
-import { Button } from "../ui/button";
-import { Icons } from "../icons";
+
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { toast } from "@/components/ui/use-toast";
 import useUser from "@/hooks/use-user";
 import userService from "@/services/user.service";
-import { toast } from "../ui/use-toast";
+import { useState } from "react";
 
-type UpdateUserFormData = z.infer<typeof updateUserSchema>;
+const editProfileFormSchema = z.object({
+  username: z
+    .string({
+      required_error: "Username is required",
+    })
+    .nonempty(),
+  email: z
+    .string({
+      required_error: "Email is required",
+    })
+    .email()
+    .nonempty(),
+});
+
+type EditProfileFormValues = z.infer<typeof editProfileFormSchema>;
 
 interface EditProfileFormProps {
   onSuccess: () => void;
 }
 
-export default function EditProfileForm({ onSuccess }: EditProfileFormProps) {
+export function EditProfileForm({ onSuccess }: EditProfileFormProps) {
   const { user, mutate } = useUser();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<UpdateUserFormData>({
-    resolver: zodResolver(updateUserSchema),
+  const form = useForm<EditProfileFormValues>({
+    resolver: zodResolver(editProfileFormSchema),
     defaultValues: {
       ...user,
     },
+    mode: "onChange",
   });
 
-  function onSubmit(data: UpdateUserFormData) {
+  function onSubmit(data: EditProfileFormValues) {
     setIsLoading(true);
     userService
       .updateUser(user.id, data)
       .then((res) => {
-        mutate("user.me", res);
+        mutate(res);
         onSuccess();
       })
       .catch((err) => {
@@ -54,63 +70,43 @@ export default function EditProfileForm({ onSuccess }: EditProfileFormProps) {
         setIsLoading(false);
       });
   }
+
   return (
-    <div>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="grid gap-4">
-          <div className="grid gap-2">
-            <Label htmlFor="name">Name</Label>
-            <Input
-              id="name"
-              type="name"
-              autoComplete="name"
-              autoCorrect="off"
-              disabled={isLoading}
-              {...register("name")}
-            />
-            {errors?.name && (
-              <FormErrorMessage>{errors.name.message}</FormErrorMessage>
-            )}
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              autoCapitalize="none"
-              autoComplete="email"
-              autoCorrect="off"
-              disabled={isLoading}
-              {...register("email")}
-            />
-            {errors?.email && (
-              <FormErrorMessage>{errors.email.message}</FormErrorMessage>
-            )}
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              type="password"
-              autoCapitalize="none"
-              autoComplete="password"
-              disabled={isLoading}
-              {...register("password")}
-            />
-            {errors?.password && (
-              <FormErrorMessage>{errors.password.message}</FormErrorMessage>
-            )}
-          </div>
-          <DialogFooter>
-            <Button type="submit">
-              {isLoading && (
-                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-              )}
-              Save changes
-            </Button>
-          </DialogFooter>
-        </div>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <FormField
+          control={form.control}
+          name="username"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Username</FormLabel>
+              <FormControl>
+                <Input placeholder="iamsahebgiri" {...field} />
+              </FormControl>
+              <FormDescription>
+                This is your public username name. It can be your real name or a
+                pseudonym.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input placeholder="iamsahebgiri@betabuzz.com" {...field} />
+              </FormControl>
+
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit">Update account</Button>
       </form>
-    </div>
+    </Form>
   );
 }

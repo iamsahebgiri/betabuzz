@@ -59,6 +59,7 @@ commentSchema.methods.toCommentResponse = async function (userId) {
     upvotesCount: this.upvotes.length,
     upvoted: this.upvotes.indexOf(userId) !== -1,
     product: this.product,
+    parent: this.parent === undefined ? null : this.parent,
     author: await User.findById(this.author),
     createdAt: this.createdAt,
     updatedAt: this.updatedAt,

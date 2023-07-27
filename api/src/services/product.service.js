@@ -1,6 +1,7 @@
 const httpStatus = require('http-status');
-const { Product } = require('../models');
+const { Product, Comment, User } = require('../models');
 const ApiError = require('../utils/ApiError');
+const { deleteImage } = require('./image.service');
 
 /**
  * Create a product
@@ -8,11 +9,16 @@ const ApiError = require('../utils/ApiError');
  * @returns {Promise<Product>}
  */
 const createProduct = async (productBody) => {
-  return Product.create(productBody);
+  const product = await Product.create(productBody);
+  const maker = await User.findById(productBody.maker);
+  maker.products.push(product.id);
+  await maker.save();
+  return product;
 };
 
 /**
  * Query for products
+ * @param {ObjectId} userId - User id
  * @param {Object} filter - Mongo filter
  * @param {Object} options - Query options
  * @param {string} [options.sortBy] - Sort option in the format: sortField:(desc|asc)
@@ -20,12 +26,12 @@ const createProduct = async (productBody) => {
  * @param {number} [options.page] - Current page (default = 1)
  * @returns {Promise<QueryResult>}
  */
-const queryProducts = async (filter, options) => {
+const queryProducts = async (userId, filter, options) => {
   Object.assign(options);
   const { results: products, ...rest } = await Product.paginate(filter, options);
   const results = await Promise.all(
     products.map(async (product) => {
-      return product.toProductResponse();
+      return product.toProductResponse(userId);
     })
   );
   return { results, ...rest };
@@ -33,6 +39,7 @@ const queryProducts = async (filter, options) => {
 
 /**
  * Query recent products
+ * @param {ObjectId} userId - User id
  * @returns {Promise<QueryResult>}
  */
 const queryRecentProducts = async () => {
@@ -57,6 +64,7 @@ const getProductById = async (id) => {
 /**
  * Update product by id
  * @param {ObjectId} productId
+ * @param {ObjectId} userId
  * @param {Object} updateBody
  * @returns {Promise<Product>}
  */
@@ -67,21 +75,29 @@ const updateProductById = async (productId, updateBody) => {
   }
   Object.assign(product, updateBody);
   await product.save();
-  return product.toProductResponse();
+  return product.toProductResponse(userId);
 };
 
 /**
  * Delete product by id
  * @param {ObjectId} productId
+ * @param {ObjectId} userId
  * @returns {Promise<Product>}
  */
-const deleteProductById = async (productId) => {
+const deleteProductById = async (productId, userId) => {
   const product = await getProductById(productId);
   if (!product) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
   }
+  if (product.maker.toString() !== userId) {
+    throw new ApiError(httpStatus.FORBIDDEN, 'Only its maker can delete it');
+  }
   await product.remove();
-  return product.toProductResponse();
+  await Comment.remove({
+    product: product.id,
+  });
+  await deleteImage(product.image);
+  return product.toProductResponse(userId);
 };
 
 /**
@@ -96,7 +112,7 @@ const voteProductById = async (productId, userId) => {
     throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
   }
   await product.addUpvote(userId);
-  return product.toProductResponse();
+  return product.toProductResponse(userId);
 };
 
 /**
@@ -111,7 +127,7 @@ const unvoteProductById = async (productId, userId) => {
     throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
   }
   await product.removeUpvote(userId);
-  return product.toProductResponse();
+  return product.toProductResponse(userId);
 };
 
 module.exports = {
