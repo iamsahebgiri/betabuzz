@@ -147,30 +147,6 @@ const UploadProductImage = ({ onSuccess }: UploadProductImageProps) => {
     }
   };
 
-  const deleteAvatar = () => {
-    setIsProcessing(true);
-    productService
-      .deleteImage("test")
-      .then(async (res) => {
-        // await mutate("user.me", res);
-        // toast({
-        //   title: "Deleted avatar successfully.",
-        //   variant: "default",
-        // });
-      })
-      .catch((err) => {
-        toast({
-          title: "Bad request.",
-          description: err?.message,
-          variant: "destructive",
-        });
-        console.log(err);
-      })
-      .finally(() => {
-        setIsProcessing(false);
-      });
-  };
-
   return (
     <div className="space-y-2">
       <Label>Image</Label>

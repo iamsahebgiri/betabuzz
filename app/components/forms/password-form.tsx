@@ -106,7 +106,9 @@ export function PasswordForm({ onSuccess }: PasswordFormProps) {
             </FormItem>
           )}
         />
-        <Button type="submit">Update password</Button>
+        <Button type="submit" isLoading={isLoading}>
+          Update password
+        </Button>
       </form>
     </Form>
   );

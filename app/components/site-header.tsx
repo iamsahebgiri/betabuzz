@@ -32,7 +32,7 @@ const UserMenu = () => {
       >
         Create
       </Link>
-      <Link href={`/${user.username}`}>
+      <Link href={`/me`}>
         <Avatar>
           <AvatarImage src={user?.avatar} alt={user.name} />
           <AvatarFallback>

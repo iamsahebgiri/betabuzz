@@ -105,7 +105,9 @@ export function EditProfileForm({ onSuccess }: EditProfileFormProps) {
             </FormItem>
           )}
         />
-        <Button type="submit">Update account</Button>
+        <Button type="submit" isLoading={isLoading}>
+          Update account
+        </Button>
       </form>
     </Form>
   );

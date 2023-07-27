@@ -2,6 +2,7 @@ const httpStatus = require('http-status');
 const { Product, Comment, User } = require('../models');
 const ApiError = require('../utils/ApiError');
 const { deleteImage } = require('./image.service');
+const Image = require('../models/image.model');
 
 /**
  * Create a product
@@ -11,7 +12,13 @@ const { deleteImage } = require('./image.service');
 const createProduct = async (productBody) => {
   const product = await Product.create(productBody);
   const maker = await User.findById(productBody.maker);
+  const image = await Image.findOne({
+    url: productBody.image,
+  });
+
   maker.products.push(product.id);
+  image.expires = false;
+  await image.save();
   await maker.save();
   return product;
 };
