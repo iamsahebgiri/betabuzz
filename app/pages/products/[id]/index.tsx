@@ -3,19 +3,23 @@ import productService from "@/services/product.service";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 
-import Head from "next/head";
-import { Button } from "@/components/ui/button";
-import { toast } from "@/components/ui/use-toast";
-import UpvoteProductButton from "@/components/product/upvote-product";
-import useUser from "@/hooks/use-user";
-import CommentSection from "@/components/product/comment-section";
-import Image from "next/image";
 import { Icons } from "@/components/icons";
-import { siteConfig } from "@/config/site";
+import CommentSection from "@/components/product/comment-section";
+import UpvoteProductButton from "@/components/product/upvote-product";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { Pill } from "@/components/ui/pill";
+import { toast } from "@/components/ui/use-toast";
+import useUser from "@/hooks/use-user";
+import { cn } from "@/lib/utils";
+import Head from "next/head";
+import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
 
 const Product = ({ productId }: { productId: string }) => {
   const { user } = useUser();
   const router = useRouter();
+  const [isDeleting, setIsDeleting] = useState(false);
   const { data, isLoading, error, mutate } = useSWR(
     `/api/products/${productId}`,
     () => productService.getProduct(productId)
@@ -30,6 +34,7 @@ const Product = ({ productId }: { productId: string }) => {
   }
 
   const handleDeleteProduct = async (id: string) => {
+    setIsDeleting(true);
     await productService
       .deleteProduct(id)
       .then((res) => {
@@ -42,6 +47,9 @@ const Product = ({ productId }: { productId: string }) => {
           description: error?.message,
           variant: "destructive",
         });
+      })
+      .finally(() => {
+        setIsDeleting(false);
       });
   };
 
@@ -49,7 +57,7 @@ const Product = ({ productId }: { productId: string }) => {
     <div>
       <Head>
         <title>
-          {data.name} - {siteConfig.name}
+          {data.name} - {data.tagline}
         </title>
         <meta name="description" content={data.tagline} />
       </Head>
@@ -65,23 +73,26 @@ const Product = ({ productId }: { productId: string }) => {
       <h2 className="mt-2 text-xl font-semibold leading-7 text-primary">
         {data.name}
       </h2>
+      <div className="mt-1 text-base font-medium leading-6 text-muted-foreground whitespace-pre-wrap">
+        {data.tagline}
+      </div>
 
       <div className="mt-2 flex items-center justify-between">
         <div className="space-x-2 flex">
-          <a href={data.link} target="__blank">
-            <Button
-              variant="secondary"
-              className="space-x-2"
-              onClick={() => {
-                router;
-              }}
-            >
-              <span>Live preview</span>
-              <Icons.arrowSquareUpFilled className="h-5 w-5 text-primary" />
-            </Button>
+          <a
+            href={`${data.link}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={cn(
+              buttonVariants({ variant: "secondary" }),
+              "space-x-2"
+            )}
+          >
+            <span>Live preview</span>
+            <Icons.arrowSquareUpFilled className="h-5 w-5 text-primary" />
           </a>
           <UpvoteProductButton
-            mutate={mutate}
+            onSuccess={(res) => mutate(res)}
             productId={productId}
             upvoted={data.upvoted}
             upvotesCount={data.upvotesCount}
@@ -91,9 +102,17 @@ const Product = ({ productId }: { productId: string }) => {
 
         {data.maker.id === user.id ? (
           <div className="space-x-2">
-            <Button variant="secondary">Edit</Button>
+            <Button
+              variant="secondary"
+              onClick={() => {
+                router.push(`/products/${productId}/edit`);
+              }}
+            >
+              Edit
+            </Button>
             <Button
               variant="destructive"
+              isLoading={isDeleting}
               onClick={() => handleDeleteProduct(productId)}
             >
               Delete
@@ -101,8 +120,27 @@ const Product = ({ productId }: { productId: string }) => {
           </div>
         ) : null}
       </div>
-      <div className="mt-1 text-base font-medium leading-6 text-muted-foreground whitespace-pre-wrap">
+      <div className="mt-6 text-base font-medium leading-6 whitespace-pre-wrap">
         {data.description}
+      </div>
+      <div className="mt-6 text-base text-muted-foreground font-medium flex gap-2 items-center">
+        Classified in{" "}
+        {data.tags && data.tags.length > 0 ? (
+          <div className="space-x-2">
+            {data.tags.map((tag: string, index: number) => (
+              <Pill title={tag} key={index} />
+            ))}
+          </div>
+        ) : (
+          <Pill title={data.category} />
+        )}{" "}
+        by{" "}
+        <Link
+          href={`/${data.maker.username}`}
+          className="font-bold hover:text-secondary-foreground"
+        >
+          {data.maker.name}
+        </Link>
       </div>
 
       <hr className="my-8" />

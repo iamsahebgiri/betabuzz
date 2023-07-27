@@ -75,7 +75,7 @@ const getProductById = async (id) => {
  * @param {Object} updateBody
  * @returns {Promise<Product>}
  */
-const updateProductById = async (productId, updateBody) => {
+const updateProductById = async (productId, userId, updateBody) => {
   const product = await getProductById(productId);
   if (!product) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
@@ -99,6 +99,11 @@ const deleteProductById = async (productId, userId) => {
   if (product.maker.toString() !== userId) {
     throw new ApiError(httpStatus.FORBIDDEN, 'Only its maker can delete it');
   }
+  const maker = await User.findById(userId);
+  if (maker.products.indexOf(productId) !== -1) {
+    maker.products.pull(productId);
+  }
+  await maker.save();
   await product.remove();
   await Comment.remove({
     product: product.id,

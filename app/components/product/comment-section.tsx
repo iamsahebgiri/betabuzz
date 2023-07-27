@@ -6,6 +6,8 @@ import productService from "@/services/product.service";
 import ListComments from "./comment-list";
 import { Button } from "../ui/button";
 import formatComments from "@/lib/comments";
+import noComments from "@/assets/no-comments.svg";
+import Image from "next/image";
 
 // const PAGE_SIZE = 10;
 
@@ -67,15 +69,17 @@ export default function CommentSection({ productId }: any) {
       </h2>
 
       {data.length === 0 ? (
-        <div className="flex flex-col mx-auto max-w-xs text-center space-y-3 relative">
-          <div className="flex gap-3 items-center rounded-md p-2 border">
-            <div className="h-8 w-8 bg-border rounded-full" />
-            <div className="space-y-2">
-              <div className="h-2 w-[80px] rounded-lg bg-border" />
-              <div className="h-2 w-[100px] rounded-lg bg-border" />
-            </div>
-          </div>
-          <p className="font-medium">No comments yet</p>
+        <div className="flex flex-col items-center justify-center space-y-3 relative">
+          <Image
+            alt="No comments yet"
+            height={120}
+            width={120}
+            src={noComments}
+          />
+          <p className="font-bold">No comments yet</p>
+          <p className="font-medium max-w-[280px] text-center text-muted-foreground text-sm">
+            Write your views about it and give feedback to the maker.
+          </p>
         </div>
       ) : (
         <ListCommentsFormatter

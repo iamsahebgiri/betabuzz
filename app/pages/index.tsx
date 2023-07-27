@@ -37,8 +37,15 @@ const Product = ({
             </span>
           </Link>
           <div className="text-muted-foreground font-medium">
-            built by {product.maker.name} · {dayjs(product.createdAt).fromNow()}{" "}
-            · {product.commentsCount} comments
+            built by{" "}
+            <Link
+              href={`/${product.maker.username}`}
+              className="font-bold hover:text-secondary-foreground"
+            >
+              {product.maker.name}
+            </Link>{" "}
+            · {dayjs(product.createdAt).fromNow()} · {product.commentsCount}{" "}
+            comments
           </div>
         </div>
       </div>
@@ -46,7 +53,18 @@ const Product = ({
         productId={product.id}
         upvoted={product.upvoted}
         upvotesCount={product.upvotesCount}
-        mutate={mutate}
+        onSuccess={(res) => {
+          mutate((prevData: any) => {
+            return prevData.map((page: any) => {
+              return {
+                ...page,
+                results: page.results.map((p: Product) =>
+                  p.id === product.id ? res : p
+                ),
+              };
+            });
+          });
+        }}
       />
     </div>
   );

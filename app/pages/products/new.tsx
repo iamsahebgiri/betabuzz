@@ -2,8 +2,10 @@ import MainLayout from "@/layouts/main.layout";
 import { CreateProductForm } from "@/components/forms/create-product";
 import Head from "next/head";
 import { siteConfig } from "@/config/site";
+import { useRouter } from "next/router";
 
 export default function NewProduct() {
+  const router = useRouter();
   return (
     <MainLayout>
       <Head>
@@ -24,7 +26,7 @@ export default function NewProduct() {
               Tell us more about this product like name, description.
             </p>
           </div>
-          <CreateProductForm />
+          <CreateProductForm onSuccess={() => router.push("/")} />
         </div>
       </div>
     </MainLayout>

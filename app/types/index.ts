@@ -5,6 +5,7 @@ export interface Author {
   name: string;
   avatar: string;
   id: string;
+  username: string;
 }
 
 export interface Comment {
