@@ -12,11 +12,11 @@ import { toast } from "@/components/ui/use-toast";
 import useUser from "@/hooks/use-user";
 import { cn } from "@/lib/utils";
 import Head from "next/head";
-import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { BlurImage } from "@/components/ui/blur-image";
 import Username from "@/components/profile/username";
+import { LoadingState } from "@/components/ui/states";
 
 const Product = ({ productId }: { productId: string }) => {
   const { user } = useUser();
@@ -28,7 +28,7 @@ const Product = ({ productId }: { productId: string }) => {
   );
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingState />;
   }
 
   if (error) {
@@ -106,7 +106,11 @@ const Product = ({ productId }: { productId: string }) => {
             <Button
               variant="destructive"
               isLoading={isDeleting}
-              onClick={() => handleDeleteProduct(productId)}
+              onClick={() => {
+                if (confirm("Are you sure you want to delete this product?")) {
+                  handleDeleteProduct(productId);
+                }
+              }}
             >
               Delete
             </Button>

@@ -224,7 +224,11 @@ const UserAvatar = () => {
               user.avatar.includes("amazonaws.com") && (
                 <button
                   className="w-8 h-8 bg-black bg-opacity-40 justify-center items-center rounded-full hidden group-hover:flex border-2 border-black/40 hover:border-white"
-                  onClick={deleteAvatar}
+                  onClick={() => {
+                    if (confirm("Are you sure you want to remove this avatar?")) {
+                      deleteAvatar();
+                    }
+                  }}
                 >
                   <Icons.trash className="h-5 w-5 text-white" />
                 </button>

@@ -87,7 +87,11 @@ function CommentActions({
               Edit
             </Button>
             {comment.children.length === 0 && (
-              <Button variant="ghost" size="sm" onClick={handleDeleteComment}>
+              <Button variant="ghost" size="sm" onClick={() => {
+                if (confirm("Are you sure you want to delete this comment?")) {
+                  handleDeleteComment();
+                }
+              }}>
                 Delete
               </Button>
             )}
@@ -131,7 +135,7 @@ function Comment({ comment, mutate, productId, hidden }: any) {
       <div className="flex-1">
         <div className="flex items-center gap-x-3 pt-1">
           <Link href={`/${comment.author.username}`}>
-            <Username user={comment.author} />
+            <Username className="font-semibold" user={comment.author} />
           </Link>
           <span className="font-medium text-sm text-muted-foreground">
             {dayjs(comment.createdAt).fromNow()}

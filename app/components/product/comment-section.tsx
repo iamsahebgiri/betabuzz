@@ -6,7 +6,7 @@ import productService from "@/services/product.service";
 import ListComments from "./comment-list";
 import formatComments from "@/lib/comments";
 import comment24Regular from "@iconify/icons-fluent/comment-24-regular";
-import { EmptyState } from "@/components/ui/states";
+import { EmptyState, LoadingState } from "@/components/ui/states";
 
 // const PAGE_SIZE = 10;
 
@@ -47,7 +47,7 @@ export default function CommentSection({ productId }: any) {
   );
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingState />;
   }
 
   if (error) {

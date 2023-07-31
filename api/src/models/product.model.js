@@ -90,7 +90,7 @@ productSchema.methods.removeComment = function (commentId) {
 };
 
 productSchema.pre('save', async function (next) {
-  this.views += 1;
+  this.update({ $inc: { views: 1 } });
   next();
 });
 
