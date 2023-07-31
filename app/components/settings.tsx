@@ -119,8 +119,7 @@ export default function SettingsModal() {
                 </TabsContent>
                 <TabsContent value="appearance" className="space-y-6">
                   <ModalHeader
-                    description="Customize the appearance of the app. Automatically
-                    switch between day and night themes."
+                    description="Customize the appearance of the app."
                   >
                     Appearance
                   </ModalHeader>

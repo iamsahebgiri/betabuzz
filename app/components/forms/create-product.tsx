@@ -323,6 +323,7 @@ export function CreateProductForm({
             Add tag
           </Button>
         </div>
+        
         <Button type="submit" isLoading={isLoading}>
           Save product
         </Button>

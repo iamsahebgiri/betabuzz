@@ -16,6 +16,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
 import discussionService from "@/services/discussion.service";
 import { toast } from "../ui/use-toast";
+import { useRouter } from "next/router";
 
 const createDiscussionFormSchema = z.object({
   title: z.string({ required_error: "Please provide a name" }).nonempty(),
@@ -27,12 +28,15 @@ type CreateDiscussionFormValues = z.infer<typeof createDiscussionFormSchema>;
 interface CreateDiscussionFormProps {
   onSuccess: (res: any) => void;
   defaultValues?: Partial<CreateDiscussionFormValues> & { id: string };
+  backTo?: string
 }
 
 export function CreateDiscussionForm({
+  backTo,
   onSuccess,
   defaultValues,
 }: CreateDiscussionFormProps) {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const form = useForm<CreateDiscussionFormValues>({
@@ -113,7 +117,11 @@ export function CreateDiscussionForm({
             </FormItem>
           )}
         />
-        <div className="text-right">
+        <div className="text-right space-x-2">
+          {backTo && <Button type="button" onClick={() => router.push(backTo)} variant="outline">
+            Back
+          </Button>}
+
           <Button type="submit" isLoading={isLoading}>
             {defaultValues ? "Edit" : "Post"}
           </Button>

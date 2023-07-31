@@ -42,6 +42,7 @@ function EditDiscussion({ discussionId }: { discussionId: string }) {
             defaultValues={{
               ...data,
             }}
+            backTo={`/discussion/${discussionId}`}
             onSuccess={(res) => {
               mutate(res);
               router.push(`/discussion/${discussionId}`);
@@ -62,9 +63,7 @@ export default function EditDiscussionPage() {
 
   return (
     <MainLayout>
-      <div className="container max-w-3xl pb-8 pt-6 md:py-10 mx-auto w-full py-16">
-        <EditDiscussion discussionId={discussionId} />
-      </div>
+      <EditDiscussion discussionId={discussionId} />
     </MainLayout>
   );
 }

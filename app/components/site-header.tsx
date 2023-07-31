@@ -13,7 +13,8 @@ export function SiteHeader() {
 
   let allowedMainNav =
     mainNav.filter(({ href }) => href === router.pathname).length !== 0;
-  return (
+  
+    return (
     <header className="supports-backdrop-blur:bg-background/60 sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur">
       <div className="container flex h-16 items-center space-x-4 justify-between sm:space-x-0">
         <Link href="/" className="flex items-center gap-2 ">
