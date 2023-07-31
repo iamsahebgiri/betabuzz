@@ -58,7 +58,7 @@ export function GeneralForm({ onSuccess }: GeneralFormProps) {
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
-        ...user
+      ...user,
     },
     mode: "onChange",
   });
@@ -220,7 +220,9 @@ export function GeneralForm({ onSuccess }: GeneralFormProps) {
             Add topic
           </Button>
         </div>
-        <Button type="submit">Update profile</Button>
+        <Button type="submit" isLoading={isLoading}>
+          Update profile
+        </Button>
       </form>
     </Form>
   );

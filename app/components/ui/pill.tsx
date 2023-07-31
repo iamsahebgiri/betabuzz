@@ -11,7 +11,8 @@ function Pill({ className, title, ...props }: PillProps) {
     <div
       className={cn(
         "inline-flex items-center rounded-full px-3 py-1 text-sm font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
-        getColor(title)
+        getColor(title),
+        className
       )}
       {...props}
     >

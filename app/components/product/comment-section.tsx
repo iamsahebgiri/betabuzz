@@ -4,8 +4,9 @@ import useSWR from "swr";
 import CommentForm from "./comment-form";
 import productService from "@/services/product.service";
 import ListComments from "./comment-list";
-import { Button } from "../ui/button";
 import formatComments from "@/lib/comments";
+import comment24Regular from "@iconify/icons-fluent/comment-24-regular";
+import { EmptyState, LoadingState } from "@/components/ui/states";
 
 // const PAGE_SIZE = 10;
 
@@ -46,7 +47,7 @@ export default function CommentSection({ productId }: any) {
   );
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingState />;
   }
 
   if (error) {
@@ -67,16 +68,11 @@ export default function CommentSection({ productId }: any) {
       </h2>
 
       {data.length === 0 ? (
-        <div className="flex flex-col mx-auto max-w-xs text-center space-y-3 relative">
-          <div className="flex gap-3 items-center rounded-md p-2 border">
-            <div className="h-8 w-8 bg-border rounded-full" />
-            <div className="space-y-2">
-              <div className="h-2 w-[80px] rounded-lg bg-border" />
-              <div className="h-2 w-[100px] rounded-lg bg-border" />
-            </div>
-          </div>
-          <p className="font-medium">No comments yet</p>
-        </div>
+        <EmptyState
+          title="Shhh... comments hibernating"
+          subtitle="Wake them up with your thoughts!"
+          icon={comment24Regular}
+        />
       ) : (
         <ListCommentsFormatter
           productId={productId}

@@ -128,7 +128,7 @@ export function SocialForm({ onSuccess }: SocialFormProps) {
             Add URL
           </Button>
         </div>
-        <Button type="submit">Update social</Button>
+        <Button type="submit" isLoading={isLoading}>Update social</Button>
       </form>
     </Form>
   );

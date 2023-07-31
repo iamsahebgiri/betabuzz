@@ -10,6 +10,8 @@ import UpvoteCommentButton from "./upvote-comment-btn";
 import type { KeyedMutator } from "swr";
 import { Comment, CommentWithChildren } from "@/types";
 import formatComments from "@/lib/comments";
+import Username from "../profile/username";
+import Link from "next/link";
 
 function CommentActions({
   comment,
@@ -85,7 +87,11 @@ function CommentActions({
               Edit
             </Button>
             {comment.children.length === 0 && (
-              <Button variant="ghost" size="sm" onClick={handleDeleteComment}>
+              <Button variant="ghost" size="sm" onClick={() => {
+                if (confirm("Are you sure you want to delete this comment?")) {
+                  handleDeleteComment();
+                }
+              }}>
                 Delete
               </Button>
             )}
@@ -128,9 +134,9 @@ function Comment({ comment, mutate, productId, hidden }: any) {
       </div>
       <div className="flex-1">
         <div className="flex items-center gap-x-3 pt-1">
-          <span className="block text-base font-semibold">
-            {comment.author.name}
-          </span>
+          <Link href={`/${comment.author.username}`}>
+            <Username className="font-semibold" user={comment.author} />
+          </Link>
           <span className="font-medium text-sm text-muted-foreground">
             {dayjs(comment.createdAt).fromNow()}
           </span>

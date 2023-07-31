@@ -2,6 +2,7 @@ const config = require('../config/config');
 const stripe = require('stripe')(config.stripe.secretKey);
 const logger = require('../config/logger');
 const { PLANS } = require('../config/stripe');
+const { User } = require('../models');
 const Subscription = require('../models/subscription.model');
 
 const handler = async (req, res) => {
@@ -67,9 +68,17 @@ const handler = async (req, res) => {
         const customerId = subscriptionUpdated.customer.toString();
 
         // If user upgrades/downgrades their subscription, update subscription
-        await Subscription.updateOne(
+        const subscription = await Subscription.updateOne(
           {
             customerId,
+          },
+          {
+            plan: plan.slug,
+          }
+        );
+        await User.updateOne(
+          {
+            id: subscription.user,
           },
           {
             plan: plan.slug,
@@ -95,6 +104,15 @@ const handler = async (req, res) => {
         subscription.currentPeriodEnd = new Date();
 
         await subscription.save();
+
+        await User.updateOne(
+          {
+            id: subscription.user,
+          },
+          {
+            plan: 'free',
+          }
+        );
       } else {
         throw new Error('Unhandled relevant event!');
       }

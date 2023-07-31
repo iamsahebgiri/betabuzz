@@ -1,123 +1,343 @@
-import React, { useState } from "react";
-import { FormErrorMessage } from "@/components/ui/form-error-message";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import * as z from "zod";
-import { createProductSchema } from "@/lib/validations/product";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
-import { buttonVariants } from "../ui/button";
-import { cn } from "@/lib/utils";
-import { Icons } from "../icons";
-import { Textarea } from "../ui/textarea";
+
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { toast } from "@/components/ui/use-toast";
+import useUser from "@/hooks/use-user";
+import userService from "@/services/user.service";
+import { useState } from "react";
 import productService from "@/services/product.service";
-import { toast } from "../ui/use-toast";
+import { Label } from "@/components/ui/label";
+import { Icons } from "@/components/icons";
 import { useRouter } from "next/router";
+import { Textarea } from "@/components/ui/textarea";
+import { cn } from "@/lib/utils";
+import { Icon } from "@iconify/react";
+import delete24Filled from "@iconify/icons-fluent/delete-24-filled";
+import checkmark24Regular from "@iconify/icons-fluent/checkmark-24-regular";
+import { CaretSortIcon } from "@radix-ui/react-icons";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import { categories } from "@/config/categories";
+import { KeyedMutator } from "swr";
 
-interface CreateProductFormProps extends React.HTMLAttributes<HTMLDivElement> {}
+const createProductFormSchema = z.object({
+  name: z
+    .string({ required_error: "Please provide a name to your product" })
+    .nonempty(),
+  link: z.string().url().nonempty(),
+  image: z
+    .string({
+      required_error: "Image can't be empty",
+    })
+    .url()
+    .nonempty(),
+  tagline: z.string(),
+  description: z.string(),
+  tags: z
+    .array(
+      z.object({
+        value: z.string().nonempty(),
+      })
+    )
+    .optional(),
+  category: z.string(),
+});
 
-type CreateProductFormData = z.infer<typeof createProductSchema>;
+type CreateProductFormValues = z.infer<typeof createProductFormSchema>;
+
+interface CreateProductFormProps {
+  onSuccess: (res: any) => void;
+  defaultValues?: Partial<CreateProductFormValues> & { id: string };
+}
 
 export function CreateProductForm({
-  className,
-  ...props
+  onSuccess,
+  defaultValues,
 }: CreateProductFormProps) {
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
-  const [image, setImage] = useState<String | null>(null);
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<CreateProductFormData>({
-    resolver: zodResolver(createProductSchema),
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const form = useForm<CreateProductFormValues>({
+    resolver: zodResolver(createProductFormSchema),
+    defaultValues,
+    mode: "onChange",
   });
 
-  const onImageUploaded = (imageUrl: String) => {
-    setImage(imageUrl);
-  };
+  const { fields, append, remove } = useFieldArray({
+    name: "tags",
+    control: form.control,
+  });
 
-  function onSubmit(data: CreateProductFormData) {
-    const payload = { ...data, image };
+  function onSubmit(data: CreateProductFormValues) {
+    const payload = {
+      ...data,
+      tags: data.tags?.map((tag) => tag.value),
+      category: categories.find((category) => category.value === data.category)
+        ?.label,
+    };
     setIsLoading(true);
-    productService
-      .createProduct(payload)
-      .then(async (res) => {
-        console.log(res);
-        router.push("/");
-      })
-      .catch((err) => {
-        toast({
-          title: "Bad request.",
-          description: err?.message,
-          variant: "destructive",
+    if (defaultValues) {
+      productService
+        .updateProduct(defaultValues.id as string, payload)
+        .then((res) => {
+          onSuccess(res);
+        })
+        .catch((err) => {
+          toast({
+            title: "Bad request.",
+            description: err?.message,
+            variant: "destructive",
+          });
+          console.log(err);
+        })
+        .finally(() => {
+          setIsLoading(false);
         });
-        console.log(err);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    } else {
+      productService
+        .createProduct(payload)
+        .then((res) => {
+          onSuccess(res);
+        })
+        .catch((err) => {
+          toast({
+            title: "Bad request.",
+            description: err?.message,
+            variant: "destructive",
+          });
+          console.log(err);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    }
   }
-  return (
-    <div>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="space-y-4">
-          <UploadProductImage onSuccess={onImageUploaded} />
-          <div className="space-y-1">
-            <Label htmlFor="name">Name</Label>
-            <Input
-              id="name"
-              placeholder="Next big product"
-              disabled={isLoading}
-              {...register("name")}
-            />
-            {errors?.name && (
-              <FormErrorMessage>{errors.name.message}</FormErrorMessage>
-            )}
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="link">Link to your product</Label>
-            <Input
-              id="link"
-              placeholder="https://next-big-product.com"
-              disabled={isLoading}
-              type="url"
-              {...register("link")}
-            />
-            {errors?.link && (
-              <FormErrorMessage>{errors.link.message}</FormErrorMessage>
-            )}
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="description">Description</Label>
-            <Textarea
-              id="description"
-              placeholder="My awesome product"
-              disabled={isLoading}
-              {...register("description")}
-            />
-            {errors?.description && (
-              <FormErrorMessage>{errors.description.message}</FormErrorMessage>
-            )}
-          </div>
 
-          <button className={cn(buttonVariants())} disabled={isLoading}>
-            {isLoading && (
-              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-            )}
-            Save product
-          </button>
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <FormField
+          control={form.control}
+          name="image"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Image</FormLabel>
+              <FormControl>
+                <UploadProductImage
+                  image={field.value}
+                  setImage={(value) => {
+                    form.setValue("image", value);
+                  }}
+                />
+              </FormControl>
+              <FormDescription>This is your image identity.</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Name</FormLabel>
+              <FormControl>
+                <Input placeholder="BetaBuzz" {...field} />
+              </FormControl>
+              <FormDescription>
+                This is your brand name. Make it sound like a brand.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="tagline"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Tagline</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Creating a buzz around the latest beta products"
+                  {...field}
+                />
+              </FormControl>
+              <FormDescription>
+                Make it resonate with your vision and mission.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="link"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Link to your product</FormLabel>
+              <FormControl>
+                <Input placeholder="http://betabuzz.vercel.app" {...field} />
+              </FormControl>
+              <FormDescription>
+                This will be used to increase your traffic. Make sure its
+                correct.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Description</FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder="Making the world a better place"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="category"
+          render={({ field }) => (
+            <FormItem className="flex flex-col">
+              <FormLabel>Category</FormLabel>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      className={cn(
+                        "w-[320px] justify-between rounded-lg text-sm",
+                        !field.value && "text-muted-foreground"
+                      )}
+                    >
+                      {field.value
+                        ? categories.find(
+                            (category) => category.value === field.value
+                          )?.label
+                        : "Select category"}
+                      <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className="w-[320px] p-0">
+                  <Command>
+                    <CommandList>
+                      <CommandInput placeholder="Search category..." />
+                      <CommandEmpty>No category found.</CommandEmpty>
+                      <CommandGroup>
+                        {categories.map((category) => (
+                          <CommandItem
+                            value={category.value}
+                            key={category.value}
+                            onSelect={(value) => {
+                              form.setValue("category", value);
+                            }}
+                          >
+                            <Icon
+                              icon={checkmark24Regular}
+                              className={cn(
+                                "mr-2 h-4 w-4",
+                                category.value === field.value
+                                  ? "opacity-100"
+                                  : "opacity-0"
+                              )}
+                            />
+                            {category.label}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <div>
+          {fields.map((field, index) => (
+            <FormField
+              control={form.control}
+              key={field.id}
+              name={`tags.${index}.value`}
+              render={({ field }) => (
+                <FormItem className="flex-1">
+                  <FormLabel className={cn(index !== 0 && "sr-only")}>
+                    Tags
+                  </FormLabel>
+                  <div className="flex gap-2">
+                    <FormControl className="flex-1">
+                      <Input {...field} />
+                    </FormControl>
+                    <Button
+                      type="button"
+                      size="circle"
+                      variant="destructive"
+                      onClick={() => remove(index)}
+                    >
+                      <Icon icon={delete24Filled} className="h-5 w-5" />
+                    </Button>
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          ))}
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="mt-2"
+            onClick={() => append({ value: "" })}
+          >
+            Add tag
+          </Button>
         </div>
+        
+        <Button type="submit" isLoading={isLoading}>
+          Save product
+        </Button>
       </form>
-    </div>
+    </Form>
   );
 }
 
 interface UploadProductImageProps {
-  onSuccess: (imageUrl: String) => void;
+  image: string;
+  setImage: (value: string) => void;
 }
 
-const UploadProductImage = ({ onSuccess }: UploadProductImageProps) => {
+const UploadProductImage = ({ setImage, image }: UploadProductImageProps) => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
 
@@ -131,7 +351,7 @@ const UploadProductImage = ({ onSuccess }: UploadProductImageProps) => {
         .uploadImage(file)
         .then(async (res) => {
           console.log(res);
-          onSuccess(res.url);
+          setImage(res.url);
         })
         .catch((err) => {
           toast({
@@ -147,125 +367,50 @@ const UploadProductImage = ({ onSuccess }: UploadProductImageProps) => {
     }
   };
 
-  const deleteAvatar = () => {
-    setIsProcessing(true);
-    productService
-      .deleteImage("test")
-      .then(async (res) => {
-        // await mutate("user.me", res);
-        // toast({
-        //   title: "Deleted avatar successfully.",
-        //   variant: "default",
-        // });
-      })
-      .catch((err) => {
-        toast({
-          title: "Bad request.",
-          description: err?.message,
-          variant: "destructive",
-        });
-        console.log(err);
-      })
-      .finally(() => {
-        setIsProcessing(false);
-      });
-  };
+  if (!selectedImage && !image) {
+    return (
+      <label
+        htmlFor="product-image"
+        className="flex w-36 h-36 justify-center items-center rounded-xl border border-dashed border-gray-900/25 cursor-pointer hover:bg-accent/60"
+      >
+        <span className="font-semibold text-sm">Upload logo</span>
+        <input
+          id="product-image"
+          name="product-image"
+          type="file"
+          accept="image/jpeg, image/png, image/jpg"
+          className="sr-only"
+          onChange={handleImageChange}
+        />
+      </label>
+    );
+  }
 
   return (
-    <div className="space-y-2">
-      <Label>Image</Label>
-      {selectedImage ? (
-        <div className="w-36 h-36 rounded-xl relative">
-          <img
-            className="w-full h-full object-cover rounded-xl"
-            src={URL.createObjectURL(selectedImage)}
-            alt="Preview"
-          />
-          {isProcessing ? (
-            <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-40 flex justify-center items-center rounded-xl">
-              <Icons.spinner className="h-6 w-6 animate-spin text-white" />
-            </div>
-          ) : (
-            <div className="absolute -top-1 -right-1">
-              <button
-                type="button"
-                className="h-6 w-6 flex items-center justify-center  rounded-full bg-gray-800/80 hover:bg-gray-800/90"
-                onClick={() => setSelectedImage(null)}
-              >
-                <Icons.x className="h-4 w-4 text-white" />
-              </button>
-            </div>
-          )}
+    <div className="w-36 h-36 rounded-xl relative">
+      <img
+        className="w-full h-full object-cover rounded-xl"
+        src={selectedImage ? URL.createObjectURL(selectedImage) : image}
+        alt="Preview"
+      />
+      {isProcessing ? (
+        <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-40 flex justify-center items-center rounded-xl">
+          <Icons.spinner className="h-6 w-6 animate-spin text-white" />
         </div>
       ) : (
-        <label
-          htmlFor="product-image"
-          className="flex w-36 h-36 justify-center items-center rounded-xl border border-dashed border-gray-900/25 cursor-pointer hover:bg-accent/60"
-        >
-          <span className="font-semibold text-sm">Upload</span>
-          <input
-            id="product-image"
-            name="product-image"
-            type="file"
-            accept="image/jpeg, image/png, image/jpg"
-            className="sr-only"
-            onChange={handleImageChange}
-          />
-        </label>
+        <div className="absolute -top-1 -right-1">
+          <button
+            type="button"
+            className="h-6 w-6 flex items-center justify-center  rounded-full bg-gray-800/80 hover:bg-gray-800/90"
+            onClick={() => {
+              setSelectedImage(null);
+              setImage("");
+            }}
+          >
+            <Icons.x className="h-4 w-4 text-white" />
+          </button>
+        </div>
       )}
     </div>
   );
-
-  // return (
-  //   <div className="flex justify-center">
-  //     {selectedImage && isProcessing ? (
-  //       <div className="w-32 h-32 rounded-full relative">
-  //         <img
-  //           className="w-full h-full object-cover rounded-full"
-  //           src={URL.createObjectURL(selectedImage)}
-  //           alt="Preview"
-  //         />
-  //         <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-40 flex justify-center items-center rounded-full">
-  //           <Icons.spinner className="h-6 w-6 animate-spin text-white" />
-  //         </div>
-  //       </div>
-  //     ) : (
-  //       <div className="group h-32 w-32 rounded-full overflow-hidden relative">
-  //         <img
-  //           src={user.avatar}
-  //           alt={user.name}
-  //           className="h-full w-full rounded-full object-cover"
-  //           width={128}
-  //           height={128}
-  //         />
-  //         <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-gray-800 hidden group-hover:flex justify-center items-center space-x-2">
-  //           <label htmlFor="user-avatar" className="cursor-pointer">
-  //             <span className="w-8 h-8 bg-black bg-opacity-40 justify-center items-center rounded-full hidden border-2 border-black/40 hover:border-white group-hover:flex">
-  //               <Icons.pen className="h-5 w-5 text-white" />
-  //             </span>
-  //             <input
-  //               id="user-avatar"
-  //               name="user-avatar"
-  //               type="file"
-  //               accept="image/jpeg, image/png, image/jpg"
-  //               className="sr-only"
-  //               onChange={handleImageChange}
-  //             />
-  //           </label>
-  //           {user.avatar.includes("amazonaws.com") && (
-  //             <button
-  //               className="w-8 h-8 bg-black bg-opacity-40 justify-center items-center rounded-full hidden group-hover:flex border-2 border-black/40 hover:border-white"
-  //               onClick={deleteAvatar}
-  //             >
-  //               <Icons.trash className="h-5 w-5 text-white" />
-  //             </button>
-  //           )}
-  //         </div>
-  //       </div>
-  //     )}
-  //   </div>
-
-  // return (
-
-  // );
 };

@@ -11,7 +11,6 @@ class UserService extends APIService {
     return this.get("/users/me")
       .then((response) => {
         const { data } = response;
-        console.log(data);
         return data;
       })
       .catch((error) => {
@@ -57,6 +56,27 @@ class UserService extends APIService {
 
   async deleteAvatar(userId: String) {
     return this.delete(`/users/${userId}/avatar`)
+      .then((response) => {
+        const { data } = response;
+        return data;
+      })
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async manageBilling() {
+    return this.post("/users/me/billing/manage")
+      .then((response) => {
+        const { data } = response;
+        return data;
+      })
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+  async upgradeBilling(priceId: string) {
+    return this.post(`/users/me/billing/upgrade?priceId=${priceId}`)
       .then((response) => {
         const { data } = response;
         return data;

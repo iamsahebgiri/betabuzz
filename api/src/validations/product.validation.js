@@ -17,6 +17,8 @@ const getProducts = {
   query: Joi.object().keys({
     name: Joi.string(),
     link: Joi.string(),
+    maker: Joi.custom(objectId),
+    upvotes: Joi.custom(objectId),
     description: Joi.string(),
     sortBy: Joi.string(),
     limit: Joi.number().integer(),

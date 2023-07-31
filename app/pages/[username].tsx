@@ -6,13 +6,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "@/components/ui/use-toast";
 import useUser from "@/hooks/use-user";
 import MainLayout from "@/layouts/main.layout";
-import authService from "@/services/auth.service";
 import userService from "@/services/user.service";
 import { getGradient } from "@/lib/gradient";
-import { Pill } from "@/components/ui/pill";
-import Image from "next/image";
 import useSWR from "swr";
 import { useRouter } from "next/router";
+import Head from "next/head";
+import { siteConfig } from "@/config/site";
+import { plansColor } from "@/config/plan-colors";
+import { LoadingState } from "@/components/ui/states";
+import { UpvotesTab } from "@/components/profile/upvotes-tab";
+import { ProductsTab } from "@/components/profile/products-tab";
+import AboutTab from "@/components/profile/about-tab";
 
 function UserProfilePage({ username }: { username: string }) {
   const { user, loading } = useUser();
@@ -22,27 +26,7 @@ function UserProfilePage({ username }: { username: string }) {
     isLoading,
   } = useSWR(`user.${username}`, () => userService.getUserByUsername(username));
 
-  const plans = {
-    red: {
-      color: "text-red-500",
-      colorDark: "text-red-800",
-      gradient: "from-rose-500 to-red-500",
-    },
-    blue: {
-      color: "text-blue-500",
-      colorDark: "text-blue-800",
-      gradient: "from-cyan-500 to-blue-500",
-    },
-    yellow: {
-      color: "text-yellow-500",
-      colorDark: "text-yellow-800",
-      gradient: "from-amber-500 to-yellow-500",
-    },
-  };
-
-  const currentPlan = plans.red;
-
-  if (isLoading || loading) return <div>Loading...</div>;
+  if (isLoading || loading) return <LoadingState />;
 
   if (!userProfile) {
     return <div>User with username '{username}' is not found.</div>;
@@ -50,9 +34,16 @@ function UserProfilePage({ username }: { username: string }) {
   if (error) {
     return <div>{JSON.stringify(error, null, 2)}</div>;
   }
+  const type = userProfile.plan as "free" | "starter" | "pro" | "premium";
+  const currentPlan = plansColor[type];
 
   return (
-    <MainLayout>
+    <>
+      <Head>
+        <title>
+          {`${userProfile.name} (@${userProfile.username}) - ${siteConfig.name}`}
+        </title>
+      </Head>
       <div className="container mx-auto max-w-3xl py-8">
         <div>
           <div
@@ -78,7 +69,11 @@ function UserProfilePage({ username }: { username: string }) {
               <div className="flex flex-col min-w-0 flex-1">
                 <div className="inline-flex items-center space-x-2">
                   <h1 className="text-2xl font-bold">{userProfile.name}</h1>
-                  <Icons.verified className={`h-5 w-5 ${currentPlan.color}`} />
+                  {userProfile.plan !== "free" && (
+                    <Icons.verified
+                      className={`h-5 w-5 ${currentPlan.color}`}
+                    />
+                  )}
                 </div>
                 <h2 className="text-base text-muted-foreground font-semibold">
                   {userProfile.username
@@ -103,116 +98,31 @@ function UserProfilePage({ username }: { username: string }) {
                 About
               </TabsTrigger>
               <TabsTrigger
-                value="activity"
+                value="upvotes"
                 className="relative h-9 rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-3 pt-2 font-semibold text-muted-foreground shadow-none transition-none data-[state=active]:border-b-primary data-[state=active]:text-foreground data-[state=active]:shadow-none"
               >
-                Activity
+                Upvotes
               </TabsTrigger>
               <TabsTrigger
-                value="collections"
+                value="products"
                 className="relative h-9 rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-3 pt-2 font-semibold text-muted-foreground shadow-none transition-none data-[state=active]:border-b-primary data-[state=active]:text-foreground data-[state=active]:shadow-none"
               >
-                Collections
+                Products
               </TabsTrigger>
             </TabsList>
           </div>
           <TabsContent value="about">
-            <div className="space-y-6">
-              <div>
-                <h2 className="font-bold text-muted-foreground leading-none tracking-tight">
-                  Bio
-                </h2>
-                <p className="font-medium text-secondary-foreground">
-                  {userProfile.bio ?? "Unknown"}
-                </p>
-              </div>
-
-              <div className="space-y-2">
-                <h2 className="font-bold text-muted-foreground leading-none tracking-tight">
-                  Interests
-                </h2>
-                {userProfile.interests && userProfile.interests.length > 0 ? (
-                  <div className="space-x-2">
-                    {userProfile.interests.map(
-                      (interest: string, index: number) => (
-                        <Pill title={interest} key={index} />
-                      )
-                    )}
-                  </div>
-                ) : (
-                  <p className="font-medium text-secondary-foreground">
-                    Unknown
-                  </p>
-                )}
-              </div>
-              <div>
-                <h2 className="font-bold text-muted-foreground leading-none tracking-tight">
-                  Gender
-                </h2>
-                <p className="font-medium text-secondary-foreground capitalize">
-                  {userProfile.gender ?? "Unknown"}
-                </p>
-              </div>
-              <div>
-                <h2 className="font-bold text-muted-foreground leading-none tracking-tight">
-                  Language
-                </h2>
-                <p className="font-medium text-secondary-foreground capitalize">
-                  {userProfile.language ?? "Unknown"}
-                </p>
-              </div>
-              <div className="space-y-2">
-                <h2 className="font-bold text-muted-foreground leading-none tracking-tight">
-                  Socials
-                </h2>
-                {userProfile.socials && userProfile.socials.length > 0 ? (
-                  <ul className="space-y-2">
-                    {userProfile.socials.map(
-                      (
-                        social: { platform: string; href: string },
-                        index: number
-                      ) => (
-                        <li className="flex gap-2 items-center" key={index}>
-                          <Image
-                            height={20}
-                            width={20}
-                            alt={social.platform}
-                            src={`https://icons.bitwarden.net/${social.platform}/icon.png`}
-                            className="h-5 w-5 rounded-md"
-                          />
-                          <a
-                            href={social.href}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="font-medium"
-                          >
-                            {social.href}
-                          </a>
-                        </li>
-                      )
-                    )}
-                  </ul>
-                ) : (
-                  <p className="font-medium text-secondary-foreground">
-                    No socials yet
-                  </p>
-                )}
-              </div>
-            </div>
+            <AboutTab user={userProfile} />
           </TabsContent>
-          <TabsContent value="activity">
-            <div>Hello there</div>
+          <TabsContent value="upvotes">
+            <UpvotesTab userId={userProfile.id} />
           </TabsContent>
-          <TabsContent value="collections">
-            <div className="flex flex-col space-y-4">
-              <div className="w-full rounded-md [&_pre]:my-0 [&_pre]:max-h-[350px] [&_pre]:overflow-auto">
-                Hello
-              </div>
-            </div>
+          <TabsContent value="products">
+            <ProductsTab userId={userProfile.id} />
           </TabsContent>
         </Tabs>
       </div>
-    </MainLayout>
+    </>
   );
 }
 
@@ -314,7 +224,11 @@ const UserAvatar = () => {
               user.avatar.includes("amazonaws.com") && (
                 <button
                   className="w-8 h-8 bg-black bg-opacity-40 justify-center items-center rounded-full hidden group-hover:flex border-2 border-black/40 hover:border-white"
-                  onClick={deleteAvatar}
+                  onClick={() => {
+                    if (confirm("Are you sure you want to remove this avatar?")) {
+                      deleteAvatar();
+                    }
+                  }}
                 >
                   <Icons.trash className="h-5 w-5 text-white" />
                 </button>
@@ -334,5 +248,9 @@ export default function ProfilePage() {
     return <div>No username</div>;
   }
 
-  return <UserProfilePage username={username} />;
+  return (
+    <MainLayout>
+      <UserProfilePage username={username} />
+    </MainLayout>
+  );
 }

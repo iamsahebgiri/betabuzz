@@ -37,8 +37,8 @@ class ProductService extends APIService {
       });
   }
 
-  async updateProduct(id: string) {
-    return this.patch(`/products/${id}`)
+  async updateProduct(id: string, payload: any) {
+    return this.patch(`/products/${id}`, payload)
       .then((response) => {
         return response?.data;
       })

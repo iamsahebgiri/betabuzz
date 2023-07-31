@@ -1,9 +1,26 @@
-import { type } from "os";
-
-export interface Author {
+export interface User {
+  interests: any[];
+  plan: string;
   email: string;
   name: string;
   avatar: string;
+  socials: any[];
+  username: string;
+  bio: string;
+  id: string;
+}
+
+export interface UserProfile {
+  interests: string[];
+  plan: string;
+  email: string;
+  name: string;
+  avatar: string;
+  socials: any[];
+  username: string;
+  bio: string;
+  gender: string;
+  language: string;
   id: string;
 }
 
@@ -14,7 +31,7 @@ export interface Comment {
   upvoted: boolean;
   product: string;
   parent: string | null;
-  author: Author;
+  author: User;
   createdAt: string;
   updatedAt: string;
 }
@@ -26,13 +43,17 @@ export type CommentWithChildren = Comment & {
 export interface Product {
   id: string;
   name: string;
+  tagline: string;
   image: string;
   description: string;
   link: string;
+  views: number;
+  tags: string[];
+  category: string;
   commentsCount: number;
   upvotesCount: number;
   upvoted: boolean;
-  maker: Author;
+  maker: User;
   createdAt: string;
   updatedAt: string;
 }
