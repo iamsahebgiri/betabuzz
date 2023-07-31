@@ -12,7 +12,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
     <div className="relative flex min-h-screen flex-col">
       <SiteHeader />
       <Head>
-        <title>{siteConfig.name}</title>
+        <title>{`${siteConfig.name}`}</title>
         <meta name="description" content={siteConfig.description} />
       </Head>
       <div className="flex-1">{children}</div>

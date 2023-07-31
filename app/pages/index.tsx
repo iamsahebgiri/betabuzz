@@ -8,6 +8,8 @@ import dayjs from "@/lib/dayjs";
 import { Button } from "@/components/ui/button";
 import { Product } from "@/types";
 import { KeyedMutator } from "swr";
+import { EmptyState } from "@/components/ui/states";
+import box24Regular from "@iconify/icons-fluent/box-24-regular";
 
 const Product = ({
   product,
@@ -97,6 +99,7 @@ const getKey = (pageIndex: number, prevPageData: any) => {
     pageIndex + 1
   }&sortBy=createdAt:desc`; // SWR key
 };
+
 export default function IndexPage() {
   const { data, size, setSize, isLoading, error, mutate } = useSWRInfinite(
     getKey,
@@ -121,7 +124,11 @@ export default function IndexPage() {
       <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
         <div className="mx-auto w-full max-w-2xl space-y-8 lg:space-y-10">
           {isEmpty ? (
-            "No Products"
+            <EmptyState
+              title="Plant your products and watch them grow!"
+              subtitle="Launch your beta and let the buzz begin!"
+              icon={box24Regular}
+            />
           ) : (
             <>
               {pages.map((page: any, pageIndex) => (

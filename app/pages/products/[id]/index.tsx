@@ -56,9 +56,7 @@ const Product = ({ productId }: { productId: string }) => {
   return (
     <div>
       <Head>
-        <title>
-          {data.name} - {data.tagline}
-        </title>
+        <title>{`${data.name} - ${data.tagline}`}</title>
         <meta name="description" content={data.tagline} />
       </Head>
 

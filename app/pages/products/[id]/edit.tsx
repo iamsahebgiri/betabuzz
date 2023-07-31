@@ -25,9 +25,7 @@ function EditProduct({ productId }: { productId: string }) {
   return (
     <>
       <Head>
-        <title>
-          Edit {data.name} - {siteConfig.name}
-        </title>
+        <title>{`Edit ${data.name} - ${siteConfig.name}`}</title>
         <meta
           name="description"
           content="Tell us more about this product like name, description."

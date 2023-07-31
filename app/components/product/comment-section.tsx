@@ -4,10 +4,9 @@ import useSWR from "swr";
 import CommentForm from "./comment-form";
 import productService from "@/services/product.service";
 import ListComments from "./comment-list";
-import { Button } from "../ui/button";
 import formatComments from "@/lib/comments";
-import noComments from "@/assets/no-comments.svg";
-import Image from "next/image";
+import comment24Regular from "@iconify/icons-fluent/comment-24-regular";
+import { EmptyState } from "@/components/ui/states";
 
 // const PAGE_SIZE = 10;
 
@@ -69,18 +68,11 @@ export default function CommentSection({ productId }: any) {
       </h2>
 
       {data.length === 0 ? (
-        <div className="flex flex-col items-center justify-center space-y-3 relative">
-          <Image
-            alt="No comments yet"
-            height={120}
-            width={120}
-            src={noComments}
-          />
-          <p className="font-bold">No comments yet</p>
-          <p className="font-medium max-w-[280px] text-center text-muted-foreground text-sm">
-            Write your views about it and give feedback to the maker.
-          </p>
-        </div>
+        <EmptyState
+          title="Shhh... comments hibernating"
+          subtitle="Wake them up with your thoughts!"
+          icon={comment24Regular}
+        />
       ) : (
         <ListCommentsFormatter
           productId={productId}

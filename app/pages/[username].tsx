@@ -6,7 +6,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "@/components/ui/use-toast";
 import useUser from "@/hooks/use-user";
 import MainLayout from "@/layouts/main.layout";
-import authService from "@/services/auth.service";
 import userService from "@/services/user.service";
 import { getGradient } from "@/lib/gradient";
 import { Pill } from "@/components/ui/pill";
@@ -16,6 +15,7 @@ import { useRouter } from "next/router";
 import Head from "next/head";
 import { siteConfig } from "@/config/site";
 import { plansColor } from "@/config/plan-colors";
+import { LoadingState } from "@/components/ui/states";
 
 function UserProfilePage({ username }: { username: string }) {
   const { user, loading } = useUser();
@@ -25,7 +25,7 @@ function UserProfilePage({ username }: { username: string }) {
     isLoading,
   } = useSWR(`user.${username}`, () => userService.getUserByUsername(username));
 
-  if (isLoading || loading) return <div>Loading...</div>;
+  if (isLoading || loading) return <LoadingState />;
 
   if (!userProfile) {
     return <div>User with username '{username}' is not found.</div>;
@@ -38,10 +38,10 @@ function UserProfilePage({ username }: { username: string }) {
   const currentPlan = plansColor[type];
 
   return (
-    <MainLayout>
+    <>
       <Head>
         <title>
-          {userProfile.name} (@{userProfile.username}) - {siteConfig.name}
+          {`${userProfile.name} (@${userProfile.username}) - ${siteConfig.name}`}
         </title>
       </Head>
       <div className="container mx-auto max-w-3xl py-8">
@@ -97,7 +97,7 @@ function UserProfilePage({ username }: { username: string }) {
                 value="activity"
                 className="relative h-9 rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-3 pt-2 font-semibold text-muted-foreground shadow-none transition-none data-[state=active]:border-b-primary data-[state=active]:text-foreground data-[state=active]:shadow-none"
               >
-                Activity
+                Upvotes
               </TabsTrigger>
               <TabsTrigger
                 value="collections"
@@ -192,18 +192,14 @@ function UserProfilePage({ username }: { username: string }) {
             </div>
           </TabsContent>
           <TabsContent value="activity">
-            <div>Hello there</div>
+            <div>List of upvotes will be shown here</div>
           </TabsContent>
           <TabsContent value="collections">
-            <div className="flex flex-col space-y-4">
-              <div className="w-full rounded-md [&_pre]:my-0 [&_pre]:max-h-[350px] [&_pre]:overflow-auto">
-                Hello
-              </div>
-            </div>
+            <div className="flex flex-col space-y-4">No collections yet</div>
           </TabsContent>
         </Tabs>
       </div>
-    </MainLayout>
+    </>
   );
 }
 
@@ -325,5 +321,9 @@ export default function ProfilePage() {
     return <div>No username</div>;
   }
 
-  return <UserProfilePage username={username} />;
+  return (
+    <MainLayout>
+      <UserProfilePage username={username} />
+    </MainLayout>
+  );
 }

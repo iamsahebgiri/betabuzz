@@ -7,7 +7,7 @@ export default function DiscussionPage() {
   return (
     <MainLayout>
       <Head>
-        <title>Discussions - {siteConfig.name}</title>
+        <title>{`Discussions - ${siteConfig.name}`}</title>
         <meta
           name="description"
           content="Ask questions, find support, and connect with the community."

@@ -9,7 +9,7 @@ export default function NewProduct() {
   return (
     <MainLayout>
       <Head>
-        <title>Create a new product - {siteConfig.name}</title>
+        <title>{`Create a new product - ${siteConfig.name}`}</title>
         <meta
           name="description"
           content="Tell us more about this product like name, description."
