@@ -2,6 +2,7 @@ import axios from "axios";
 import dayjs from "@/lib/dayjs";
 import Cookies from "js-cookie";
 
+axios.defaults.baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
 const unAuthorizedStatus = [401];
 axios.interceptors.response.use(
   (response) => response,
@@ -21,8 +22,8 @@ abstract class APIService {
   protected baseURL: string;
   protected headers: any = {};
 
-  constructor(baseURL: string) {
-    this.baseURL = baseURL;
+  constructor() {
+    this.baseURL = process.env.NEXT_PUBLIC_API_BASE_URL as string;
   }
 
   setRefreshToken(token: string, expires: string) {

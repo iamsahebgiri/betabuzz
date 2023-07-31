@@ -1,12 +1,5 @@
 import APIService from "@/services/api.service";
-
-const { NEXT_PUBLIC_API_BASE_URL } = process.env;
-
 class DiscussionService extends APIService {
-  constructor() {
-    super(NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000/v1");
-  }
-
   async getAll() {
     return this.get("/discussions")
       .then((response) => {
