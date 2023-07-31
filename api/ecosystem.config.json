@@ -1,14 +1,27 @@
 {
   "apps": [
     {
-      "name": "app",
+      "name": "app-8000",
       "script": "src/index.js",
       "instances": 1,
       "autorestart": true,
       "watch": false,
       "time": true,
       "env": {
-        "NODE_ENV": "production"
+        "NODE_ENV": "production",
+        "PORT": 8000
+      }
+    },
+    {
+      "name": "app-8001",
+      "script": "src/index.js",
+      "instances": 1,
+      "autorestart": true,
+      "watch": false,
+      "time": true,
+      "env": {
+        "NODE_ENV": "production",
+        "PORT": 8001
       }
     }
   ]
