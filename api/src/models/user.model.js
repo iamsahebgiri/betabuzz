@@ -63,18 +63,18 @@ const userSchema = mongoose.Schema(
         type: String,
       },
     ],
-    collections: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Product',
-      },
-    ],
-    products: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Product',
-      },
-    ],
+    // collections: [
+    //   {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: 'Product',
+    //   },
+    // ],
+    // products: [
+    //   {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: 'Product',
+    //   },
+    // ],
     password: {
       type: String,
       required: true,

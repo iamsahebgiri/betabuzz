@@ -8,46 +8,8 @@ import { buttonVariants } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { MainNav } from "@/components/main-nav";
+import { UserNav } from "./user-nav";
 
-const UserMenu = () => {
-  const { user, loading, loggedOut } = useUser();
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (loggedOut) {
-    return (
-      <Link href="/login" className={buttonVariants({ variant: "default" })}>
-        Sign in
-      </Link>
-    );
-  }
-
-  return (
-    <div className="flex items-center space-x-2">
-      <Link
-        href="/products/new"
-        className={buttonVariants({ variant: "default" })}
-      >
-        Create
-      </Link>
-      <Link href={`/me`}>
-        <Avatar>
-          <AvatarImage src={user?.avatar} alt={user.name} />
-          <AvatarFallback>
-            <Image
-              src={`https://ui-avatars.com/api/?name=${user.name}&background=random`}
-              alt={user.name}
-              width={40}
-              height={40}
-            />
-          </AvatarFallback>
-        </Avatar>
-      </Link>
-    </div>
-  );
-};
 
 export function SiteHeader() {
   const { mainNav, name } = siteConfig;
@@ -64,7 +26,7 @@ export function SiteHeader() {
         </Link>
         {allowedMainNav ? <MainNav items={mainNav} /> : null}
         <nav className="flex items-center space-x-1">
-          <UserMenu />
+          <UserNav />
         </nav>
       </div>
     </header>

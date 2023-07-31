@@ -11,15 +11,11 @@ const Image = require('../models/image.model');
  */
 const createProduct = async (productBody) => {
   const product = await Product.create(productBody);
-  const maker = await User.findById(productBody.maker);
   const image = await Image.findOne({
     url: productBody.image,
   });
-
-  maker.products.push(product.id);
   image.expires = false;
   await image.save();
-  await maker.save();
   return product;
 };
 
@@ -36,6 +32,32 @@ const createProduct = async (productBody) => {
 const queryProducts = async (userId, filter, options) => {
   Object.assign(options);
   const { results: products, ...rest } = await Product.paginate(filter, options);
+  const results = await Promise.all(
+    products.map(async (product) => {
+      return product.toProductResponse(userId);
+    })
+  );
+  return { results, ...rest };
+};
+
+/**
+ * Query for products
+ * @param {ObjectId} userId - User id
+ * @param {Object} filter - Mongo filter
+ * @param {Object} options - Query options
+ * @param {string} [options.sortBy] - Sort option in the format: sortField:(desc|asc)
+ * @param {number} [options.limit] - Maximum number of results per page (default = 10)
+ * @param {number} [options.page] - Current page (default = 1)
+ * @returns {Promise<QueryResult>}
+ */
+const getProductsUpvotedByUser = async (userId, filter, options) => {
+  Object.assign(options);
+  const { results: products, ...rest } = await Product.paginate(
+    {
+      ...filter,
+    },
+    options
+  );
   const results = await Promise.all(
     products.map(async (product) => {
       return product.toProductResponse(userId);
@@ -99,11 +121,6 @@ const deleteProductById = async (productId, userId) => {
   if (product.maker.toString() !== userId) {
     throw new ApiError(httpStatus.FORBIDDEN, 'Only its maker can delete it');
   }
-  const maker = await User.findById(userId);
-  if (maker.products.indexOf(productId) !== -1) {
-    maker.products.pull(productId);
-  }
-  await maker.save();
   await product.remove();
   await Comment.remove({
     product: product.id,

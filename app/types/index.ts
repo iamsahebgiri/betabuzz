@@ -1,11 +1,26 @@
-import { type } from "os";
-
-export interface Author {
+export interface User {
+  interests: any[];
+  plan: string;
   email: string;
   name: string;
   avatar: string;
-  id: string;
+  socials: any[];
   username: string;
+  id: string;
+}
+
+export interface UserProfile {
+  interests: string[];
+  plan: string;
+  email: string;
+  name: string;
+  avatar: string;
+  socials: any[];
+  username: string;
+  bio: string;
+  gender: string;
+  language: string;
+  id: string;
 }
 
 export interface Comment {
@@ -15,7 +30,7 @@ export interface Comment {
   upvoted: boolean;
   product: string;
   parent: string | null;
-  author: Author;
+  author: User;
   createdAt: string;
   updatedAt: string;
 }
@@ -33,7 +48,7 @@ export interface Product {
   commentsCount: number;
   upvotesCount: number;
   upvoted: boolean;
-  maker: Author;
+  maker: User;
   createdAt: string;
   updatedAt: string;
 }

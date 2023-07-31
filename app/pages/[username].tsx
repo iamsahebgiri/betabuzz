@@ -8,14 +8,15 @@ import useUser from "@/hooks/use-user";
 import MainLayout from "@/layouts/main.layout";
 import userService from "@/services/user.service";
 import { getGradient } from "@/lib/gradient";
-import { Pill } from "@/components/ui/pill";
-import Image from "next/image";
 import useSWR from "swr";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import { siteConfig } from "@/config/site";
 import { plansColor } from "@/config/plan-colors";
 import { LoadingState } from "@/components/ui/states";
+import { UpvotesTab } from "@/components/profile/upvotes-tab";
+import { ProductsTab } from "@/components/profile/products-tab";
+import AboutTab from "@/components/profile/about-tab";
 
 function UserProfilePage({ username }: { username: string }) {
   const { user, loading } = useUser();
@@ -33,7 +34,6 @@ function UserProfilePage({ username }: { username: string }) {
   if (error) {
     return <div>{JSON.stringify(error, null, 2)}</div>;
   }
-
   const type = userProfile.plan as "free" | "starter" | "pro" | "premium";
   const currentPlan = plansColor[type];
 
@@ -94,108 +94,27 @@ function UserProfilePage({ username }: { username: string }) {
                 About
               </TabsTrigger>
               <TabsTrigger
-                value="activity"
+                value="upvotes"
                 className="relative h-9 rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-3 pt-2 font-semibold text-muted-foreground shadow-none transition-none data-[state=active]:border-b-primary data-[state=active]:text-foreground data-[state=active]:shadow-none"
               >
                 Upvotes
               </TabsTrigger>
               <TabsTrigger
-                value="collections"
+                value="products"
                 className="relative h-9 rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-3 pt-2 font-semibold text-muted-foreground shadow-none transition-none data-[state=active]:border-b-primary data-[state=active]:text-foreground data-[state=active]:shadow-none"
               >
-                Collections
+                My Products
               </TabsTrigger>
             </TabsList>
           </div>
           <TabsContent value="about">
-            <div className="space-y-6">
-              <div>
-                <h2 className="font-bold text-muted-foreground leading-none tracking-tight">
-                  Bio
-                </h2>
-                <p className="font-medium text-secondary-foreground">
-                  {userProfile.bio ?? "Unknown"}
-                </p>
-              </div>
-
-              <div className="space-y-2">
-                <h2 className="font-bold text-muted-foreground leading-none tracking-tight">
-                  Interests
-                </h2>
-                {userProfile.interests && userProfile.interests.length > 0 ? (
-                  <div className="space-x-2">
-                    {userProfile.interests.map(
-                      (interest: string, index: number) => (
-                        <Pill title={interest} key={index} />
-                      )
-                    )}
-                  </div>
-                ) : (
-                  <p className="font-medium text-secondary-foreground">
-                    Unknown
-                  </p>
-                )}
-              </div>
-              <div>
-                <h2 className="font-bold text-muted-foreground leading-none tracking-tight">
-                  Gender
-                </h2>
-                <p className="font-medium text-secondary-foreground capitalize">
-                  {userProfile.gender ?? "Unknown"}
-                </p>
-              </div>
-              <div>
-                <h2 className="font-bold text-muted-foreground leading-none tracking-tight">
-                  Language
-                </h2>
-                <p className="font-medium text-secondary-foreground capitalize">
-                  {userProfile.language ?? "Unknown"}
-                </p>
-              </div>
-              <div className="space-y-2">
-                <h2 className="font-bold text-muted-foreground leading-none tracking-tight">
-                  Socials
-                </h2>
-                {userProfile.socials && userProfile.socials.length > 0 ? (
-                  <ul className="space-y-2">
-                    {userProfile.socials.map(
-                      (
-                        social: { platform: string; href: string },
-                        index: number
-                      ) => (
-                        <li className="flex gap-2 items-center" key={index}>
-                          <Image
-                            height={20}
-                            width={20}
-                            alt={social.platform}
-                            src={`https://icons.bitwarden.net/${social.platform}/icon.png`}
-                            className="h-5 w-5 rounded-md"
-                          />
-                          <a
-                            href={social.href}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="font-medium"
-                          >
-                            {social.href}
-                          </a>
-                        </li>
-                      )
-                    )}
-                  </ul>
-                ) : (
-                  <p className="font-medium text-secondary-foreground">
-                    No socials yet
-                  </p>
-                )}
-              </div>
-            </div>
+            <AboutTab user={userProfile} />
           </TabsContent>
-          <TabsContent value="activity">
-            <div>List of upvotes will be shown here</div>
+          <TabsContent value="upvotes">
+            <UpvotesTab makerId={userProfile.id} />
           </TabsContent>
-          <TabsContent value="collections">
-            <div className="flex flex-col space-y-4">No collections yet</div>
+          <TabsContent value="products">
+            <ProductsTab userId={userProfile.id} />
           </TabsContent>
         </Tabs>
       </div>
