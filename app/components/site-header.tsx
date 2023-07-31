@@ -1,15 +1,11 @@
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-import { siteConfig } from "@/config/site";
-import useUser from "@/hooks/use-user";
-import { buttonVariants } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { MainNav } from "@/components/main-nav";
+import { siteConfig } from "@/config/site";
+import { ThemeToggle } from "./theme-toggle";
 import { UserNav } from "./user-nav";
-
 
 export function SiteHeader() {
   const { mainNav, name } = siteConfig;
@@ -25,7 +21,8 @@ export function SiteHeader() {
           <span className="hidden font-bold sm:inline-block">{name}</span>
         </Link>
         {allowedMainNav ? <MainNav items={mainNav} /> : null}
-        <nav className="flex items-center space-x-1">
+        <nav className="flex items-center space-x-2">
+          <ThemeToggle className="hidden sm:flex" />
           <UserNav />
         </nav>
       </div>

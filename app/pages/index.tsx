@@ -23,7 +23,7 @@ export default function IndexPage() {
   return (
     <MainLayout>
       <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
-        <div className="mx-auto w-full max-w-2xl space-y-8 lg:space-y-10">
+        <div className="mx-auto w-full max-w-2xl">
           <InfiniteProductList
             data={data}
             size={size}

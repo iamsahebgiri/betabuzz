@@ -3,14 +3,14 @@ import { PAGE_SIZE } from "@/config/constants";
 import productService from "@/services/product.service";
 import useSWRInfinite from "swr/infinite";
 
-const getKey = (page: number, prev: any, user: string) => {
+const getKey = (page: number, prev: any, userId: string) => {
   if (prev && prev.totalPages === prev.page) {
     return null;
   }
 
   return `/products?limit=${PAGE_SIZE}&page=${
     page + 1
-  }&sortBy=createdAt:desc&upvotes=${user}`;
+  }&sortBy=createdAt:desc&maker=${userId}`;
 };
 
 interface ProductsTabProps {

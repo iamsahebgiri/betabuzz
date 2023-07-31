@@ -15,6 +15,8 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { BlurImage } from "@/components/ui/blur-image";
+import Username from "@/components/profile/username";
 
 const Product = ({ productId }: { productId: string }) => {
   const { user } = useUser();
@@ -38,7 +40,6 @@ const Product = ({ productId }: { productId: string }) => {
     await productService
       .deleteProduct(id)
       .then((res) => {
-        console.log(res);
         router.replace("/");
       })
       .catch((error) => {
@@ -60,13 +61,7 @@ const Product = ({ productId }: { productId: string }) => {
         <meta name="description" content={data.tagline} />
       </Head>
 
-      <Image
-        src={data.image}
-        alt={data.name}
-        height={72}
-        width={72}
-        className="h-18 w-18 rounded-lg"
-      />
+      <BlurImage src={data.image} alt={data.name} />
 
       <h2 className="mt-2 text-xl font-semibold leading-7 text-primary">
         {data.name}
@@ -137,7 +132,7 @@ const Product = ({ productId }: { productId: string }) => {
           href={`/${data.maker.username}`}
           className="font-bold hover:text-secondary-foreground"
         >
-          {data.maker.name}
+          <Username user={data.maker} />
         </Link>
       </div>
 

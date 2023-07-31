@@ -13,7 +13,6 @@ export default function PlanPage() {
     userService
       .upgradeBilling(priceId)
       .then((res) => {
-        console.log(res);
         if (window) {
           window.location = res.url;
         }

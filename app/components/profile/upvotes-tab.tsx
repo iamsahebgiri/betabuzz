@@ -3,23 +3,23 @@ import { PAGE_SIZE } from "@/config/constants";
 import productService from "@/services/product.service";
 import useSWRInfinite from "swr/infinite";
 
-const getKey = (page: number, prev: any, maker: string) => {
+const getKey = (page: number, prev: any, userId: string) => {
   if (prev && prev.totalPages === prev.page) {
     return null;
   }
 
   return `/products?limit=${PAGE_SIZE}&page=${
     page + 1
-  }&sortBy=createdAt:desc&maker=${maker}`;
+  }&sortBy=createdAt:desc&upvotes=${userId}`;
 };
 
 interface UpvotesTabProps {
-  makerId: string;
+  userId: string;
 }
 
-export function UpvotesTab({ makerId }: UpvotesTabProps) {
+export function UpvotesTab({ userId }: UpvotesTabProps) {
   const { data, size, setSize, isLoading, error, mutate } = useSWRInfinite(
-    (...args) => getKey(...args, makerId),
+    (...args) => getKey(...args, userId),
     (url) => productService.getAllInfinite(url)
   );
 

@@ -11,7 +11,6 @@ class UserService extends APIService {
     return this.get("/users/me")
       .then((response) => {
         const { data } = response;
-        console.log(data);
         return data;
       })
       .catch((error) => {

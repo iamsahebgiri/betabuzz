@@ -69,7 +69,11 @@ function UserProfilePage({ username }: { username: string }) {
               <div className="flex flex-col min-w-0 flex-1">
                 <div className="inline-flex items-center space-x-2">
                   <h1 className="text-2xl font-bold">{userProfile.name}</h1>
-                  <Icons.verified className={`h-5 w-5 ${currentPlan.color}`} />
+                  {userProfile.plan !== "free" && (
+                    <Icons.verified
+                      className={`h-5 w-5 ${currentPlan.color}`}
+                    />
+                  )}
                 </div>
                 <h2 className="text-base text-muted-foreground font-semibold">
                   {userProfile.username
@@ -103,7 +107,7 @@ function UserProfilePage({ username }: { username: string }) {
                 value="products"
                 className="relative h-9 rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-3 pt-2 font-semibold text-muted-foreground shadow-none transition-none data-[state=active]:border-b-primary data-[state=active]:text-foreground data-[state=active]:shadow-none"
               >
-                My Products
+                Products
               </TabsTrigger>
             </TabsList>
           </div>
@@ -111,7 +115,7 @@ function UserProfilePage({ username }: { username: string }) {
             <AboutTab user={userProfile} />
           </TabsContent>
           <TabsContent value="upvotes">
-            <UpvotesTab makerId={userProfile.id} />
+            <UpvotesTab userId={userProfile.id} />
           </TabsContent>
           <TabsContent value="products">
             <ProductsTab userId={userProfile.id} />

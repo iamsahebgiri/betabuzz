@@ -6,6 +6,7 @@ export interface User {
   avatar: string;
   socials: any[];
   username: string;
+  bio: string;
   id: string;
 }
 
@@ -42,9 +43,13 @@ export type CommentWithChildren = Comment & {
 export interface Product {
   id: string;
   name: string;
+  tagline: string;
   image: string;
   description: string;
   link: string;
+  views: number;
+  tags: string[];
+  category: string;
   commentsCount: number;
   upvotesCount: number;
   upvoted: boolean;

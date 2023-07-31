@@ -7,6 +7,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { KeyedMutator } from "swr";
 import { Button } from "@/components/ui/button";
+import { Pill } from "../ui/pill";
+import { BlurImage } from "../ui/blur-image";
 
 const Product = ({
   product,
@@ -16,35 +18,32 @@ const Product = ({
   mutate: KeyedMutator<any>;
 }) => {
   return (
-    <div className="flex justify-between">
-      <div className="mr-2 flex flex-1 items-start gap-3">
-        <Image
-          src={product.image}
-          alt={product.name}
-          height={72}
-          width={72}
-          className="h-12 w-12 rounded-lg"
-        />
+    <div className="flex justify-between items-center py-1">
+      <div className="mr-2 flex gap-3">
         <div>
-          <Link
-            href={`/products/${product.id}`}
-            className="text-base font-bold"
-          >
-            {product.name}{" "}
-            <span className="font-medium">
-              ({new URL(product.link).hostname})
-            </span>
-          </Link>
-          <div className="text-muted-foreground font-medium">
-            built by{" "}
+          <BlurImage src={product.image} alt={product.name} />
+        </div>
+        <div className="flex flex-1 flex-col">
+          <div>
             <Link
-              href={`/${product.maker.username}`}
-              className="font-bold hover:text-secondary-foreground"
+              href={`/products/${product.id}`}
+              className="text-base font-bold"
             >
-              {product.maker.name}
-            </Link>{" "}
-            · {dayjs(product.createdAt).fromNow()} · {product.commentsCount}{" "}
-            comments
+              {product.name}{" "}
+              <span className="hidden font-medium md:inline-block">
+                ({new URL(product.link).hostname})
+              </span>
+            </Link>
+            <div className="text-muted-foreground font-medium">
+              {product.tagline}
+            </div>
+          </div>
+          <div className="flex items-center gap-x-3 text-secondary-foreground/80 text-sm font-semibold overflow-hidden">
+            <span className="flex-none">{product.commentsCount} comments</span>
+            <span className="hidden sm:block flex-none w-1 h-1 bg-muted-foreground/60 rounded-full" />
+            <span className="flex-none hidden sm:block">
+              {product.category}
+            </span>
           </div>
         </div>
       </div>
@@ -119,12 +118,12 @@ export function InfiniteProductList({
     <>
       {isEmpty ? (
         <EmptyState
-          title="Plant your products and watch them grow!"
+          title="No products found"
           subtitle="Launch your beta and let the buzz begin!"
           icon={box24Regular}
         />
       ) : (
-        <>
+        <div className="space-y-6 lg:space-y-8">
           {pages.map((page: any, pageIndex) => (
             <ProductsList
               key={pageIndex}
@@ -144,7 +143,7 @@ export function InfiniteProductList({
               </Button>
             </div>
           )}
-        </>
+        </div>
       )}
     </>
   );
