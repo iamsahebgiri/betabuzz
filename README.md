@@ -28,9 +28,7 @@ Creating a buzz around the latest beta products
 
 ## ⚡️ Introduction
 
-Introduce your project, what problem you are trying to solve, what makes it unique, sell it to me.
-
-Add screenshot or gif.
+BetaBuzz is website to share and discover new products. Users submit products, which are listed in a linear format. The site includes a comments system and a voting system similar to Hacker News or Reddit.
 
 ## 🎯 Features
 
@@ -39,16 +37,72 @@ Add screenshot or gif.
 - Stripe integration for subscription (Blue Tick)
 - Community discussion and recursive comments
 
+
+## 📁 Folder 
+
+Here's the folder structure of the api and app:
+
+```sh
+.
+├── api
+│   ├── src
+│   │   ├── config
+│   │   ├── controllers
+│   │   ├── docs
+│   │   ├── middlewares
+│   │   ├── models
+│   │   ├── routes
+│   │   ├── services
+│   │   ├── utils
+│   │   └── validations
+│   └── tests
+│       ├── fixtures
+│       ├── integration
+│       ├── unit
+│       └── utils
+└── app
+    ├── assets
+    ├── components
+    ├── config
+    ├── hooks
+    ├── layouts
+    ├── lib
+    ├── pages
+    ├── public
+    ├── services
+    ├── styles
+    └── types
+
+```
 ## ⚙️ Installation
 
 Make sure you have [Node.js](https://nodejs.org/en/download/) installed.
 Run this followed commands:
 
+To install the api
 ```bash
+# Change directory to api
+cd api
+
+# Copy environment variables and Make sure to change them 
+cp .env.example .env
+
 # Install dependencies (only the first time)
 npm install
 
-# Run the local server at localhost:8080
+# Run the local server at localhost:8000
+npm run dev
+```
+
+To run the web app
+
+```sh
+# Change directory to app
+cd app
+# Install dependencies (only the first time)
+npm install
+
+# Run the local server at localhost:3000
 npm run dev
 
 # Build for production in the dist/ directory
