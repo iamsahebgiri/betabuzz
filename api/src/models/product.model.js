@@ -54,7 +54,7 @@ const productSchema = mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 // add plugin that converts mongoose to json
@@ -84,13 +84,13 @@ productSchema.methods.addComment = function (commentId) {
 
 productSchema.methods.removeComment = function (commentId) {
   if (this.comments.indexOf(commentId) !== -1) {
-    this.comments.remove(commentId);
+    this.comments.pull(commentId);
   }
   return this.save();
 };
 
 productSchema.pre('save', async function (next) {
-  this.update({ $inc: { views: 1 } });
+  this.views += 1;
   next();
 });
 

@@ -28,7 +28,7 @@ const queryDiscussions = async (userId, filter, options) => {
   const results = await Promise.all(
     discussions.map(async (discussion) => {
       return discussion.toDiscussionResponse(userId);
-    })
+    }),
   );
   return { results, ...rest };
 };
@@ -43,7 +43,7 @@ const queryRecentDiscussions = async () => {
   const results = await Promise.all(
     discussions.map(async (discussion) => {
       return discussion.toDiscussionResponse();
-    })
+    }),
   );
   return { results, totalResults: discussions.length };
 };
@@ -88,8 +88,8 @@ const deleteDiscussionById = async (discussionId, userId) => {
   if (discussion.author.toString() !== userId) {
     throw new ApiError(httpStatus.FORBIDDEN, 'Only its author can delete it');
   }
-  await discussion.remove();
-  await Reply.remove({
+  await discussion.deleteOne();
+  await Reply.deleteMany({
     discussion: discussion.id,
   });
   return discussion.toDiscussionResponse(userId);

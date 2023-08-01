@@ -53,7 +53,7 @@ const updateUser = {
         Joi.object().keys({
           platform: Joi.string(),
           href: Joi.string(),
-        })
+        }),
       ),
       dateOfBirth: Joi.date(),
       bio: Joi.string(),

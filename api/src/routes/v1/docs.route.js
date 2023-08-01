@@ -15,7 +15,7 @@ router.get(
   '/',
   swaggerUi.setup(specs, {
     explorer: true,
-  })
+  }),
 );
 
 module.exports = router;

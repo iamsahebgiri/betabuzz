@@ -1,5 +1,5 @@
 const httpStatus = require('http-status');
-const { Product, Comment, User } = require('../models');
+const { Product, Comment } = require('../models');
 const ApiError = require('../utils/ApiError');
 const { deleteImage } = require('./image.service');
 const Image = require('../models/image.model');
@@ -35,33 +35,7 @@ const queryProducts = async (userId, filter, options) => {
   const results = await Promise.all(
     products.map(async (product) => {
       return product.toProductResponse(userId);
-    })
-  );
-  return { results, ...rest };
-};
-
-/**
- * Query for products
- * @param {ObjectId} userId - User id
- * @param {Object} filter - Mongo filter
- * @param {Object} options - Query options
- * @param {string} [options.sortBy] - Sort option in the format: sortField:(desc|asc)
- * @param {number} [options.limit] - Maximum number of results per page (default = 10)
- * @param {number} [options.page] - Current page (default = 1)
- * @returns {Promise<QueryResult>}
- */
-const getProductsUpvotedByUser = async (userId, filter, options) => {
-  Object.assign(options);
-  const { results: products, ...rest } = await Product.paginate(
-    {
-      ...filter,
-    },
-    options
-  );
-  const results = await Promise.all(
-    products.map(async (product) => {
-      return product.toProductResponse(userId);
-    })
+    }),
   );
   return { results, ...rest };
 };
@@ -76,7 +50,7 @@ const queryRecentProducts = async () => {
   const results = await Promise.all(
     products.map(async (product) => {
       return product.toProductResponse();
-    })
+    }),
   );
   return { results, totalResults: products.length };
 };
@@ -121,8 +95,8 @@ const deleteProductById = async (productId, userId) => {
   if (product.maker.toString() !== userId) {
     throw new ApiError(httpStatus.FORBIDDEN, 'Only its maker can delete it');
   }
-  await product.remove();
-  await Comment.remove({
+  await product.deleteOne();
+  await Comment.deleteMany({
     product: product.id,
   });
   await deleteImage(product.image);

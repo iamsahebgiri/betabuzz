@@ -1,5 +1,5 @@
 const request = require('supertest');
-const faker = require('faker');
+const falso = require('@ngneat/falso');
 const httpStatus = require('http-status');
 const httpMocks = require('node-mocks-http');
 const moment = require('moment');
@@ -23,8 +23,8 @@ describe('Auth routes', () => {
     let newUser;
     beforeEach(() => {
       newUser = {
-        name: faker.name.findName(),
-        email: faker.internet.email().toLowerCase(),
+        name: falso.randFullName(),
+        email: falso.randEmail().toLowerCase(),
         password: 'password1',
       };
     });
@@ -474,7 +474,7 @@ describe('Auth middleware', () => {
 
     expect(next).toHaveBeenCalledWith(expect.any(ApiError));
     expect(next).toHaveBeenCalledWith(
-      expect.objectContaining({ statusCode: httpStatus.UNAUTHORIZED, message: 'Please authenticate' })
+      expect.objectContaining({ statusCode: httpStatus.UNAUTHORIZED, message: 'Please authenticate' }),
     );
   });
 
@@ -487,7 +487,7 @@ describe('Auth middleware', () => {
 
     expect(next).toHaveBeenCalledWith(expect.any(ApiError));
     expect(next).toHaveBeenCalledWith(
-      expect.objectContaining({ statusCode: httpStatus.UNAUTHORIZED, message: 'Please authenticate' })
+      expect.objectContaining({ statusCode: httpStatus.UNAUTHORIZED, message: 'Please authenticate' }),
     );
   });
 
@@ -502,7 +502,7 @@ describe('Auth middleware', () => {
 
     expect(next).toHaveBeenCalledWith(expect.any(ApiError));
     expect(next).toHaveBeenCalledWith(
-      expect.objectContaining({ statusCode: httpStatus.UNAUTHORIZED, message: 'Please authenticate' })
+      expect.objectContaining({ statusCode: httpStatus.UNAUTHORIZED, message: 'Please authenticate' }),
     );
   });
 
@@ -517,7 +517,7 @@ describe('Auth middleware', () => {
 
     expect(next).toHaveBeenCalledWith(expect.any(ApiError));
     expect(next).toHaveBeenCalledWith(
-      expect.objectContaining({ statusCode: httpStatus.UNAUTHORIZED, message: 'Please authenticate' })
+      expect.objectContaining({ statusCode: httpStatus.UNAUTHORIZED, message: 'Please authenticate' }),
     );
   });
 
@@ -532,7 +532,7 @@ describe('Auth middleware', () => {
 
     expect(next).toHaveBeenCalledWith(expect.any(ApiError));
     expect(next).toHaveBeenCalledWith(
-      expect.objectContaining({ statusCode: httpStatus.UNAUTHORIZED, message: 'Please authenticate' })
+      expect.objectContaining({ statusCode: httpStatus.UNAUTHORIZED, message: 'Please authenticate' }),
     );
   });
 
@@ -544,7 +544,7 @@ describe('Auth middleware', () => {
 
     expect(next).toHaveBeenCalledWith(expect.any(ApiError));
     expect(next).toHaveBeenCalledWith(
-      expect.objectContaining({ statusCode: httpStatus.UNAUTHORIZED, message: 'Please authenticate' })
+      expect.objectContaining({ statusCode: httpStatus.UNAUTHORIZED, message: 'Please authenticate' }),
     );
   });
 

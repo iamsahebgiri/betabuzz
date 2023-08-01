@@ -1,8 +1,9 @@
 const httpStatus = require('http-status');
 const config = require('../config/config');
+// eslint-disable-next-line import/order
+const stripe = require('stripe')(config.stripe.secretKey);
 const Subscription = require('../models/subscription.model');
 const ApiError = require('../utils/ApiError');
-const stripe = require('stripe')(config.stripe.secretKey);
 
 /**
  * Upgrades the user's billing plan

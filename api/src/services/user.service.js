@@ -66,6 +66,7 @@ const getUserByUsername = async (username) => {
  * @returns {Promise<User>}
  */
 const updateUserById = async (userId, updateBody) => {
+  const payload = { ...updateBody };
   const user = await getUserById(userId);
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
@@ -77,7 +78,7 @@ const updateUserById = async (userId, updateBody) => {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Username already taken');
   }
   if (updateBody.name) {
-    updateBody.avatar = `https://ui-avatars.com/api/?name=${encodeURI(updateBody.name)}&background=random`;
+    payload.avatar = `https://ui-avatars.com/api/?name=${encodeURI(updateBody.name)}&background=random`;
   }
   Object.assign(user, updateBody);
   await user.save();
@@ -94,7 +95,7 @@ const deleteUserById = async (userId) => {
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
   }
-  await user.remove();
+  await user.delete();
   return user;
 };
 

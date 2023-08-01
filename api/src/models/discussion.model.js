@@ -32,7 +32,7 @@ const discussionSchema = mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 // add plugin that converts mongoose to json
@@ -62,13 +62,13 @@ discussionSchema.methods.addReply = function (replyId) {
 
 discussionSchema.methods.removeReply = function (replyId) {
   if (this.replies.indexOf(replyId) !== -1) {
-    this.replies.remove(replyId);
+    this.replies.pull(replyId);
   }
   return this.save();
 };
 
 discussionSchema.pre('save', async function (next) {
-  this.update({ $inc: { views: 1 } });
+  this.views += 1;
   next();
 });
 

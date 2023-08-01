@@ -11,7 +11,7 @@ const router = express.Router();
 router
   .route('/')
   .post(auth(), validate(productValidation.createProduct), productController.createProduct)
-  .get(auth(),productController.getProducts);
+  .get(auth(), productController.getProducts);
 
 router.get('/trending', auth(), productController.getTrendingProducts);
 router.get('/recent', auth(), productController.getRecentProducts);
@@ -23,7 +23,7 @@ router
 
 router
   .route('/:productId')
-  .get(auth(),validate(productValidation.getProduct), productController.getProduct)
+  .get(auth(), validate(productValidation.getProduct), productController.getProduct)
   .patch(auth(), validate(productValidation.updateProduct), productController.updateProduct)
   .delete(auth(), validate(productValidation.deleteProduct), productController.deleteProduct);
 

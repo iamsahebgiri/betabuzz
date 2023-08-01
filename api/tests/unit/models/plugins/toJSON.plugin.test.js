@@ -78,7 +78,7 @@ describe('toJSON plugin', () => {
             delete ret.private;
           },
         },
-      }
+      },
     );
     schema.plugin(toJSON);
     const Model = connection.model('Model', schema);

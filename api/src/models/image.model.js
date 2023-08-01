@@ -20,7 +20,7 @@ const imageSchema = mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 imageSchema.plugin(toJSON);

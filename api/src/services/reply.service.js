@@ -23,7 +23,7 @@ const createReply = async (discussionId, replyBody) => {
 };
 
 /**
- * Query for replys
+ * Query for replies
  * @param {ObjectId} discussionId - Discussion Id
  * @param {ObjectId} userId - User Id
  * @param {Object} filter - Mongo filter
@@ -33,23 +33,14 @@ const createReply = async (discussionId, replyBody) => {
  * @param {number} [options.page] - Current page (default = 1)
  * @returns {Promise<QueryResult>}
  */
-const getReplies = async (discussionId, userId, filter, options) => {
+const getReplies = async (discussionId, userId) => {
   const discussion = await discussionService.getDiscussionById(discussionId);
   if (!discussion) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Discussion not found');
   }
-  // TODO: No pagination for now please
-  // filter = { ...filter, discussion: discussionId };
-  // const { results: replys, ...rest } = await Reply.paginate(filter, options);
-  // const results = await Promise.all(
-  //   replys.map(async (reply) => {
-  //     return reply.toReplyResponse(userId);
-  //   })
-  // );
-  // return { results, ...rest };
 
-  const replys = await Reply.find({ discussion: discussionId });
-  const results = await Promise.all(replys.map(async (reply) => reply.toReplyResponse(userId)));
+  const replies = await Reply.find({ discussion: discussionId });
+  const results = await Promise.all(replies.map(async (reply) => reply.toReplyResponse(userId)));
   return results;
 };
 
@@ -108,7 +99,7 @@ const deleteReplyById = async (replyId, discussionId) => {
   }
   await discussion.removeReply(replyId);
 
-  await reply.remove();
+  await reply.deleteOne();
   return reply.toReplyResponse();
 };
 

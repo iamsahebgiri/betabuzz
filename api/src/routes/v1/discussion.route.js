@@ -1,7 +1,6 @@
 const express = require('express');
 const auth = require('../../middlewares/auth');
 const validate = require('../../middlewares/validate');
-const { upload } = require('../../middlewares/multer');
 const discussionController = require('../../controllers/discussion.controller');
 const discussionValidation = require('../../validations/discussion.validation');
 const replyValidation = require('../../validations/reply.validation');

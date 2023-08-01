@@ -1,8 +1,7 @@
-const Image = require('../models/image.model');
 const sharp = require('sharp');
 const httpStatus = require('http-status');
+const Image = require('../models/image.model');
 const config = require('../config/config');
-const { User } = require('../models');
 const ApiError = require('../utils/ApiError');
 const strings = require('../utils/strings');
 const uploadService = require('./upload.service');

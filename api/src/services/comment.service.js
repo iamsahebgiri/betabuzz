@@ -33,7 +33,7 @@ const createComment = async (productId, commentBody) => {
  * @param {number} [options.page] - Current page (default = 1)
  * @returns {Promise<QueryResult>}
  */
-const getComments = async (productId, userId, filter, options) => {
+const getComments = async (productId, userId) => {
   const product = await productService.getProductById(productId);
   if (!product) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
@@ -108,7 +108,7 @@ const deleteCommentById = async (commentId, productId) => {
   }
   await product.removeComment(commentId);
 
-  await comment.remove();
+  await comment.deleteOne();
   return comment.toCommentResponse();
 };
 

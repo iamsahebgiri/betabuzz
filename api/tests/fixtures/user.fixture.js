@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
-const faker = require('faker');
+const falso = require('@ngneat/falso');
 const User = require('../../src/models/user.model');
 
 const password = 'password1';
@@ -9,8 +9,8 @@ const hashedPassword = bcrypt.hashSync(password, salt);
 
 const userOne = {
   _id: mongoose.Types.ObjectId(),
-  name: faker.name.findName(),
-  email: faker.internet.email().toLowerCase(),
+  name: falso.randFullName(),
+  email: falso.randEmail().toLowerCase(),
   password,
   role: 'user',
   isEmailVerified: false,
@@ -18,8 +18,8 @@ const userOne = {
 
 const userTwo = {
   _id: mongoose.Types.ObjectId(),
-  name: faker.name.findName(),
-  email: faker.internet.email().toLowerCase(),
+  name: falso.randFullName(),
+  email: falso.randEmail().toLowerCase(),
   password,
   role: 'user',
   isEmailVerified: false,
@@ -27,8 +27,8 @@ const userTwo = {
 
 const admin = {
   _id: mongoose.Types.ObjectId(),
-  name: faker.name.findName(),
-  email: faker.internet.email().toLowerCase(),
+  name: falso.randFullName(),
+  email: falso.randEmail().toLowerCase(),
   password,
   role: 'admin',
   isEmailVerified: false,

@@ -1,4 +1,5 @@
 const config = require('../config/config');
+// eslint-disable-next-line import/order
 const stripe = require('stripe')(config.stripe.secretKey);
 const logger = require('../config/logger');
 const { PLANS } = require('../config/stripe');
@@ -13,14 +14,14 @@ const handler = async (req, res) => {
   ]);
 
   const sig = req.headers['stripe-signature'];
-  const webhookSecret = config.stripe.webhookSecret;
+  const { webhookSecret } = config.stripe;
 
   let event;
   try {
     if (!sig || !webhookSecret) return;
     event = stripe.webhooks.constructEvent(req.body, sig, webhookSecret);
   } catch (err) {
-    console.log(`❌ Error message: ${err.message}`);
+    logger.error(`❌ Error message: ${err.message}`);
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
@@ -55,15 +56,15 @@ const handler = async (req, res) => {
             currentPeriodStart,
             currentPeriodEnd,
           },
-          { upsert: true }
+          { upsert: true },
         );
       } else if (event.type === 'customer.subscription.updated') {
         const subscriptionUpdated = event.data.object;
         const newPriceId = subscriptionUpdated.items.data[0].price.id;
 
-        const env = config.env;
-        const plan = PLANS.find(
-          (plan) => plan.price.monthly.priceIds[env] === newPriceId || plan.price.yearly.priceIds[env] === newPriceId
+        const { env } = config;
+        const currentPlan = PLANS.find(
+          (plan) => plan.price.monthly.priceIds[env] === newPriceId || plan.price.yearly.priceIds[env] === newPriceId,
         );
         const customerId = subscriptionUpdated.customer.toString();
 
@@ -73,16 +74,16 @@ const handler = async (req, res) => {
             customerId,
           },
           {
-            plan: plan.slug,
-          }
+            plan: currentPlan.slug,
+          },
         );
         await User.updateOne(
           {
             id: subscription.user,
           },
           {
-            plan: plan.slug,
-          }
+            plan: currentPlan.slug,
+          },
         );
       } else if (event.type === 'customer.subscription.deleted') {
         const subscriptionDeleted = event.data.object;
@@ -97,8 +98,6 @@ const handler = async (req, res) => {
           return;
         }
 
-        console.log({ subscription, customerId });
-
         subscription.plan = 'free';
         subscription.currentPeriodStart = new Date();
         subscription.currentPeriodEnd = new Date();
@@ -111,7 +110,7 @@ const handler = async (req, res) => {
           },
           {
             plan: 'free',
-          }
+          },
         );
       } else {
         throw new Error('Unhandled relevant event!');
