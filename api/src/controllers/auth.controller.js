@@ -5,7 +5,7 @@ const { authService, userService, tokenService, emailService } = require('../ser
 const register = catchAsync(async (req, res) => {
   const body = {
     ...req.body,
-    avatar: `https://api.dicebear.com/6.x/personas/svg?seed=${req.body.email}.svg`,
+    avatar: `https://api.dicebear.com/6.x/avataaars/svg?seed=${req.body.email}&backgroundColor=b6e3f4,c0aede,d1d4f9,fda4af,f0abfc,67e8f9,a7f3d0`,
   };
   const user = await userService.createUser(body);
   const tokens = await tokenService.generateAuthTokens(user);

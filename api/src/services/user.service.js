@@ -78,7 +78,7 @@ const updateUserById = async (userId, updateBody) => {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Username already taken');
   }
   if (updateBody.email) {
-    payload.avatar = `https://api.dicebear.com/6.x/personas/svg?seed=${updateBody.email}.svg`;
+    payload.avatar = `https://api.dicebear.com/6.x/avataaars/svg?seed=${updateBody.email}&backgroundColor=b6e3f4,c0aede,d1d4f9,fda4af,f0abfc,67e8f9,a7f3d0`;
   }
   Object.assign(user, updateBody);
   await user.save();
@@ -137,7 +137,7 @@ const deleteAvatar = async (userId) => {
     const key = user.avatar.split('/').pop();
     await uploadService.deleteFile(key);
   }
-  user.avatar = `https://api.dicebear.com/6.x/personas/svg?seed=${user.email}.svg`;
+  user.avatar = `https://api.dicebear.com/6.x/avataaars/svg?seed=${user.email}&backgroundColor=b6e3f4,c0aede,d1d4f9,fda4af,f0abfc,67e8f9,a7f3d0`;
   await user.save();
   return user;
 };
