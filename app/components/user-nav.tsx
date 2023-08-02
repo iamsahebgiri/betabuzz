@@ -65,11 +65,17 @@ export function UserNav() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
+          <DropdownMenuItem onClick={() => router.push("/products/new")}>
+            New product
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => router.push("/discussion/new")}>
+            New discussion
+          </DropdownMenuItem>
           <DropdownMenuItem onClick={() => router.push("/me")}>
             Profile
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => router.push("/products/new")}>
-            New product
+          <DropdownMenuItem onClick={() => router.push("/billing/plans")}>
+            Subscriptions
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />

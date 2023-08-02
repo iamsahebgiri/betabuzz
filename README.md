@@ -34,11 +34,10 @@ BetaBuzz is website to share and discover new products. Users submit products, w
 
 - JWT Based Authentication
 - Storing user generated content in S3
-- Stripe integration for subscription (Blue Tick)
-- Community discussion and recursive comments
+- Stripe integration for subscription (Premium features such as markdown editor, blue tick, etc.)
+- Recursive comments (like Reddit, HN) with markdown support
 
-
-## 📁 Folder 
+## 📁 Folder
 
 Here's the folder structure of the api and app:
 
@@ -74,17 +73,19 @@ Here's the folder structure of the api and app:
     └── types
 
 ```
+
 ## ⚙️ Installation
 
 Make sure you have [Node.js](https://nodejs.org/en/download/) installed.
 Run this followed commands:
 
 To install the api
+
 ```bash
 # Change directory to api
 cd api
 
-# Copy environment variables and Make sure to change them 
+# Copy environment variables and Make sure to change them
 cp .env.example .env
 
 # Install dependencies (only the first time)

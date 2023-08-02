@@ -3,12 +3,13 @@ const nextConfig = {
   reactStrictMode: true,
   images: {
     dangerouslyAllowSVG: true,
+    unoptimized: true,
     remotePatterns: [
       {
-        hostname: "betabuzz-avatars.s3.ap-south-1.amazonaws.com",
+        hostname: "wsrv.nl",
       },
       {
-        hostname: "i.pravatar.cc",
+        hostname: "betabuzz-avatars.s3.ap-south-1.amazonaws.com",
       },
       {
         hostname: "ui-avatars.com",
