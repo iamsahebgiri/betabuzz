@@ -77,8 +77,8 @@ const updateUserById = async (userId, updateBody) => {
   if (updateBody.username && (await User.isEmailTaken(updateBody.username, userId))) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Username already taken');
   }
-  if (updateBody.name) {
-    payload.avatar = `https://ui-avatars.com/api/?name=${encodeURI(updateBody.name)}&background=random`;
+  if (updateBody.email) {
+    payload.avatar = `https://api.dicebear.com/6.x/personas/svg?seed=${updateBody.email}.svg`;
   }
   Object.assign(user, updateBody);
   await user.save();
@@ -137,7 +137,7 @@ const deleteAvatar = async (userId) => {
     const key = user.avatar.split('/').pop();
     await uploadService.deleteFile(key);
   }
-  user.avatar = `https://ui-avatars.com/api/?name=${user.name}&background=random`;
+  user.avatar = `https://api.dicebear.com/6.x/personas/svg?seed=${user.email}.svg`;
   await user.save();
   return user;
 };
