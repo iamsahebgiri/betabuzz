@@ -23,7 +23,7 @@ function EmptyState({
     >
       <Icon icon={icon} className="h-12 w-12 text-gray-300" />
       <h2 className="font-bold">{title}</h2>
-      <p className="font-medium max-w-[280px] text-center text-muted-foreground text-sm">
+      <p className="max-w-[280px] text-center text-sm font-medium text-muted-foreground">
         {subtitle}
       </p>
     </div>
@@ -47,7 +47,7 @@ function LoadingState({
         width="24"
         height="24"
         viewBox="0 0 24 24"
-        className="text-muted-foreground animate-spin"
+        className="animate-spin text-muted-foreground"
       >
         <path
           fill="currentColor"

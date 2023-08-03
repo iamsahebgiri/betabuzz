@@ -46,7 +46,7 @@ function ReplyActions({
 
   return (
     <>
-      <div className="mb-6 flex gap-2 items-center">
+      <div className="mb-6 flex items-center gap-2">
         <UpvoteReplyButton reply={reply} mutate={mutate} />
         <Button
           variant="ghost"
@@ -59,7 +59,7 @@ function ReplyActions({
           Reply
         </Button>
 
-        {user.id === reply.author.id ? (
+        {user?.id === reply.author.id ? (
           <>
             <Button
               variant="ghost"
@@ -112,11 +112,11 @@ function ReplyActions({
 
 function Reply({ reply, mutate, discussionId, hidden }: any) {
   return (
-    <li className="relative flex gap-6 items-start gap-x-2">
+    <li className="relative flex items-start gap-6 gap-x-2">
       {hidden ? null : (
-        <span className="absolute left-[15px] inset-y-0 my-auto h-full w-[2px] bg-border/80" />
+        <span className="absolute inset-y-0 left-[15px] my-auto h-full w-[2px] bg-border/80" />
       )}
-      <div className="flex-none relative">
+      <div className="relative flex-none">
         <Avatar className="h-8 w-8">
           <AvatarImage src={reply.author.avatar} alt={reply.author.name} />
         </Avatar>
@@ -126,7 +126,7 @@ function Reply({ reply, mutate, discussionId, hidden }: any) {
           <Link href={`/${reply.author.username}`}>
             <Username className="font-semibold" user={reply.author} />
           </Link>
-          <span className="font-medium text-sm text-muted-foreground">
+          <span className="text-sm font-medium text-muted-foreground">
             {dayjs(reply.createdAt).fromNow()}
           </span>
         </div>

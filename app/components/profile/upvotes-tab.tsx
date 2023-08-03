@@ -25,7 +25,7 @@ export function UpvotesTab({ userId }: UpvotesTabProps) {
 
   return (
     <div className="space-y-6">
-      <h2 className="font-semibold text-lg leading-none tracking-tight">
+      <h2 className="text-lg font-semibold leading-none tracking-tight">
         Upvotes
       </h2>
       <div className="mx-auto w-full space-y-8 lg:space-y-10">

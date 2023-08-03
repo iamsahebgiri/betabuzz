@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import React, { useState } from "react";
 
 import { Icons } from "@/components/icons";
@@ -29,7 +30,7 @@ function UserProfilePage({ username }: { username: string }) {
   if (isLoading || loading) return <LoadingState />;
 
   if (!userProfile) {
-    return <div>User with username '{username}' is not found.</div>;
+    return <div>User with username &apos;{username}&apos; is not found.</div>;
   }
   if (error) {
     return <div>{JSON.stringify(error, null, 2)}</div>;
@@ -47,12 +48,12 @@ function UserProfilePage({ username }: { username: string }) {
       <div className="container mx-auto max-w-3xl py-8">
         <div>
           <div
-            className={`h-48 w-full lg:h-64 rounded-xl ${getGradient(
+            className={`h-48 w-full rounded-xl lg:h-64 ${getGradient(
               userProfile.email
             )}`}
           />
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 -mt-12 sm:-mt-10 sm:flex sm:items-center sm:space-x-3">
-            <div className="relative group h-24 w-24 rounded-full overflow-hidden sm:h-32 sm:w-32">
+          <div className="mx-auto -mt-12 max-w-5xl px-4 sm:-mt-10 sm:flex sm:items-center sm:space-x-3 sm:px-6 lg:px-8">
+            <div className="group relative h-24 w-24 overflow-hidden rounded-full sm:h-32 sm:w-32">
               {user.id === userProfile.id ? (
                 <UserAvatar />
               ) : (
@@ -65,8 +66,8 @@ function UserProfilePage({ username }: { username: string }) {
                 />
               )}
             </div>
-            <div className="mt-2 sm:mt-6 sm:flex-1 sm:min-w-0 sm:flex sm:items-center sm:justify-start sm:space-x-6">
-              <div className="flex flex-col min-w-0 flex-1">
+            <div className="mt-2 sm:mt-6 sm:flex sm:min-w-0 sm:flex-1 sm:items-center sm:justify-start sm:space-x-6">
+              <div className="flex min-w-0 flex-1 flex-col">
                 <div className="inline-flex items-center space-x-2">
                   <h1 className="text-2xl font-bold">{userProfile.name}</h1>
                   {userProfile.plan !== "free" && (
@@ -75,20 +76,20 @@ function UserProfilePage({ username }: { username: string }) {
                     />
                   )}
                 </div>
-                <h2 className="text-base text-muted-foreground font-semibold">
+                <h2 className="text-base font-semibold text-muted-foreground">
                   {userProfile.username
                     ? `@${userProfile.username}`
                     : userProfile.email}
                 </h2>
               </div>
-              <div className="mt-4 sm:mt-0 flex flex-col justify-stretch space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4">
+              <div className="mt-4 flex flex-col justify-stretch space-y-3 sm:mt-0 sm:flex-row sm:space-x-4 sm:space-y-0">
                 {user.id === userProfile.id ? <SettingsModal /> : null}
               </div>
             </div>
           </div>
         </div>
 
-        <Tabs defaultValue="about" className="relative mr-auto w-full mt-8">
+        <Tabs defaultValue="about" className="relative mr-auto mt-8 w-full">
           <div className="flex items-center justify-between pb-3">
             <TabsList className="w-full justify-start rounded-none border-b bg-transparent p-0">
               <TabsTrigger
@@ -187,18 +188,18 @@ const UserAvatar = () => {
   return (
     <div>
       {selectedImage && isProcessing ? (
-        <div className="group h-24 w-24 rounded-full overflow-hidden sm:h-32 sm:w-32 relative border-4 border-muted">
+        <div className="group relative h-24 w-24 overflow-hidden rounded-full border-4 border-muted sm:h-32 sm:w-32">
           <img
-            className="w-full h-full object-cover rounded-full"
+            className="h-full w-full rounded-full object-cover"
             src={URL.createObjectURL(selectedImage)}
             alt="Preview"
           />
-          <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-40 flex justify-center items-center rounded-full">
+          <div className="bg-opacity/40 absolute left-0 top-0 flex h-full w-full items-center justify-center rounded-full bg-black">
             <Icons.spinner className="h-6 w-6 animate-spin text-white" />
           </div>
         </div>
       ) : (
-        <div className="group h-24 w-24 rounded-full sm:h-32 sm:w-32 border-4 border-muted overflow-hidden relative">
+        <div className="group relative h-24 w-24 overflow-hidden rounded-full border-4 border-muted sm:h-32 sm:w-32">
           <img
             src={user.avatar}
             alt={user.name}
@@ -206,9 +207,9 @@ const UserAvatar = () => {
             width={128}
             height={128}
           />
-          <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-gray-800 hidden group-hover:flex justify-center items-center space-x-2">
+          <div className="absolute inset-x-0 bottom-0 hidden h-16 items-center justify-center space-x-2 bg-gradient-to-t from-gray-800 group-hover:flex">
             <label htmlFor="user-avatar" className="cursor-pointer">
-              <span className="w-8 h-8 bg-black bg-opacity-40 justify-center items-center rounded-full hidden border-2 border-black/40 hover:border-white group-hover:flex">
+              <span className="bg-opacity/40 hidden h-8 w-8 items-center justify-center rounded-full border-2 border-black/40 bg-black hover:border-white group-hover:flex">
                 <Icons.pen className="h-5 w-5 text-white" />
               </span>
               <input
@@ -223,9 +224,11 @@ const UserAvatar = () => {
             {user?.avatar !== undefined &&
               user.avatar.includes("amazonaws.com") && (
                 <button
-                  className="w-8 h-8 bg-black bg-opacity-40 justify-center items-center rounded-full hidden group-hover:flex border-2 border-black/40 hover:border-white"
+                  className="bg-opacity/40 hidden h-8 w-8 items-center justify-center rounded-full border-2 border-black/40 bg-black hover:border-white group-hover:flex"
                   onClick={() => {
-                    if (confirm("Are you sure you want to remove this avatar?")) {
+                    if (
+                      confirm("Are you sure you want to remove this avatar?")
+                    ) {
                       deleteAvatar();
                     }
                   }}

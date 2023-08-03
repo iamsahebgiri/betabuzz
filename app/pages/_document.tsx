@@ -5,7 +5,7 @@ export default function Document() {
   return (
     <Html lang="en" className={fontSans.variable}>
       <Head />
-      <body className="bg-background min-h-screen antialiased font-sans">
+      <body className="min-h-screen bg-background font-sans antialiased">
         <Main />
         <NextScript />
       </body>

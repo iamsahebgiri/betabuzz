@@ -16,7 +16,7 @@ export function SiteHeader() {
   
     return (
     <header className="supports-backdrop-blur:bg-background/60 sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur">
-      <div className="container flex h-16 items-center space-x-4 justify-between sm:space-x-0">
+      <div className="container flex h-16 items-center justify-between space-x-4 sm:space-x-0">
         <Link href="/" className="flex items-center gap-2 ">
           <Icons.logo className="h-6 w-6 text-primary" />
           <span className="hidden font-bold sm:inline-block">{name}</span>

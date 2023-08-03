@@ -50,7 +50,7 @@ export function BlurImage(props: BlurImageProps) {
   const [loading, setLoading] = useState(true);
 
   return (
-    <div className="relative h-20 w-20 aspect-square rounded-lg overflow-hidden">
+    <div className="relative aspect-square h-20 w-20 overflow-hidden rounded-lg">
       <Image
         {...rest}
         src={imageUrl(props.src as string, {
@@ -63,8 +63,8 @@ export function BlurImage(props: BlurImageProps) {
         width={80}
         sizes="100vw"
         className={cn(
-          "rounded-lg duration-500 ease-in-out h-auto w-full",
-          loading ? "blur-lg scale-110" : "blur-0 scale-100"
+          "h-auto w-full rounded-lg duration-500 ease-in-out",
+          loading ? "scale-110 blur-lg" : "scale-100 blur-0"
         )}
         onLoadingComplete={async () => {
           setLoading(false);

@@ -71,7 +71,7 @@ const Discussion = ({ discussionId }: { discussionId: string }) => {
           <h2 className="text-xl font-semibold leading-7 text-primary">
             {data.title}
           </h2>
-          <div className="text-sm font-medium leading-6 text-muted-foreground space-x-3">
+          <div className="space-x-3 text-sm font-medium leading-6 text-muted-foreground">
             <span>
               <Username user={data.author} />
             </span>
@@ -82,7 +82,7 @@ const Discussion = ({ discussionId }: { discussionId: string }) => {
       </div>
 
       <div className="ml-[60px]">
-        <div className="mt-2 text-base font-medium leading-6 whitespace-pre-wrap">
+        <div className="mt-2 whitespace-pre-wrap text-base font-medium leading-6">
           {data.content}
         </div>
         {data.author.id === user.id ? (
@@ -127,7 +127,7 @@ export default function DiscussionPage() {
 
   return (
     <MainLayout>
-      <div className="container max-w-3xl pb-8 pt-6 md:py-10 mx-auto w-full py-16">
+      <div className="container mx-auto w-full max-w-3xl py-16 pb-8 pt-6 md:py-10">
         <Discussion discussionId={discussionId} />
       </div>
     </MainLayout>

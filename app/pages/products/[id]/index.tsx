@@ -66,12 +66,12 @@ const Product = ({ productId }: { productId: string }) => {
       <h2 className="mt-2 text-xl font-semibold leading-7 text-primary">
         {data.name}
       </h2>
-      <div className="mt-1 text-base font-medium leading-6 text-muted-foreground whitespace-pre-wrap">
+      <div className="mt-1 whitespace-pre-wrap text-base font-medium leading-6 text-muted-foreground">
         {data.tagline}
       </div>
 
       <div className="mt-2 flex items-center justify-between">
-        <div className="space-x-2 flex">
+        <div className="flex space-x-2">
           <a
             href={`${data.link}`}
             target="_blank"
@@ -117,10 +117,10 @@ const Product = ({ productId }: { productId: string }) => {
           </div>
         ) : null}
       </div>
-      <div className="mt-6 text-base font-medium leading-6 whitespace-pre-wrap">
+      <div className="mt-6 whitespace-pre-wrap text-base font-medium leading-6">
         {data.description}
       </div>
-      <div className="mt-6 text-base text-muted-foreground font-medium flex gap-2 items-center">
+      <div className="mt-6 flex items-center gap-2 text-base font-medium text-muted-foreground">
         Classified in{" "}
         {data.tags && data.tags.length > 0 ? (
           <div className="space-x-2">
@@ -155,7 +155,7 @@ export default function ProductPage() {
 
   return (
     <MainLayout>
-      <div className="container max-w-2xl pb-8 pt-6 md:py-10 mx-auto w-full py-16">
+      <div className="container mx-auto w-full max-w-2xl py-16 pb-8 pt-6 md:py-10">
         <Product productId={productId} />
       </div>
     </MainLayout>

@@ -63,8 +63,8 @@ export default function UpvoteProductButton({
           }}
           className="pl-2 pr-4"
         >
-          <Icons.arrowUp className="h-6 w-6 mt-0.5" />
-          <div className="text-sm font-bold space-x-2">
+          <Icons.arrowUp className="mt-0.5 h-6 w-6" />
+          <div className="space-x-2 text-sm font-bold">
             <span>{upvotesCount}</span>
             <span className="pl-1">{expanded ? "Upvote" : null}</span>
           </div>
@@ -77,15 +77,15 @@ export default function UpvoteProductButton({
     <div>
       {upvoted ? (
         <button
-          className="bg-secondary text-secondary-foreground hover:bg-secondary/80 flex h-12 w-12 flex-col items-center justify-center rounded-lg"
+          className="flex h-12 w-12 flex-col items-center justify-center rounded-lg bg-secondary text-secondary-foreground hover:bg-secondary/80"
           onClick={() => handleUnvoteProduct(productId)}
         >
-          <Icons.arrowUp className="text-primary h-6 w-6" />
+          <Icons.arrowUp className="h-6 w-6 text-primary" />
           <span className="-mt-1 text-sm font-bold">{upvotesCount}</span>
         </button>
       ) : (
         <button
-          className="border-border flex h-12 w-12 flex-col items-center justify-center rounded-lg border"
+          className="flex h-12 w-12 flex-col items-center justify-center rounded-lg border border-border"
           onClick={() => handleVoteProduct(productId)}
         >
           <Icons.arrowUp className=" h-6 w-6" />

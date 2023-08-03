@@ -71,7 +71,7 @@ export default function EditProductPage() {
 
   return (
     <MainLayout>
-      <div className="container max-w-2xl pb-8 pt-6 md:py-10 mx-auto w-full py-16">
+      <div className="container mx-auto w-full max-w-2xl py-16 pb-8 pt-6 md:py-10">
         <EditProduct productId={productId} />
       </div>
     </MainLayout>

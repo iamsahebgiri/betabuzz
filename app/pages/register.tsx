@@ -24,7 +24,7 @@ export default function RegisterPage() {
         >
           Login
         </Link>
-        <div className="bg-muted hidden h-full lg:block" />
+        <div className="hidden h-full bg-muted lg:block" />
         <div className="lg:p-8">
           <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
             <div className="flex flex-col space-y-2 text-center">
@@ -34,7 +34,7 @@ export default function RegisterPage() {
               </h1>
             </div>
             <RegisterForm />
-            <p className="text-muted-foreground px-8 text-center text-sm font-medium">
+            <p className="px-8 text-center text-sm font-medium text-muted-foreground">
               By clicking continue, you agree to our{" "}
               <Link
                 href="/terms"

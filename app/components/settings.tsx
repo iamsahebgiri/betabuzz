@@ -58,7 +58,7 @@ const ModalHeader = ({ children, description }: any) => {
         <h3 className="text-lg font-bold leading-none tracking-tight">
           {children}
         </h3>
-        <p className="text-sm font-medium text-muted-foreground mt-2">
+        <p className="mt-2 text-sm font-medium text-muted-foreground">
           {description}
         </p>
       </div>
@@ -79,18 +79,18 @@ export default function SettingsModal() {
         </DialogTrigger>
 
         <Tabs defaultValue="account">
-          <DialogContent className="sm:max-w-3xl h-full flex max-h-[560px] sm:rounded-xl sm:p-0 gap-0">
-            <aside className="w-52 bg-gray-100 dark:bg-gray-900 rounded-l-xl flex-none">
-              <div className="px-5 py-5 pb-4">
+          <DialogContent className="flex h-full max-h-[560px] gap-0 sm:max-w-3xl sm:rounded-xl sm:p-0">
+            <aside className="w-52 flex-none rounded-l-xl bg-gray-100 dark:bg-gray-900">
+              <div className="p-5 pb-4">
                 <h2 className="text-xl font-bold">Settings</h2>
               </div>
               <div className="flex flex-col items-center justify-between px-2.5">
-                <TabsList className="w-full h-full justify-start items-start rounded-none bg-transparent p-0 flex-col">
+                <TabsList className="h-full w-full flex-col items-start justify-start rounded-none bg-transparent p-0">
                   {sidebarItems.map((item) => (
                     <TabsTrigger
                       value={item.value}
                       key={item.value}
-                      className="relative w-full h-8 text-secondary-foreground rounded-lg gap-2 justify-start font-semibold shadow-none transition data-[state=active]:bg-gray-300 dark:data-[state=active]:bg-gray-700 data-[state=active]:shadow-none"
+                      className="relative h-8 w-full justify-start gap-2 rounded-lg font-semibold text-secondary-foreground shadow-none transition data-[state=active]:bg-gray-300 data-[state=active]:shadow-none dark:data-[state=active]:bg-gray-700"
                     >
                       <Icon
                         icon={item.icon}
@@ -103,7 +103,7 @@ export default function SettingsModal() {
               </div>
             </aside>
 
-            <ScrollArea className="p-6 my-2 border-l flex-1">
+            <ScrollArea className="my-2 flex-1 border-l p-6">
               <div className="p-2">
                 <TabsContent value="account" className="space-y-6">
                   <ModalHeader description="Update your account settings.">

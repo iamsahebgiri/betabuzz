@@ -43,7 +43,7 @@ const Discussion = ({
           </h2>
         </Link>
 
-        <div className="text-sm font-medium leading-6 text-muted-foreground space-x-3">
+        <div className="space-x-3 text-sm font-medium leading-6 text-muted-foreground">
           <Link href={`/${discussion.author.username}`}>
             <Username iconClassName="h-4 w-4" user={discussion.author} />
           </Link>

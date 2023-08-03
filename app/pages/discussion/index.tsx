@@ -38,7 +38,7 @@ export default function DiscussionPage() {
           <div className="flex flex-col items-start gap-6">
             <div>
               <h2 className="text-2xl font-bold">Discussions</h2>
-              <p className="text-base text-muted-foreground font-medium">
+              <p className="text-base font-medium text-muted-foreground">
                 Ask questions, find support, and connect with the community.
               </p>
             </div>

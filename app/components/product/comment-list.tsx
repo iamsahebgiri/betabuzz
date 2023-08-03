@@ -61,7 +61,7 @@ function CommentActions({
 
   return (
     <>
-      <div className="mb-6 flex gap-2 items-center">
+      <div className="mb-6 flex items-center gap-2">
         <UpvoteCommentButton comment={comment} mutate={mutate} />
         <Button
           variant="ghost"
@@ -123,11 +123,11 @@ function CommentActions({
 
 function Comment({ comment, mutate, productId, hidden }: any) {
   return (
-    <li className="relative flex gap-6 items-start gap-x-2">
+    <li className="relative flex items-start gap-6 gap-x-2">
       {hidden ? null : (
-        <span className="absolute left-[15px] inset-y-0 my-auto h-full w-[2px] bg-border/80" />
+        <span className="absolute inset-y-0 left-[15px] my-auto h-full w-[2px] bg-border/80" />
       )}
-      <div className="flex-none relative">
+      <div className="relative flex-none">
         <Avatar className="h-8 w-8">
           <AvatarImage src={comment.author.avatar} alt={comment.author.name} />
         </Avatar>
@@ -137,7 +137,7 @@ function Comment({ comment, mutate, productId, hidden }: any) {
           <Link href={`/${comment.author.username}`}>
             <Username className="font-semibold" user={comment.author} />
           </Link>
-          <span className="font-medium text-sm text-muted-foreground">
+          <span className="text-sm font-medium text-muted-foreground">
             {dayjs(comment.createdAt).fromNow()}
           </span>
         </div>

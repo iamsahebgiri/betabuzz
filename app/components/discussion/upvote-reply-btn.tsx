@@ -70,8 +70,8 @@ export default function UpvoteReplyButton({
       }}
       className="pl-2 pr-4"
     >
-      <Icons.arrowUp className="h-6 w-6 mt-0.5" />
-      <div className="text-sm font-bold space-x-2">
+      <Icons.arrowUp className="mt-0.5 h-6 w-6" />
+      <div className="space-x-2 text-sm font-bold">
         <span>{reply.upvotesCount}</span>
       </div>
     </Button>

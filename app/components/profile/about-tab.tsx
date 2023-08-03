@@ -11,7 +11,7 @@ export default function AboutTab({ user }: AboutTabProps) {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="font-bold text-muted-foreground leading-none tracking-tight">
+        <h2 className="font-bold leading-none tracking-tight text-muted-foreground">
           Bio
         </h2>
         <p className="font-medium text-secondary-foreground">
@@ -20,7 +20,7 @@ export default function AboutTab({ user }: AboutTabProps) {
       </div>
 
       <div className="space-y-2">
-        <h2 className="font-bold text-muted-foreground leading-none tracking-tight">
+        <h2 className="font-bold leading-none tracking-tight text-muted-foreground">
           Interests
         </h2>
         {user.interests && user.interests.length > 0 ? (
@@ -34,30 +34,30 @@ export default function AboutTab({ user }: AboutTabProps) {
         )}
       </div>
       <div>
-        <h2 className="font-bold text-muted-foreground leading-none tracking-tight">
+        <h2 className="font-bold leading-none tracking-tight text-muted-foreground">
           Gender
         </h2>
-        <p className="font-medium text-secondary-foreground capitalize">
+        <p className="font-medium capitalize text-secondary-foreground">
           {user.gender ?? "Unknown"}
         </p>
       </div>
       <div>
-        <h2 className="font-bold text-muted-foreground leading-none tracking-tight">
+        <h2 className="font-bold leading-none tracking-tight text-muted-foreground">
           Language
         </h2>
-        <p className="font-medium text-secondary-foreground capitalize">
+        <p className="font-medium capitalize text-secondary-foreground">
           {user.language ?? "Unknown"}
         </p>
       </div>
       <div className="space-y-2">
-        <h2 className="font-bold text-muted-foreground leading-none tracking-tight">
+        <h2 className="font-bold leading-none tracking-tight text-muted-foreground">
           Socials
         </h2>
         {user.socials && user.socials.length > 0 ? (
           <ul className="space-y-2">
             {user.socials.map(
               (social: { platform: string; href: string }, index: number) => (
-                <li className="flex gap-2 items-center" key={index}>
+                <li className="flex items-center gap-2" key={index}>
                   <Image
                     height={20}
                     width={20}

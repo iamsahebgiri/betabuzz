@@ -18,7 +18,7 @@ const Product = ({
   mutate: KeyedMutator<any>;
 }) => {
   return (
-    <div className="flex justify-between items-center py-1">
+    <div className="flex items-center justify-between py-1">
       <div className="mr-2 flex gap-3">
         <div>
           <BlurImage src={product.image} alt={product.name} />
@@ -34,14 +34,14 @@ const Product = ({
                 ({new URL(product.link).hostname})
               </span>
             </Link>
-            <div className="text-muted-foreground font-medium">
+            <div className="font-medium text-muted-foreground">
               {product.tagline}
             </div>
           </div>
-          <div className="flex items-center gap-x-3 text-secondary-foreground/80 text-sm font-semibold overflow-hidden">
+          <div className="flex items-center gap-x-3 overflow-hidden text-sm font-semibold text-secondary-foreground/80">
             <span className="flex-none">{product.commentsCount} comments</span>
-            <span className="hidden sm:block flex-none w-1 h-1 bg-muted-foreground/60 rounded-full" />
-            <span className="flex-none hidden sm:block">
+            <span className="hidden h-1 w-1 flex-none rounded-full bg-muted-foreground/60 sm:block" />
+            <span className="hidden flex-none sm:block">
               {product.category}
             </span>
           </div>

@@ -117,7 +117,7 @@ export function CreateDiscussionForm({
             </FormItem>
           )}
         />
-        <div className="text-right space-x-2">
+        <div className="space-x-2 text-right">
           {backTo && <Button type="button" onClick={() => router.push(backTo)} variant="outline">
             Back
           </Button>}

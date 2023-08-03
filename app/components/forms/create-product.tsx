@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useFieldArray, useForm } from "react-hook-form";
 import * as z from "zod";
@@ -323,7 +324,7 @@ export function CreateProductForm({
             Add tag
           </Button>
         </div>
-        
+
         <Button type="submit" isLoading={isLoading}>
           Save product
         </Button>
@@ -371,9 +372,9 @@ const UploadProductImage = ({ setImage, image }: UploadProductImageProps) => {
     return (
       <label
         htmlFor="product-image"
-        className="flex w-36 h-36 justify-center items-center rounded-xl border border-dashed border-gray-900/25 cursor-pointer hover:bg-accent/60"
+        className="flex h-36 w-36 cursor-pointer items-center justify-center rounded-xl border border-dashed border-gray-900/25 hover:bg-accent/60"
       >
-        <span className="font-semibold text-sm">Upload logo</span>
+        <span className="text-sm font-semibold">Upload logo</span>
         <input
           id="product-image"
           name="product-image"
@@ -387,21 +388,21 @@ const UploadProductImage = ({ setImage, image }: UploadProductImageProps) => {
   }
 
   return (
-    <div className="w-36 h-36 rounded-xl relative">
+    <div className="relative h-36 w-36 rounded-xl">
       <img
-        className="w-full h-full object-cover rounded-xl"
+        className="h-full w-full rounded-xl object-cover"
         src={selectedImage ? URL.createObjectURL(selectedImage) : image}
         alt="Preview"
       />
       {isProcessing ? (
-        <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-40 flex justify-center items-center rounded-xl">
+        <div className="bg-opacity/40 absolute left-0 top-0 flex h-full w-full items-center justify-center rounded-xl bg-black">
           <Icons.spinner className="h-6 w-6 animate-spin text-white" />
         </div>
       ) : (
-        <div className="absolute -top-1 -right-1">
+        <div className="absolute -right-1 -top-1">
           <button
             type="button"
-            className="h-6 w-6 flex items-center justify-center  rounded-full bg-gray-800/80 hover:bg-gray-800/90"
+            className="flex h-6 w-6 items-center justify-center  rounded-full bg-gray-800/80 hover:bg-gray-800/90"
             onClick={() => {
               setSelectedImage(null);
               setImage("");
