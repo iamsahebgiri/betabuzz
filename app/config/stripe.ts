@@ -43,7 +43,7 @@ export const PLANS = [
         },
       },
     },
-    includedFeatures: ["Yellow tick"],
+    includedFeatures: ["Yellow tick", "Markdown editor"],
   },
   {
     name: "Premium",
@@ -66,6 +66,6 @@ export const PLANS = [
         },
       },
     },
-    includedFeatures: ["Red tick"],
+    includedFeatures: ["Red tick", "Markdown editor"],
   },
 ];

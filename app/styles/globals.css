@@ -71,6 +71,7 @@
 @layer base {
   * {
     @apply border-border;
+    font-feature-settings: "salt";
   }
   body {
     @apply bg-background text-foreground;

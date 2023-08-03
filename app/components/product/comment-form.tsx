@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { FormErrorMessage } from "@/components/ui/form-error-message";
 import { Textarea } from "@/components/ui/textarea";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Icons } from "../icons";
@@ -12,6 +12,7 @@ import productService from "@/services/product.service";
 import { toast } from "../ui/use-toast";
 import { KeyedMutator } from "swr";
 import { Comment } from "@/types";
+import useUser from "@/hooks/use-user";
 
 type UpdateUserFormData = z.infer<typeof createCommentProductSchema>;
 
@@ -28,6 +29,7 @@ function CommentForm({
   content?: string;
   handleClose?: () => void;
 }) {
+  const { user } = useUser();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -35,6 +37,7 @@ function CommentForm({
     register,
     reset,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<UpdateUserFormData>({
     resolver: zodResolver(createCommentProductSchema),
@@ -74,12 +77,6 @@ function CommentForm({
           ...(comment?.id ? { parent: comment.id } : {}),
         })
         .then(async (res) => {
-          // mutate((prevData: any) => {
-          //   return [
-          //     { ...prevData[0], results: [res, ...prevData[0].results] },
-          //     ...prevData,
-          //   ];
-          // });
           mutate((prevData: any) => {
             return [...prevData, res];
           });
@@ -104,10 +101,21 @@ function CommentForm({
     <div>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
         <div className="space-y-2">
+          {/* {user?.plan === "pro" || user?.plan === "premium" ? (
+          ) : (
+            <Textarea
+              id="content"
+              disabled={isLoading}
+              placeholder="What do you think?"
+              rows={5}
+              {...register("content")}
+            />
+          )} */}
           <Textarea
             id="content"
             disabled={isLoading}
             placeholder="What do you think?"
+            rows={5}
             {...register("content")}
           />
           {errors?.content && (

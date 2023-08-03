@@ -1,6 +1,6 @@
 export interface User {
   interests: any[];
-  plan: string;
+  plan: "free" | "starter" | "pro" | "premium";
   email: string;
   name: string;
   avatar: string;
@@ -12,7 +12,7 @@ export interface User {
 
 export interface UserProfile {
   interests: string[];
-  plan: string;
+  plan: "free" | "starter" | "pro" | "premium";
   email: string;
   name: string;
   avatar: string;

@@ -74,7 +74,7 @@ function CommentActions({
           Reply
         </Button>
 
-        {user.id === comment.author.id ? (
+        {user?.id === comment.author.id ? (
           <>
             <Button
               variant="ghost"
