@@ -156,8 +156,8 @@ export const categories = [
         label: "Wireframing",
       },
       {
-        value: "ai-coding",
-        label: "AI coding assistants",
+        value: "ai",
+        label: "AI",
       },
       {
         value: "automation",
@@ -340,8 +340,8 @@ export const categories = [
         label: "Savings apps",
       },
       {
-        value: "startup-financial-planning",
-        label: "Startup financial planning",
+        value: "startup",
+        label: "Startup",
       },
       {
         value: "stock-trading",
@@ -420,8 +420,8 @@ export const categories = [
         label: "Camping apps",
       },
       {
-        value: "health-insurance",
-        label: "Health Insurance",
+        value: "health",
+        label: "Health",
       },
       {
         value: "hiking-apps",
@@ -578,5 +578,17 @@ export const categories = [
       {
         value: "shopify-apps",
         label: "Shopify Apps",
+      },
+      {
+        value: "augmented-reality",
+        label: "Augmented Reality",
+      },
+      {
+        value: "saas",
+        label: "SaaS",
+      },
+      {
+        value: "developer-tools",
+        label: "Developer Tools",
       },
 ];
