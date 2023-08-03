@@ -102,6 +102,7 @@ function ReplyForm({
             disabled={isLoading}
             placeholder="What do you think?"
             {...register("content")}
+            rows={5}
           />
           {errors?.content && (
             <FormErrorMessage>{errors.content.message}</FormErrorMessage>

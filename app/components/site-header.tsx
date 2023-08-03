@@ -15,10 +15,10 @@ export function SiteHeader() {
     mainNav.filter(({ href }) => href === router.pathname).length !== 0;
   
     return (
-    <header className="supports-backdrop-blur:bg-background/60 sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur">
+    <header className="supports-backdrop-blur:bg-background/60 bg-background/95 sticky top-0 z-40 w-full border-b backdrop-blur">
       <div className="container flex h-16 items-center justify-between space-x-4 sm:space-x-0">
         <Link href="/" className="flex items-center gap-2 ">
-          <Icons.logo className="h-6 w-6 text-primary" />
+          <Icons.logo className="text-primary h-6 w-6" />
           <span className="hidden font-bold sm:inline-block">{name}</span>
         </Link>
         {allowedMainNav ? <MainNav items={mainNav} /> : null}

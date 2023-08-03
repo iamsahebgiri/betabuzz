@@ -34,7 +34,7 @@ export default function PlanPage() {
               type="button"
               onClick={() => setType("monthly")}
               className={cn(
-                "relative w-1/2 whitespace-nowrap rounded-full border border-transparent py-2 text-sm font-medium text-gray-900 shadow-sm transition-all focus:z-10 focus:outline-none focus:ring-2 focus:ring-ring sm:w-auto sm:px-8",
+                "focus:ring-ring relative w-1/2 whitespace-nowrap rounded-full border border-transparent py-2 text-sm font-medium text-gray-900 shadow-sm transition-all focus:z-10 focus:outline-none focus:ring-2 sm:w-auto sm:px-8",
                 type === "monthly" && "border-gray-200 bg-white"
               )}
             >
@@ -44,7 +44,7 @@ export default function PlanPage() {
               type="button"
               onClick={() => setType("yearly")}
               className={cn(
-                "relative w-1/2 whitespace-nowrap rounded-full border border-transparent py-2 text-sm font-medium text-gray-900 shadow-sm transition-all focus:z-10 focus:outline-none focus:ring-2 focus:ring-ring sm:w-auto sm:px-8",
+                "focus:ring-ring relative w-1/2 whitespace-nowrap rounded-full border border-transparent py-2 text-sm font-medium text-gray-900 shadow-sm transition-all focus:z-10 focus:outline-none focus:ring-2 sm:w-auto sm:px-8",
                 type === "yearly" && "border-gray-200 bg-white"
               )}
             >
@@ -64,7 +64,7 @@ export default function PlanPage() {
               )}
             >
               <div
-                className={cn("divide-y divide-muted rounded-xl bg-background")}
+                className={cn("divide-muted bg-background h-full divide-y rounded-xl")}
               >
                 <div className="p-6">
                   <h2 className="text-lg font-medium leading-6">{plan.name}</h2>
@@ -72,7 +72,7 @@ export default function PlanPage() {
                     <span className="text-4xl font-extrabold">
                       Rs. {plan.price[type].amount.toString().slice(0, -2)}
                     </span>{" "}
-                    <span className="text-base font-medium text-muted-foreground">
+                    <span className="text-muted-foreground text-base font-medium">
                       {type === "monthly" ? "/mo" : "/yr"}
                     </span>
                   </p>
@@ -97,7 +97,7 @@ export default function PlanPage() {
                           icon={checkmark24Regular}
                           className="h-5 w-5 shrink-0 text-green-500"
                         />
-                        <span className="text-sm font-medium text-muted-foreground">
+                        <span className="text-muted-foreground text-sm font-medium">
                           {feature}
                         </span>
                       </li>

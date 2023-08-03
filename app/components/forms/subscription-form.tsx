@@ -1,15 +1,32 @@
-import React from "react";
+import React, { useState } from "react";
 import { ThemeToggle } from "../theme-toggle";
 import { Icons } from "../icons";
-import { buttonVariants } from "../ui/button";
+import { Button, buttonVariants } from "../ui/button";
 import Link from "next/link";
 import useUser from "@/hooks/use-user";
 import { plansColor } from "@/config/plan-colors";
+import userService from "@/services/user.service";
 
 export default function SubscriptionForm() {
   const { user } = useUser();
   const type = user.plan as "free" | "starter" | "pro" | "premium";
   const currentPlan = plansColor[type];
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleManage = () => {
+    setIsLoading(true);
+    userService
+      .manageBilling()
+      .then((res) => {
+        if (window) {
+          window.location = res.url;
+        }
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
 
   return (
     <div className="flex flex-col space-y-4 ">
@@ -49,15 +66,26 @@ export default function SubscriptionForm() {
               <Icons.verified className="h-12 w-12 text-white/40" />
             </div>
           </span>
-          <Link
-            href="/billing/plans"
-            className={buttonVariants({
-              variant: "unstyled",
-              className: `bg-white/70 ${currentPlan.colorDark} hover:bg-white/60`,
-            })}
-          >
-            Upgrade
-          </Link>
+          {user.plan === "free" ? (
+            <Link
+              href="/billing/plans"
+              className={buttonVariants({
+                variant: "unstyled",
+                className: `bg-white/70 ${currentPlan.colorDark} hover:bg-white/60`,
+              })}
+            >
+              Upgrade
+            </Link>
+          ) : (
+            <Button
+              variant="unstyled"
+              className={`bg-white/70 ${currentPlan.colorDark} hover:bg-white/60`}
+              onClick={handleManage}
+              isLoading={isLoading}
+            >
+              Manage
+            </Button>
+          )}
         </div>
       </div>
       {/* <Button onClick={handleLogout}>Log out</Button> */}

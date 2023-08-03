@@ -16,6 +16,8 @@ const handler = async (req, res) => {
   const sig = req.headers['stripe-signature'];
   const { webhookSecret } = config.stripe;
 
+  logger.debug(JSON.stringify({ sig }, null, 2));
+
   let event;
   try {
     if (!sig || !webhookSecret) return;
@@ -44,7 +46,6 @@ const handler = async (req, res) => {
 
         const currentPeriodEnd = new Date(0);
         currentPeriodEnd.setUTCSeconds(checkoutSession.expires_at);
-
         await Subscription.updateOne(
           {
             user: checkoutSession.client_reference_id,
@@ -58,6 +59,9 @@ const handler = async (req, res) => {
           },
           { upsert: true },
         );
+        // await User.findByIdAndUpdate(checkoutSession.client_reference_id, {
+        //   plan: 'starter',
+        // });
       } else if (event.type === 'customer.subscription.updated') {
         const subscriptionUpdated = event.data.object;
         const newPriceId = subscriptionUpdated.items.data[0].price.id;
@@ -69,7 +73,7 @@ const handler = async (req, res) => {
         const customerId = subscriptionUpdated.customer.toString();
 
         // If user upgrades/downgrades their subscription, update subscription
-        const subscription = await Subscription.updateOne(
+        await Subscription.updateOne(
           {
             customerId,
           },
@@ -77,14 +81,10 @@ const handler = async (req, res) => {
             plan: currentPlan.slug,
           },
         );
-        await User.updateOne(
-          {
-            id: subscription.user,
-          },
-          {
-            plan: currentPlan.slug,
-          },
-        );
+        const subscription = await Subscription.findOne({ customerId });
+        await User.findByIdAndUpdate(subscription.user, {
+          plan: currentPlan.slug,
+        });
       } else if (event.type === 'customer.subscription.deleted') {
         const subscriptionDeleted = event.data.object;
         const customerId = subscriptionDeleted.customer.toString();
