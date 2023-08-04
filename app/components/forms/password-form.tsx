@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import * as z from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -15,11 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 import useUser from "@/hooks/use-user";
-import { extractDomain } from "@/lib/strings";
-import { cn } from "@/lib/utils";
 import userService from "@/services/user.service";
-import delete24Filled from "@iconify/icons-fluent/delete-24-filled";
-import { Icon } from "@iconify/react";
 import { useState } from "react";
 
 const passwordFormSchema = z
@@ -47,13 +43,12 @@ export function PasswordForm({ onSuccess }: PasswordFormProps) {
 
   const form = useForm<PasswordFormValues>({
     resolver: zodResolver(passwordFormSchema),
-    defaultValues: {
-      ...user,
-    },
     mode: "onChange",
   });
 
   function onSubmit(data: PasswordFormValues) {
+    if (!user) return null;
+
     setIsLoading(true);
     userService
       .updateUser(user.id, { password: data.password })

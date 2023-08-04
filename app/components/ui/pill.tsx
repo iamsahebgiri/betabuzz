@@ -1,6 +1,6 @@
-import * as React from "react";
-import { cn } from "@/lib/utils";
 import { getColor } from "@/lib/color";
+import { cn } from "@/lib/utils";
+import * as React from "react";
 
 export interface PillProps extends React.HTMLAttributes<HTMLDivElement> {
   title: string;

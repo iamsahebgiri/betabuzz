@@ -20,7 +20,7 @@ function ReplyActions({
   mutate: KeyedMutator<any>;
   content?: string;
 }) {
-  const { user } = useUser();
+  const { user, loading } = useUser();
   const [replying, setReplying] = useState(false);
   const [editing, setEditing] = useState(false);
 
@@ -43,6 +43,9 @@ function ReplyActions({
         });
       });
   };
+
+
+
 
   return (
     <>

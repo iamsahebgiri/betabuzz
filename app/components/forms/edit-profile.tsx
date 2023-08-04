@@ -51,6 +51,7 @@ export function EditProfileForm({ onSuccess }: EditProfileFormProps) {
   });
 
   function onSubmit(data: EditProfileFormValues) {
+    if (!user) return null;
     setIsLoading(true);
     userService
       .updateUser(user.id, data)

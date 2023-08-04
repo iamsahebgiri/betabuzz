@@ -56,6 +56,8 @@ export function SocialForm({ onSuccess }: SocialFormProps) {
   });
 
   function onSubmit(data: SocialFormValues) {
+    if (!user) return null;
+
     const payload = {
       socials: data.socials?.map((social) => ({
         platform: extractDomain(social.href),
@@ -128,7 +130,9 @@ export function SocialForm({ onSuccess }: SocialFormProps) {
             Add URL
           </Button>
         </div>
-        <Button type="submit" isLoading={isLoading}>Update social</Button>
+        <Button type="submit" isLoading={isLoading}>
+          Update social
+        </Button>
       </form>
     </Form>
   );

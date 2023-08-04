@@ -54,7 +54,7 @@ function UserProfilePage({ username }: { username: string }) {
           />
           <div className="mx-auto -mt-12 max-w-5xl px-4 sm:-mt-10 sm:flex sm:items-center sm:space-x-3 sm:px-6 lg:px-8">
             <div className="group relative h-24 w-24 overflow-hidden rounded-full sm:h-32 sm:w-32">
-              {user.id === userProfile.id ? (
+              {user && user.id === userProfile.id ? (
                 <UserAvatar />
               ) : (
                 <img
@@ -83,7 +83,7 @@ function UserProfilePage({ username }: { username: string }) {
                 </h2>
               </div>
               <div className="mt-4 flex flex-col justify-stretch space-y-3 sm:mt-0 sm:flex-row sm:space-x-4 sm:space-y-0">
-                {user.id === userProfile.id ? <SettingsModal /> : null}
+                {user && user.id === userProfile.id ? <SettingsModal /> : null}
               </div>
             </div>
           </div>
@@ -133,6 +133,8 @@ const UserAvatar = () => {
   const [isProcessing, setIsProcessing] = useState<boolean>(true);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!user) return null;
+
     const file = e.target.files && e.target.files[0];
     if (file) {
       setSelectedImage(file);
@@ -162,6 +164,7 @@ const UserAvatar = () => {
   };
 
   const deleteAvatar = () => {
+    if (!user) return null;
     setIsProcessing(true);
     userService
       .deleteAvatar(user.id)
@@ -200,13 +203,16 @@ const UserAvatar = () => {
         </div>
       ) : (
         <div className="group relative h-24 w-24 overflow-hidden rounded-full border-4 border-muted sm:h-32 sm:w-32">
-          <img
-            src={user.avatar}
-            alt={user.name}
-            className="h-full w-full rounded-full object-cover"
-            width={128}
-            height={128}
-          />
+          {user && (
+            <img
+              src={user.avatar}
+              alt={user.name}
+              className="h-full w-full rounded-full object-cover"
+              width={128}
+              height={128}
+            />
+          )}
+
           <div className="absolute inset-x-0 bottom-0 hidden h-16 items-center justify-center space-x-2 bg-gradient-to-t from-gray-800 group-hover:flex">
             <label htmlFor="user-avatar" className="cursor-pointer">
               <span className="bg-opacity/40 hidden h-8 w-8 items-center justify-center rounded-full border-2 border-black/40 bg-black hover:border-white group-hover:flex">

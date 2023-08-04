@@ -58,7 +58,6 @@ const Discussion = ({ discussionId }: { discussionId: string }) => {
         <meta name="description" content={data.title} />
       </Head>
       <div className="flex items-center gap-3">
-
         <UpvoteDiscussionButton
           discussionId={data.id}
           upvoted={data.upvoted}
@@ -85,7 +84,7 @@ const Discussion = ({ discussionId }: { discussionId: string }) => {
         <div className="mt-2 whitespace-pre-wrap text-base font-medium leading-6">
           {data.content}
         </div>
-        {data.author.id === user.id ? (
+        {user && user.id == data.author.id ? (
           <div className="mt-6 flex items-center justify-between">
             <div className="space-x-2">
               <Button
@@ -101,7 +100,7 @@ const Discussion = ({ discussionId }: { discussionId: string }) => {
                 isLoading={isDeleting}
                 onClick={() => {
                   if (confirm("Are you sure want to delete this discussion?")) {
-                    handleDeleteDiscussion(data.id)
+                    handleDeleteDiscussion(data.id);
                   }
                 }}
               >

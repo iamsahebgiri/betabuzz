@@ -70,6 +70,8 @@ export function GeneralForm({ onSuccess }: GeneralFormProps) {
   });
 
   function onSubmit(data: ProfileFormValues) {
+    if (!user) return null;
+    
     setIsLoading(true);
     userService
       .updateUser(user.id, data)

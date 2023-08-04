@@ -20,7 +20,7 @@ export function UserNav() {
   const router = useRouter();
   const { user, loading, loggedOut, mutate } = useUser();
 
-  if (loading) {
+  if (loading || !user) {
     return <Skeleton className="h-12 w-12 rounded-full" />;
   }
 
@@ -53,7 +53,7 @@ export function UserNav() {
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
             <p className="text-base font-semibold leading-none">{user.name}</p>
-            <p className="text-muted-foreground text-sm font-medium leading-none">
+            <p className="text-sm font-medium leading-none text-muted-foreground">
               {user.email}
             </p>
           </div>

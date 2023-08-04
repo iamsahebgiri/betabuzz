@@ -22,7 +22,7 @@ export default function FailurePage() {
             <h3 className="text-center text-base font-bold md:text-2xl">
               Payment failed!
             </h3>
-            <p className="text-muted-foreground my-2 font-medium">
+            <p className="my-2 font-medium text-muted-foreground">
               Try again! If something goes wrong talk to support.
             </p>
             <p className=" font-medium"> Have a great day! </p>

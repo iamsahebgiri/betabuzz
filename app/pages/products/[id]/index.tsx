@@ -17,6 +17,7 @@ import { useState } from "react";
 import { BlurImage } from "@/components/ui/blur-image";
 import Username from "@/components/profile/username";
 import { LoadingState } from "@/components/ui/states";
+import AuthLayout from "@/layouts/auth.layout";
 
 const Product = ({ productId }: { productId: string }) => {
   const { user } = useUser();
@@ -93,7 +94,7 @@ const Product = ({ productId }: { productId: string }) => {
           />
         </div>
 
-        {data.maker.id === user.id ? (
+        {user && user.id == data.maker.id ? (
           <div className="space-x-2">
             <Button
               variant="secondary"
@@ -120,7 +121,20 @@ const Product = ({ productId }: { productId: string }) => {
       <div className="mt-6 whitespace-pre-wrap text-base font-medium leading-6">
         {data.description}
       </div>
-      <div className="mt-6 flex items-center gap-2 text-base font-medium text-muted-foreground">
+
+      <div className="mt-4 flex flex-wrap items-center gap-2">
+        <p className="text-base font-medium text-muted-foreground">
+          Made with love by
+        </p>
+        <Link
+          href={`/${data.maker.username}`}
+          className="font-bold hover:text-secondary-foreground"
+        >
+          <Username user={data.maker} />
+        </Link>
+      </div>
+
+      <div className="mt-6 flex flex-wrap items-center gap-2 text-base font-medium text-muted-foreground">
         Classified in{" "}
         {data.tags && data.tags.length > 0 ? (
           <div className="space-x-2">
@@ -130,14 +144,7 @@ const Product = ({ productId }: { productId: string }) => {
           </div>
         ) : (
           <Pill title={data.category} />
-        )}{" "}
-        by{" "}
-        <Link
-          href={`/${data.maker.username}`}
-          className="font-bold hover:text-secondary-foreground"
-        >
-          <Username user={data.maker} />
-        </Link>
+        )}
       </div>
 
       <hr className="my-8" />
@@ -154,10 +161,10 @@ export default function ProductPage() {
   const productId = router.query.id as string;
 
   return (
-    <MainLayout>
+    <AuthLayout>
       <div className="container mx-auto w-full max-w-2xl py-16 pb-8 pt-6 md:py-10">
         <Product productId={productId} />
       </div>
-    </MainLayout>
+    </AuthLayout>
   );
 }

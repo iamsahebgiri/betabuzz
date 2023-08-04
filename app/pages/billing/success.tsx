@@ -22,7 +22,7 @@ export default function SuccessPage() {
             <h3 className="text-center text-base font-bold md:text-2xl">
               Payment Done!
             </h3>
-            <p className="text-muted-foreground my-2 font-medium">
+            <p className="my-2 font-medium text-muted-foreground">
               Thank you for completing your secure online payment.
             </p>
             <p className=" font-medium"> Have a great day! </p>

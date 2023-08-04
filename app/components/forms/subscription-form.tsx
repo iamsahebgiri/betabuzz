@@ -9,8 +9,8 @@ import userService from "@/services/user.service";
 
 export default function SubscriptionForm() {
   const { user } = useUser();
-  const type = user.plan as "free" | "starter" | "pro" | "premium";
-  const currentPlan = plansColor[type];
+  const type = user && user.plan;
+  const currentPlan = plansColor[type ?? "free"];
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -66,7 +66,7 @@ export default function SubscriptionForm() {
               <Icons.verified className="h-12 w-12 text-white/40" />
             </div>
           </span>
-          {user.plan === "free" ? (
+          {user && user.plan === "free" ? (
             <Link
               href="/billing/plans"
               className={buttonVariants({
