@@ -10,17 +10,18 @@ import UpvoteReplyButton from "./upvote-reply-btn";
 import type { KeyedMutator } from "swr";
 import Username from "@/components/profile/username";
 import Link from "next/link";
+import Preview from "../ui/editor/preview";
 
 function ReplyActions({
   reply,
   mutate,
-  content,
+  raw,
 }: {
   reply: any;
   mutate: KeyedMutator<any>;
-  content?: string;
+  raw?: string;
 }) {
-  const { user, loading } = useUser();
+  const { user } = useUser();
   const [replying, setReplying] = useState(false);
   const [editing, setEditing] = useState(false);
 
@@ -43,9 +44,6 @@ function ReplyActions({
         });
       });
   };
-
-
-
 
   return (
     <>
@@ -104,7 +102,7 @@ function ReplyActions({
         <ReplyForm
           type="edit"
           reply={reply}
-          content={content}
+          raw={raw}
           mutate={mutate}
           handleClose={() => setEditing(false)}
         />
@@ -125,7 +123,7 @@ function Reply({ reply, mutate, discussionId, hidden }: any) {
         </Avatar>
       </div>
       <div className="flex-1">
-        <div className="flex items-center gap-x-3 pt-1">
+        <div className="flex items-center gap-x-3 pl-1.5 pt-1">
           <Link href={`/${reply.author.username}`}>
             <Username className="font-semibold" user={reply.author} />
           </Link>
@@ -134,10 +132,10 @@ function Reply({ reply, mutate, discussionId, hidden }: any) {
           </span>
         </div>
 
-        <p className="whitespace-pre-wrap font-medium">{reply.content}</p>
+        <Preview html={reply.html} />
 
         <div className="my-3">
-          <ReplyActions reply={reply} mutate={mutate} content={reply.content} />
+          <ReplyActions reply={reply} mutate={mutate} raw={reply.raw} />
           {reply.children && reply.children.length > 0 && (
             <ListReplies
               replies={reply.children}

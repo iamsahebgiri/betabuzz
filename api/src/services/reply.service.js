@@ -3,6 +3,7 @@ const discussionService = require('./discussion.service');
 const { Reply } = require('../models');
 const ApiError = require('../utils/ApiError');
 const Discussion = require('../models/discussion.model');
+const markdownService = require('./markdown.service');
 
 /**
  * Reply on a discussion
@@ -15,7 +16,9 @@ const createReply = async (discussionId, replyBody) => {
   if (!discussion) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Discussion not found');
   }
-  const reply = await Reply.create(replyBody);
+
+  const html = await markdownService.renderMarkdown(replyBody.raw);
+  const reply = await Reply.create({ ...replyBody, html });
   discussion.replies.push(reply.id);
   await discussion.save();
 
@@ -77,7 +80,8 @@ const updateReplyById = async (replyId, updateBody) => {
   if (!reply) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Reply not found');
   }
-  Object.assign(reply, updateBody);
+  const html = markdownService.renderMarkdown(updateBody.raw);
+  Object.assign(reply, { ...updateBody, html });
   await reply.save();
   return reply.toReplyResponse();
 };

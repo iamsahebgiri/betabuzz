@@ -57,6 +57,7 @@
     "http-status": "^1.6.2",
     "joi": "^17.9.2",
     "jsonwebtoken": "^9.0.1",
+    "markdown-wasm": "^1.2.0",
     "moment": "^2.29.4",
     "mongoose": "^7.4.1",
     "morgan": "^1.10.0",

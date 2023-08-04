@@ -6,7 +6,7 @@ const createReply = {
     discussionId: Joi.required().custom(objectId),
   }),
   body: Joi.object().keys({
-    content: Joi.string().required(),
+    raw: Joi.string().required(),
     parent: Joi.string().custom(objectId),
   }),
 };
@@ -16,7 +16,7 @@ const getReplies = {
     discussionId: Joi.required().custom(objectId),
   }),
   query: Joi.object().keys({
-    content: Joi.string(),
+    raw: Joi.string(),
     sortBy: Joi.string(),
     limit: Joi.number().integer(),
     page: Joi.number().integer(),
@@ -37,7 +37,7 @@ const updateReply = {
   }),
   body: Joi.object()
     .keys({
-      content: Joi.string().required(),
+      raw: Joi.string().required(),
     })
     .min(1),
 };

@@ -4,9 +4,12 @@ const User = require('./user.model');
 
 const replySchema = mongoose.Schema(
   {
-    content: {
+    raw: {
       type: String,
       required: true,
+    },
+    html: {
+      type: String,
     },
     author: {
       type: mongoose.Schema.Types.ObjectId,
@@ -55,7 +58,8 @@ replySchema.methods.removeUpvote = function (userId) {
 replySchema.methods.toReplyResponse = async function (userId) {
   return {
     id: this.id,
-    content: this.content,
+    raw: this.raw,
+    html: this.html,
     upvotesCount: this.upvotes.length,
     upvoted: this.upvotes.indexOf(userId) !== -1,
     discussion: this.discussion,

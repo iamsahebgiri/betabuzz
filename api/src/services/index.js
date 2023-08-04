@@ -9,3 +9,4 @@ module.exports.imageService = require('./image.service');
 module.exports.billingService = require('./billing.service');
 module.exports.discussionService = require('./discussion.service');
 module.exports.replyService = require('./reply.service');
+module.exports.markdownService = require('./markdown.service');

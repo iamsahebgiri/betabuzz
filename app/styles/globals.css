@@ -1,3 +1,5 @@
+@import url("./github-dark.css");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

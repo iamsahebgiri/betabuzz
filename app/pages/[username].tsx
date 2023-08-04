@@ -76,7 +76,7 @@ function UserProfilePage({ username }: { username: string }) {
                     />
                   )}
                 </div>
-                <h2 className="text-muted-foreground text-base font-semibold">
+                <h2 className="text-base font-semibold text-muted-foreground">
                   {userProfile.username
                     ? `@${userProfile.username}`
                     : userProfile.email}
@@ -94,19 +94,19 @@ function UserProfilePage({ username }: { username: string }) {
             <TabsList className="w-full justify-start rounded-none border-b bg-transparent p-0">
               <TabsTrigger
                 value="about"
-                className="text-muted-foreground data-[state=active]:border-b-primary data-[state=active]:text-foreground relative h-9 rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-3 pt-2 font-semibold shadow-none transition-none data-[state=active]:shadow-none"
+                className="relative h-9 rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-3 pt-2 font-semibold text-muted-foreground shadow-none transition-none data-[state=active]:border-b-primary data-[state=active]:text-foreground data-[state=active]:shadow-none"
               >
                 About
               </TabsTrigger>
               <TabsTrigger
                 value="upvotes"
-                className="text-muted-foreground data-[state=active]:border-b-primary data-[state=active]:text-foreground relative h-9 rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-3 pt-2 font-semibold shadow-none transition-none data-[state=active]:shadow-none"
+                className="relative h-9 rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-3 pt-2 font-semibold text-muted-foreground shadow-none transition-none data-[state=active]:border-b-primary data-[state=active]:text-foreground data-[state=active]:shadow-none"
               >
                 Upvotes
               </TabsTrigger>
               <TabsTrigger
                 value="products"
-                className="text-muted-foreground data-[state=active]:border-b-primary data-[state=active]:text-foreground relative h-9 rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-3 pt-2 font-semibold shadow-none transition-none data-[state=active]:shadow-none"
+                className="relative h-9 rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-3 pt-2 font-semibold text-muted-foreground shadow-none transition-none data-[state=active]:border-b-primary data-[state=active]:text-foreground data-[state=active]:shadow-none"
               >
                 Products
               </TabsTrigger>
@@ -191,7 +191,7 @@ const UserAvatar = () => {
   return (
     <div>
       {selectedImage && isProcessing ? (
-        <div className="border-muted group relative h-24 w-24 overflow-hidden rounded-full border-4 sm:h-32 sm:w-32">
+        <div className="group relative h-24 w-24 overflow-hidden rounded-full border-4 border-muted sm:h-32 sm:w-32">
           <img
             className="h-full w-full rounded-full object-cover"
             src={URL.createObjectURL(selectedImage)}
@@ -202,7 +202,7 @@ const UserAvatar = () => {
           </div>
         </div>
       ) : (
-        <div className="border-muted group relative h-24 w-24 overflow-hidden rounded-full border-4 sm:h-32 sm:w-32">
+        <div className="group relative h-24 w-24 overflow-hidden rounded-full border-4 border-muted sm:h-32 sm:w-32">
           {user && (
             <img
               src={user.avatar}

@@ -67,10 +67,10 @@ const Discussion = ({ discussionId }: { discussionId: string }) => {
           }}
         />
         <div>
-          <h2 className="text-primary text-xl font-semibold leading-7">
+          <h2 className="text-xl font-semibold leading-7 text-primary">
             {data.title}
           </h2>
-          <div className="text-muted-foreground space-x-3 text-sm font-medium leading-6">
+          <div className="space-x-3 text-sm font-medium leading-6 text-muted-foreground">
             <span>
               <Username user={data.author} />
             </span>

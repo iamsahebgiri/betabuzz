@@ -54,7 +54,7 @@ const deleteDiscussion = catchAsync(async (req, res) => {
 const createReply = catchAsync(async (req, res) => {
   const { discussionId } = req.params;
   const replyBody = {
-    content: req.body.content,
+    raw: req.body.raw,
     author: req.user.id,
     parent: req.body.parent,
     discussion: discussionId,
@@ -66,7 +66,7 @@ const createReply = catchAsync(async (req, res) => {
 const getReplies = catchAsync(async (req, res) => {
   const { discussionId } = req.params;
   const userId = req.user.id;
-  const filter = pick(req.query, ['content']);
+  const filter = pick(req.query, ['raw']);
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
   const replies = await replyService.getReplies(discussionId, userId, filter, options);
   res.send(replies);

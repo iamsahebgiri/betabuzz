@@ -22,7 +22,7 @@ export default function NotFoundPage() {
             <h3 className="text-center text-base font-bold md:text-2xl">
               You are lost dwag!
             </h3>
-            <p className="text-muted-foreground my-2 font-medium">
+            <p className="my-2 font-medium text-muted-foreground">
               Sorry, the page you are looking for cannot be found.
             </p>
             <div className="py-10 text-center">

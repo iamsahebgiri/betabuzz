@@ -5,3 +5,4 @@ module.exports.commentValidation = require('./comment.validation');
 module.exports.billingValidation = require('./billing.validation');
 module.exports.discussionValidation = require('./discussion.validation');
 module.exports.replyValidation = require('./reply.validation');
+module.exports.markdownValidation = require('./markdown.validation');
