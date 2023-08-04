@@ -64,10 +64,10 @@ const Product = ({ productId }: { productId: string }) => {
 
       <BlurImage src={data.image} alt={data.name} />
 
-      <h2 className="mt-2 text-xl font-semibold leading-7 text-primary">
+      <h2 className="text-primary mt-2 text-xl font-semibold leading-7">
         {data.name}
       </h2>
-      <div className="mt-1 whitespace-pre-wrap text-base font-medium leading-6 text-muted-foreground">
+      <div className="text-muted-foreground mt-1 whitespace-pre-wrap text-base font-medium leading-6">
         {data.tagline}
       </div>
 
@@ -83,7 +83,7 @@ const Product = ({ productId }: { productId: string }) => {
             )}
           >
             <span>Live preview</span>
-            <Icons.arrowSquareUpFilled className="h-5 w-5 text-primary" />
+            <Icons.arrowSquareUpFilled className="text-primary h-5 w-5" />
           </a>
           <UpvoteProductButton
             onSuccess={(res) => mutate(res)}
@@ -123,18 +123,18 @@ const Product = ({ productId }: { productId: string }) => {
       </div>
 
       <div className="mt-4 flex flex-wrap items-center gap-2">
-        <p className="text-base font-medium text-muted-foreground">
+        <p className="text-muted-foreground text-base font-medium">
           Made with love by
         </p>
         <Link
           href={`/${data.maker.username}`}
-          className="font-bold hover:text-secondary-foreground"
+          className="hover:text-secondary-foreground font-bold"
         >
           <Username user={data.maker} />
         </Link>
       </div>
 
-      <div className="mt-6 flex flex-wrap items-center gap-2 text-base font-medium text-muted-foreground">
+      <div className="text-muted-foreground mt-6 flex flex-wrap items-center gap-2 text-base font-medium">
         Classified in{" "}
         {data.tags && data.tags.length > 0 ? (
           <div className="space-x-2">
