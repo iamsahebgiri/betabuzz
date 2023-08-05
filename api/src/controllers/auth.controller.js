@@ -12,6 +12,7 @@ const googleOAuthHandler = catchAsync(async (req, res) => {
   const body = {
     email,
     name,
+    username: email.split('@').shift(),
     medium: 'google',
     avatar: picture,
   };
@@ -24,6 +25,7 @@ const googleOAuthHandler = catchAsync(async (req, res) => {
 const register = catchAsync(async (req, res) => {
   const body = {
     ...req.body,
+    username: req.body.email.split('@').shift(),
     medium: 'email',
     avatar: `https://api.dicebear.com/6.x/avataaars/svg?seed=${req.body.email}&backgroundColor=b6e3f4,c0aede,d1d4f9,fda4af,f0abfc,67e8f9,a7f3d0`,
   };
