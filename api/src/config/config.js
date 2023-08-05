@@ -31,6 +31,9 @@ const envVarsSchema = Joi.object()
     STRIPE_PUBLISHABLE_KEY: Joi.string().description('Stripe publishable key'),
     STRIPE_SECRET_KEY: Joi.string().description('Stripe secret key'),
     STRIPE_WEBHOOK_SECRET: Joi.string().description('Stripe webhook secret'),
+    GOOGLE_CLIENT_ID: Joi.string().description('Google client ID'),
+    GOOGLE_CLIENT_SECRET: Joi.string().description('Google client secret'),
+    GOOGLE_REDIRECT_URI: Joi.string().description('Google redirect uri'),
   })
   .unknown();
 
@@ -74,10 +77,14 @@ module.exports = {
       bucketRegion: envVars.AWS_S3_BUCKET_REGION,
     },
   },
-
   stripe: {
     publishableKey: envVars.STRIPE_PUBLISHABLE_KEY,
     secretKey: envVars.STRIPE_SECRET_KEY,
     webhookSecret: envVars.STRIPE_WEBHOOK_SECRET,
+  },
+  google: {
+    clientId: envVars.GOOGLE_CLIENT_ID,
+    clientSecret: envVars.GOOGLE_CLIENT_SECRET,
+    redirectUri: envVars.GOOGLE_REDIRECT_URI,
   },
 };

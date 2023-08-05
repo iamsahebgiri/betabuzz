@@ -41,6 +41,25 @@ class AuthService extends APIService {
       });
   }
 
+  async signInWithGoogle(data: any) {
+    return this.post("/auth/oauth/google", data, { headers: {} })
+      .then((response) => {
+        const { data } = response;
+        this.setAccessToken(
+          data.tokens.access.token,
+          data.tokens.access.expires
+        );
+        this.setRefreshToken(
+          data.tokens.refresh.token,
+          data.tokens.refresh.expires
+        );
+        return data;
+      })
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
   async signOut() {
     return this.post("/auth/logout", {
       refreshToken: this.getRefreshToken(),

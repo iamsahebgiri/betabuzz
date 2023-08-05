@@ -19,6 +19,27 @@ const createUser = async (userBody) => {
 };
 
 /**
+ * Create a user via google
+ * @param {Object} userBody
+ * @returns {Promise<User>}
+ */
+const createUserViaGoogle = async (userBody) => {
+  const user = await User.findOneAndUpdate(
+    {
+      email: userBody.email,
+    },
+    {
+      ...userBody,
+    },
+    {
+      upsert: true,
+      new: true,
+    },
+  );
+  return user;
+};
+
+/**
  * Query for users
  * @param {Object} filter - Mongo filter
  * @param {Object} options - Query options
@@ -143,6 +164,7 @@ const deleteAvatar = async (userId) => {
 };
 
 module.exports = {
+  createUserViaGoogle,
   createUser,
   queryUsers,
   getUserById,

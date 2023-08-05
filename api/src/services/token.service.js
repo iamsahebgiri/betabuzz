@@ -113,6 +113,16 @@ const generateVerifyEmailToken = async (user) => {
   return verifyEmailToken;
 };
 
+/**
+ * Decode google Access token
+ * @param {string} token
+ * @returns {Promise<string>}
+ */
+const decodeGoogleAccessToken = async (token) => {
+  const googleUser = jwt.decode(token);
+  return googleUser;
+};
+
 module.exports = {
   generateToken,
   saveToken,
@@ -120,4 +130,5 @@ module.exports = {
   generateAuthTokens,
   generateResetPasswordToken,
   generateVerifyEmailToken,
+  decodeGoogleAccessToken,
 };

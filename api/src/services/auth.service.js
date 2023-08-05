@@ -1,9 +1,44 @@
+const axios = require('axios');
 const httpStatus = require('http-status');
 const tokenService = require('./token.service');
 const userService = require('./user.service');
 const Token = require('../models/token.model');
 const ApiError = require('../utils/ApiError');
 const { tokenTypes } = require('../config/tokens');
+const config = require('../config/config');
+const logger = require('../config/logger');
+
+/**
+ * Get Google OAuth Tokens
+ * @param {string} email
+ * @returns {Promise<Object>}
+ */
+const getGoogleOAuthTokens = async (code) => {
+  const url = 'https://oauth2.googleapis.com/token';
+
+  const params = {
+    code,
+    client_id: config.google.clientId,
+    client_secret: config.google.clientSecret,
+    redirect_uri: config.google.redirectUri,
+    grant_type: 'authorization_code',
+  };
+
+  try {
+    const res = await axios.post(url, null, {
+      params,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    });
+    return res.data;
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.log(error);
+    logger.error(error.message);
+    throw new Error(error.message);
+  }
+};
 
 /**
  * Login with username and password
@@ -91,6 +126,7 @@ const verifyEmail = async (verifyEmailToken) => {
 };
 
 module.exports = {
+  getGoogleOAuthTokens,
   loginUserWithEmailAndPassword,
   logout,
   refreshAuth,

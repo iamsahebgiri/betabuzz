@@ -45,6 +45,7 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.379.1",
     "@ngneat/falso": "^7.0.1",
+    "axios": "^1.4.0",
     "bcryptjs": "^2.4.3",
     "compression": "^1.7.4",
     "cors": "^2.8.5",

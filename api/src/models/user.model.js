@@ -77,7 +77,7 @@ const userSchema = mongoose.Schema(
     // ],
     password: {
       type: String,
-      required: true,
+      // required: true,
       trim: true,
       minlength: 8,
       validate(value) {
@@ -86,6 +86,12 @@ const userSchema = mongoose.Schema(
         }
       },
       private: true, // used by the toJSON plugin
+    },
+    medium: {
+      type: String,
+      enum: ['email', 'google'],
+      default: 'email',
+      private: true,
     },
     plan: {
       type: String,

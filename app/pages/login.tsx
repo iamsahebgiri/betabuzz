@@ -19,7 +19,7 @@ export default function LoginPage() {
             </h1>
           </div>
           <SignInForm />
-          <p className="px-8 text-center text-sm font-medium text-muted-foreground">
+          <p className="text-muted-foreground px-8 text-center text-sm font-medium">
             <Link
               href="/register"
               className="hover:text-brand underline underline-offset-4"
