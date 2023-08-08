@@ -61,7 +61,7 @@ function ReplyForm({
       if (!reply) return;
 
       discussionService
-        .editReply(discussionId, reply.id, data)
+        .editReply(discussionId, reply.id, { raw: data.raw })
         .then(async (res) => {
           mutate();
           form.reset();

@@ -80,7 +80,7 @@ const updateReplyById = async (replyId, updateBody) => {
   if (!reply) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Reply not found');
   }
-  const html = markdownService.renderMarkdown(updateBody.raw);
+  const html = await markdownService.renderMarkdown(updateBody.raw);
   Object.assign(reply, { ...updateBody, html });
   await reply.save();
   return reply.toReplyResponse();
