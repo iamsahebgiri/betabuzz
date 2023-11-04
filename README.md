@@ -30,6 +30,13 @@ Creating a buzz around the latest beta products
 
 BetaBuzz is website to share and discover new products. Users submit products, which are listed in a linear format. The site includes a comments system and a voting system similar to Hacker News or Reddit.
 
+![Products](art/products.png)
+![Community](art/community.png)
+![Profile](art/profile.jpeg)
+![Settings](art/settings.png)
+![Product](art/product.png)
+![Comments](art/comments.png)
+
 ## 🎯 Features
 
 - JWT Based Authentication
