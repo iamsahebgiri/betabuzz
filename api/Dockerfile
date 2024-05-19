@@ -1,8 +1,8 @@
 FROM node:alpine
 
-RUN mkdir -p /usr/src/node-app && chown -R node:node /usr/src/node-app
+RUN mkdir -p /usr/src/betabuzz-api && chown -R node:node /usr/src/betabuzz-api
 
-WORKDIR /usr/src/node-app
+WORKDIR /usr/src/betabuzz-api
 
 COPY package.json yarn.lock ./
 
