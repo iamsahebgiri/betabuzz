@@ -1,0 +1,13 @@
+
+apiVersion: 1
+
+datasources:
+  - name: gdev-testdata
+    isDefault: false
+    type: testdata
+  
+  - name: prometheus
+    isDefault: true
+    type: prometheus
+    url: http://prometheus:9090
+    editable: true

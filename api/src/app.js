@@ -6,6 +6,7 @@ const compression = require('compression');
 const cors = require('cors');
 const passport = require('passport');
 const httpStatus = require('http-status');
+const apiMetrics = require('prometheus-api-metrics');
 const config = require('./config/config');
 const morgan = require('./config/morgan');
 const { jwtStrategy } = require('./config/passport');
@@ -23,6 +24,13 @@ if (config.env !== 'test') {
 }
 
 app.post('/v1/stripe/webhook', express.raw({ type: 'application/json' }), webhookController.handler);
+
+// setup prometheus metrics
+app.use(
+  apiMetrics({
+    metricsPath: '/v1/metrics',
+  }),
+);
 
 // set security HTTP headers
 app.use(helmet());

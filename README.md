@@ -36,6 +36,7 @@ BetaBuzz is website to share and discover new products. Users submit products, w
 ![Settings](art/settings.png)
 ![Product](art/product.png)
 ![Comments](art/comments.png)
+![Grafana dashboard](art/monitoring.png)
 
 ## 🎯 Features
 
